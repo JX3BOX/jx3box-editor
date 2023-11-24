@@ -77,6 +77,7 @@
 								<LetterPaper :data="o" @update="updateLetter" />
 							</div>
 						</div>
+                        <el-alert v-if="!letter.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
 					</el-tab-pane>
 				</el-tabs>
 
@@ -160,8 +161,7 @@ export default {
 
 			placeholderTexts: {
 				authors: "请输入 ID 或 名称",
-			},
-			letter_active: null,
+			}, 
 		};
 	},
 	computed: {
@@ -263,9 +263,9 @@ export default {
 						this.loading = false;
 					});
 			} else if (this.type === "letter") {
-				const { per, page, name } = params;
+				const { per, page } = params;
 				const _params = { per, page };
-				if (name) _params._search = name;
+				if (this.query) _params._search = this.query;
 				getLetterPaper(_params)
 					.then((res) => {
 						if (!append) this.letter = [];
