@@ -72,7 +72,11 @@
 							<i class="el-icon-coffee-cup" style="margin-right: 5px"></i>
 							<b>信纸</b>
 						</span>
-						<LetterDemo v-for="(item, i) in letter" :key="i" :data="item" @update="insertLetter" />
+						<div class="m-letter-list">
+							<div class="m-letter" :class="{ active: !!o.isSelected }" v-for="o in letter" :key="o.id" @click="selectLetter(o)">
+								<LetterPaper :data="o" @update="updateLetter" />
+							</div>
+						</div>
 					</el-tab-pane>
 				</el-tabs>
 
@@ -107,12 +111,12 @@ import { getLink, showAvatar, resolveImagePath } from "@jx3box/jx3box-common/js/
 import User from "@jx3box/jx3box-common/js/user";
 
 import ComboVue from "./components/Combo.vue";
-import LetterDemo from "./components/LetterDemo.vue";
+import LetterPaper from "./components/Letter.vue";
 export default {
 	name: "BoxResource",
 	components: {
 		ComboVue,
-		LetterDemo,
+		LetterPaper,
 	},
 	props: {
 		enable: {
@@ -157,6 +161,7 @@ export default {
 			placeholderTexts: {
 				authors: "请输入 ID 或 名称",
 			},
+			letter_active: null,
 		};
 	},
 	computed: {
@@ -355,9 +360,21 @@ export default {
 			o.isSelected = true;
 			this.html = `<a data-type="emotion" class="e-jx3-emotion w-jx3-element" data-id="${o.id}" target="_blank" href="/emotion/${o.id}"><img class="e-jx3-emotion-img" data-type="emotion" data-id="${o.id}" style="width:180px;" src="${o.url}" alt="${o.id}"/></a>`;
 		},
-		insertLetter(html) {
-			this.html = html;
+		// 信纸
+		selectLetter(o) {
+			this.resetItems(); 
+			o.isSelected = true;
+			this.html = o.html;
 		},
+		updateLetter({ html, id }) {
+			this.letter = this.letter.map((item) => {
+				if (item.id == id) {
+					item.html = html;
+				}
+				return item;
+			}); 
+		},
+
 		resetItems: function () {
 			let data = this[this.type];
 			data.forEach((item) => {
@@ -406,7 +423,20 @@ export default {
 	background: none !important;
 	border: none;
 }
-.m-database-tabs .c-letter-paper {
-	.w(25%);
+.m-database-tabs .m-letter-list {
+	.flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	.m-letter {
+		.w(25%);
+		.pointer;
+		filter: brightness(60%);
+		box-sizing: border-box;
+		border: 3px solid transparent;
+		&.active {
+			filter: brightness(100%);
+			border: 3px solid #409eff;
+		}
+	}
 }
 </style>
