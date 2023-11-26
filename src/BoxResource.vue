@@ -77,7 +77,7 @@
 								<LetterPaper :data="o" @update="updateLetter" />
 							</div>
 						</div>
-                        <el-alert v-if="!letter.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
+						<el-alert v-if="!letter.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
 					</el-tab-pane>
 				</el-tabs>
 
@@ -161,7 +161,7 @@ export default {
 
 			placeholderTexts: {
 				authors: "请输入 ID 或 名称",
-			}, 
+			},
 		};
 	},
 	computed: {
@@ -362,17 +362,18 @@ export default {
 		},
 		// 信纸
 		selectLetter(o) {
-			this.resetItems(); 
+			this.resetItems();
 			o.isSelected = true;
 			this.html = o.html;
 		},
-		updateLetter({ html, id }) {
+		updateLetter({ html, id, style }) {
 			this.letter = this.letter.map((item) => {
 				if (item.id == id) {
 					item.html = html;
+					item.style = style;
 				}
 				return item;
-			}); 
+			});
 		},
 
 		resetItems: function () {
