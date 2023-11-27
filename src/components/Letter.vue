@@ -25,7 +25,8 @@ export default {
 				const _style = this.initStyle(obj);
 				this.insertStyle(_style);
 				this.html = this.htmlDemo(obj);
-				this.$emit("update", { html: this.html, id: obj.id });
+				const html = `<div class="e-letter">${this.html} <style>${this.styleTag.textContent}</style></div>`;
+				this.$emit("update", { html, id: obj.id });
 			},
 		},
 	},
@@ -50,7 +51,7 @@ export default {
 		htmlDemo({ slug }) {
 			const titleHtml = `<div class="e-letter-title img_title_${slug}">我是抬头</div>`;
 			const contentHtml = `<div class="e-letter-content img_body_${slug}"><div class="u-letter-content__header img_header_${slug}"><div class="u-letter-content__footer img_footer_${slug}"><p>明月几时有，把酒问青天。</p></div></div></div>`;
-			return `<div class="e-letter">${titleHtml}${contentHtml}</div>`;
+			return titleHtml + contentHtml;
 		},
 		// 插入style标签
 		insertStyle(style = "") {

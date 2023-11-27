@@ -107,6 +107,7 @@ export default {
 				//         `,
 				//     },
 				// ],
+				valid_children: "+body[style]",
 			},
 			mode: "tinymce",
 			style: "",
@@ -137,7 +138,7 @@ export default {
 		insertAttachments: function (data) {
 			tinyMCE.editors["tinymce"].insertContent(data.html);
 		},
-		insertResource: function (data) {
+		insertResource: function (data) { 
 			tinyMCE.editors["tinymce"].insertContent(data);
 		},
 		emotionSelected: function (emotion) {

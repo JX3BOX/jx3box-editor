@@ -112,7 +112,6 @@ import User from "@jx3box/jx3box-common/js/user";
 
 import ComboVue from "./components/Combo.vue";
 import LetterPaper from "./components/Letter.vue";
-import { omit } from "lodash";
 export default {
 	name: "BoxResource",
 	components: {
