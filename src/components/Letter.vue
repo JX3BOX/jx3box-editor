@@ -25,7 +25,7 @@ export default {
 				const _style = this.initStyle(obj);
 				this.insertStyle(_style);
 				this.html = this.htmlDemo(obj);
-				const html = `<div class="e-letter">${this.html} <style>${this.styleTag.textContent}</style></div>`;
+				const html = `<div class="e-letter">${this.html}</div><style>${this.styleTag.textContent}</style>`;
 				this.$emit("update", { html, id: obj.id });
 			},
 		},
@@ -35,7 +35,7 @@ export default {
 		initStyle({ style, slug }) {
 			if (!slug) return;
 			if (!style) {
-				return `.img_title_${slug}{}\n\n.img_body_${slug}{}\n\n.img_header_${slug}{}\n\n.img_footer_${slug}{}`;
+				return `.img_title_${slug}{}.img_body_${slug}{}.img_header_${slug}{}.img_footer_${slug}{}`;
 			}
 			const ruleRegex = /\.([^{]+)\s*{([^}]*)}/g;
 			let match;
@@ -43,7 +43,7 @@ export default {
 			while ((match = ruleRegex.exec(style)) !== null) {
 				const className = match[1].trim().replace(/_(.+?)_([^_]+)$/, `_$1_${slug}`);
 				const styleRules = match[2].trim();
-				_style += `.${className}{${styleRules}}\n\n`;
+				_style += `.${className}{${styleRules}}`;
 			}
 			return _style;
 		},
