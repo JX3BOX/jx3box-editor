@@ -73,7 +73,7 @@
 							<b>信纸</b>
 						</span>
 						<div class="m-letter-list">
-							<div class="m-letter" :class="{ active: !!o.isSelected }" v-for="o in letter" :key="o.id" @click="selectLetter(o)">
+							<div class="m-letter" :class="{ active: !!o.isSelected }" v-for="o in filterLetter" :key="o.id" @click="selectLetter(o)">
 								<LetterPaper :data="o" @update="updateLetter" />
 							</div>
 						</div>
@@ -82,7 +82,6 @@
 				</el-tabs>
 
 				<template v-if="multipage && type !== 'combo'">
-					{{ multipage && type !== "combo" }}
 					<!-- 下一页 -->
 					<el-button class="m-archive-more" :class="{ show: hasNextPage }" type="primary" icon="el-icon-arrow-down" @click="appendPage">加载更多</el-button>
 					<!-- 分页 -->
@@ -113,6 +112,7 @@ import User from "@jx3box/jx3box-common/js/user";
 
 import ComboVue from "./components/Combo.vue";
 import LetterPaper from "./components/Letter.vue";
+import { omit } from "lodash";
 export default {
 	name: "BoxResource",
 	components: {
@@ -200,6 +200,9 @@ export default {
 		},
 		boxIcon: function () {
 			return __imgPath + "image/common/jx3box_white.svg";
+		},
+		filterLetter() {
+			return this.letter;
 		},
 	},
 	watch: {
@@ -366,11 +369,10 @@ export default {
 			o.isSelected = true;
 			this.html = o.html;
 		},
-		updateLetter({ html, id, style }) {
+		updateLetter({ html, id }) {
 			this.letter = this.letter.map((item) => {
 				if (item.id == id) {
 					item.html = html;
-					item.style = style;
 				}
 				return item;
 			});

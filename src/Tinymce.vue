@@ -58,6 +58,7 @@ export default {
 				body_class: "c-article c-article-editor c-article-tinymce",
 				height: this.height || 800,
 				autosave_ask_before_unload: false,
+				content_style: "",
 
 				// UI
 				icons: "custom",
@@ -108,6 +109,7 @@ export default {
 				// ],
 			},
 			mode: "tinymce",
+			style: "",
 		};
 	},
 	model: {
@@ -121,6 +123,9 @@ export default {
 		content: function (newval) {
 			this.data = newval;
 		},
+		style(val) {
+			this.init.content_style = val;
+		},
 	},
 	methods: {
 		setup: function (editor) {
@@ -133,7 +138,7 @@ export default {
 			tinyMCE.editors["tinymce"].insertContent(data.html);
 		},
 		insertResource: function (data) {
-            tinyMCE.editors["tinymce"].insertContent(data);
+			tinyMCE.editors["tinymce"].insertContent(data);
 		},
 		emotionSelected: function (emotion) {
 			const src = `${__imgPath}emotion/output/${emotion.filename}`;
