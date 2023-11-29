@@ -430,14 +430,30 @@ export default {
 	flex-wrap: wrap;
 	gap: 20px;
 	.m-letter {
-		.w(25%);
 		.pointer;
-		filter: brightness(60%);
+		.pr;
 		box-sizing: border-box;
 		border: 3px solid transparent;
+		&::after {
+			content: "";
+			display: block;
+			.full;
+			.pa;
+			.lt(0);
+			.z(1);
+			.tm(0.3);
+			.r(3px);
+			background: #000;
+		}
 		&.active {
-			filter: brightness(100%);
+			.r(5px);
 			border: 3px solid #409eff;
+			&::after {
+				.none;
+			}
+		}
+		.e-letter {
+			zoom: 0.7;
 		}
 	}
 }

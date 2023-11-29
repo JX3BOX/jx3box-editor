@@ -294,7 +294,7 @@
   vertical-align: -3px;
 }
 .c-article-tinymce p,
-.c-article-tinymce div {
+.c-article-tinymce div:not([class]) {
   margin: 0;
   line-height: 2.2;
 }
