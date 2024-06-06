@@ -3,14 +3,14 @@ export default
 <p><a class="e-jx3-skill w-jx3-element" href="https://www.jx3box.com/app/database/?type=skill&amp;query=2716&amp;level=0" data-type="skill" data-client="std" data-id="2716" data-level="0">[剑破虚空]</a></p>
 
 <ul class="e-skill-combo w-skill-combo">
-<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1}</li>
-<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":0}</li>
-<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1}</li>
+<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1,"n":"炖鸡","c":"red"}</li>
+<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":0,"n":"炖鸡"}</li>
+<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1,"n":"炖鸡"}</li>
 </ul>
 
 <ul class="e-skill-combo w-skill-combo">
-<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1}</li>
-<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":0}</li>
+<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1,"n":"炖鸡"}</li>
+<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":0,"n":"炖鸡"}</li>
 <li class="w-skill-combo-item">13047,盾击,6339,{"gcd":0}</li>
 </ul>
 
@@ -85,7 +85,7 @@ export default
 <p><img loading="lazy" src="https://console.cnyixun.com/upload/post/2021/5/29/7898_3119895.png"></p>
 <p>媒体<video controls="controls" width="300" height="150">
 <source src="https://static.jx3.xoyo.com/video/20090828/CG1_fengqidaoxiang.mp4" type="video/mp4"></video></p>
-<p>B站<iframe src="//player.bilibili.com/player.html?aid=6083521&amp;cid=10838288&amp;page=5" frameborder="no" scrolling="no" allowfullscreen="allowfullscreen">哈哈</iframe></p>
+<p>B站<iframe src="//player.bilibili.com/player.html?aid=6083521&amp;cid=10838288&amp;page=5&autoplay=0" frameborder="no" scrolling="no" allowfullscreen="allowfullscreen">哈哈</iframe></p>
 <script src="xxxx">&nbsp;11111111111脚本</p>
 <h4>四级标题·折叠文本功能，语法高亮，分页</h4>
 
