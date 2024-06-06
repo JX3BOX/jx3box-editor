@@ -5,7 +5,7 @@
 		<div class="c-editor-header">
 			<Upload v-if="attachmentEnable" @insert="insertAttachments" />
 			<Resource v-if="resourceEnable" @insert="insertResource" />
-			<BoxResource v-if="resourceEnable" @insert="insertResource" />
+			<BoxResource v-if="resourceEnable" @insert="insertResource" :subtype="subtype" />
 		</div>
 		<Emotion class="c-editor-emotion" @selected="emotionSelected"></Emotion>
 
@@ -37,7 +37,7 @@ Vue.directive("draggable", draggable);
 
 export default {
 	name: "Tinymce",
-	props: ["content", "height", "attachmentEnable", "resourceEnable"],
+	props: ["content", "height", "attachmentEnable", "resourceEnable", "subtype"],
 	data: function () {
 		return {
 			data: this.content,

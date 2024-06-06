@@ -65,7 +65,7 @@
 							<i class="el-icon-lollipop" style="margin-right: 5px"></i>
 							<b>连招</b>
 						</span>
-						<ComboVue :query="query" ref="combo" :client="comboClient" :strict="strict"></ComboVue>
+						<ComboVue :query="query" ref="combo" :client="comboClient" :strict="strict" :subtype="subtype"></ComboVue>
 					</el-tab-pane>
 					<el-tab-pane label="信纸" name="letter">
 						<span slot="label" class="u-tab-label">
@@ -123,6 +123,10 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		subtype: {
+			type: String,
+			default: "通用",
+		}
 	},
 	data: function () {
 		return {
