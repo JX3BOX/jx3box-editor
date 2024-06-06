@@ -1,6 +1,6 @@
 {
   "name": "@jx3box/jx3box-editor",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "JX3BOX Article & Editor",
   "main": "index.js",
   "scripts": {
@@ -58,6 +58,7 @@
     "vue-gallery-slideshow": "^1.5.2",
     "vue-photoswipe.js": "^2.0.23",
     "vue-plugin-load-script": "^1.3.6",
+    "vuedraggable": "^2.24.3",
     "xss": "^1.0.8"
   },
   "devDependencies": {

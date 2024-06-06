@@ -64,10 +64,12 @@
 
             <div class="c-combo-content__right">
                 <!-- 已选技能 -->
-                <el-divider>已选技能</el-divider>
+                <el-divider>已选技能
+                    <!-- <el-checkbox v-model="sort" border size="small">开启排序</el-checkbox> -->
+                </el-divider>
                 <div class="m-selected-skills">
                     <ul class="m-skills-list">
-                        <li v-for="(skill, index) in selected" :key="index" class="m-skill" @contextmenu.prevent="(event) => onContextmenu(event, skill)">
+                        <li v-for="(skill, index) in selected" :key="skill.SkillID + '' + index" class="m-skill" @contextmenu.prevent="(event) => onContextmenu(event, skill)">
                             <div class="u-skill" v-if="skill && skill.IconID">
                                 <img class="u-skill-icon" :src="iconURL(skill.IconID)" :alt="skill.IconID" />
                                 <i class="u-gcd-icon" v-show="skill.WithoutGcd">
@@ -100,7 +102,7 @@ Vue.use(LoadScript);
 import contextmenu from "vue-contextmenujs";
 Vue.use(contextmenu);
 export default {
-    name: "skillDialog",
+    name: "ComboSkill",
     components: {
         SkillMartial,
     },
@@ -141,8 +143,19 @@ export default {
 
             activeName: "special",
             selected: [],
+
+            sort: false,
         };
     },
+    // watch: {
+    //     sort: function (val) {
+    //         if (val) {
+    //             this.$nextTick(() => {
+    //                 this.initSkillSort();
+    //             });
+    //         }
+    //     },
+    // },
     computed: {
         hasNextPage: function () {
             return this.total > 1 && this.page < this.pages;
@@ -229,6 +242,7 @@ export default {
             const _this = this;
             const sortSkills = Sortable.create(el, {
                 animation: 200,
+                forceFallback: true,
                 onEnd({ newIndex, oldIndex }) {
                     const newSkills = cloneDeep(_this.selected);
                     const [removed] = newSkills.splice(oldIndex, 1);
@@ -254,6 +268,10 @@ export default {
                                 confirmButtonText: "确定",
                                 cancelButtonText: "取消",
                                 inputValue: skill?.n || "",
+                                // 最长4个字
+                                inputValidator: (value) => {
+                                    return value.length <= 4;
+                                },
                             })
                                 .then(({ value }) => {
                                     this.$set(skill, "n", value);
