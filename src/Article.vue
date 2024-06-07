@@ -180,12 +180,12 @@ export default {
             // 奇穴
             renderTalent();
             renderTalent2();
-            // 物品
-            renderJx3Element(this);
             // 配装
             renderPzIframe();
             // 连招
             renderCombo();
+            // 物品
+            renderJx3Element(this);
         },
         doDir: function () {
             // 显示局部

@@ -295,6 +295,7 @@ export default {
                     gcd: item.WithoutGcd ? 0 : 1,
                 };
                 item.n && (obj.n = item.n);
+                item.client = this.client;
                 skills_html += `<li class="w-skill-combo-item">${item.SkillID},${item.Name},${item.IconID},${JSON.stringify(obj)}</li>`;
             });
             const html = `<ul class="e-skill-combo w-skill-combo">${skills_html}</ul>`;
