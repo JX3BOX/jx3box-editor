@@ -21,7 +21,7 @@ function renderCombo(selector = ".e-skill-combo") {
                 // 渲染
                 let code = `
                 <span class="w-skill-combo-item">
-                    <img class="u-skill-icon w-jx3-element" src="${iconLink(icon)}" alt="${icon}" title="${name}" data-type="skill" data-id="${id}" data-client="${client}" />
+                    <img class="u-skill-icon w-jx3-element" src="${iconLink(icon)}" alt="${icon}" data-type="skill" data-id="${id}" data-client="${client}" />
                     <span class="u-skill-name" title="${name}">${name}</span>
                     <span class="u-skill-note" title="${n}" style="color:${c};font-size:${fz}px;font-weight:${fw}">${n}</span>
                     <i class="u-gcd-icon ${gcd == 0 ? 'is-show' : ''}" title="无GCD技能">
