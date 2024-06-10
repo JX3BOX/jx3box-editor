@@ -76,7 +76,7 @@
                                     <i class="el-icon-time"></i>
                                 </i>
                                 <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
-                                <span class="u-note" :title="skill.n">{{ skill.n }}</span>
+                                <span class="u-note" :title="skill.n" :style="itemStyle(skill)">{{ skill.n }}</span>
                             </div>
                             <i class="u-remove-icon" title="移除" @click="removeSelected(index)"><i class="el-icon-close"></i></i>
                         </li>
@@ -84,6 +84,32 @@
                 </div>
             </div>
         </div>
+        <el-dialog :visible.sync="showRemark" width="600px" append-to-body v-draggable class="c-large-dialog" title="设置备注">
+            <el-form label-position="left" label-width="80px">
+                <el-form-item label="备注">
+                    <el-input placeholder="输入备注" v-model="form.n"></el-input>
+                </el-form-item>
+                <el-form-item label="文字颜色">
+                    <el-color-picker v-model="form.c" :predefine="predefineColors" show-alpha></el-color-picker>
+                </el-form-item>
+                <el-form-item label="文字大小">
+                    <el-input v-model="form.fz"></el-input>
+                </el-form-item>
+                <el-form-item label="文字粗细">
+                    <el-select v-model="form.fw">
+                        <el-option v-for="i in 9" :key="i" :value="i * 100" :label="i * 100"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="预览">
+                    <span :style="nStyle">{{ form.n || '示例文字' }}</span>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+				<el-button @click="showRemark = false">取 消</el-button>
+				<el-button type="primary" @click="confirm">确 定
+				</el-button>
+			</span>
+        </el-dialog>
     </div>
 </template>
 
@@ -94,7 +120,7 @@ import { getSkill } from "../../service/resource";
 import SkillMartial from "./SkillMartial.vue";
 
 import Sortable from "sortablejs";
-import { cloneDeep } from "lodash";
+import { cloneDeep, pick } from "lodash";
 
 import LoadScript from "vue-plugin-load-script";
 Vue.use(LoadScript);
@@ -145,17 +171,34 @@ export default {
             selected: [],
 
             sort: false,
+
+            form: {
+                n: "",
+                c: "",
+                fz: "14",
+                fw: "500"
+            },
+            showRemark: false,
+            currentSkill: {},
+
+            predefineColors: [
+                '#ff4500',
+                '#ff8c00',
+                '#ffd700',
+                '#90ee90',
+                '#00ced1',
+                '#1e90ff',
+                '#c71585',
+                'rgba(255, 69, 0, 0.68)',
+                'rgb(255, 120, 0)',
+                'hsv(51, 100, 98)',
+                'hsva(120, 40, 94, 0.5)',
+                'hsl(181, 100%, 37%)',
+                'hsla(209, 100%, 56%, 0.73)',
+                '#c7158577',
+            ]
         };
     },
-    // watch: {
-    //     sort: function (val) {
-    //         if (val) {
-    //             this.$nextTick(() => {
-    //                 this.initSkillSort();
-    //             });
-    //         }
-    //     },
-    // },
     computed: {
         hasNextPage: function () {
             return this.total > 1 && this.page < this.pages;
@@ -166,6 +209,13 @@ export default {
         isBlank: function () {
             return !this.query && !this.skill["length"];
         },
+        nStyle() {
+            return pick({
+                color: this.form.c,
+                fontSize: (this.form.fz || 12) + 'px',
+                fontWeight: this.form.fw
+            }, ['color','fontSize','fontWeight'])
+        }
     },
     mounted() {
         this.$nextTick(() => {
@@ -264,19 +314,21 @@ export default {
                     {
                         label: "备注",
                         onClick: () => {
-                            this.$prompt("请输入备注", "备注", {
-                                confirmButtonText: "确定",
-                                cancelButtonText: "取消",
-                                inputValue: skill?.n || "",
-                                // 最长4个字
-                                inputValidator: (value) => {
-                                    return value.length <= 4;
-                                },
-                            })
-                                .then(({ value }) => {
-                                    this.$set(skill, "n", value);
-                                })
-                                .catch(() => {});
+                            this.showRemark = true;
+                            this.currentSkill = skill
+                            // this.$prompt("请输入备注", "备注", {
+                            //     confirmButtonText: "确定",
+                            //     cancelButtonText: "取消",
+                            //     inputValue: skill?.n || "",
+                            //     // 最长4个字
+                            //     inputValidator: (value) => {
+                            //         return value.length <= 4;
+                            //     },
+                            // })
+                            //     .then(({ value }) => {
+                            //         this.$set(skill, "n", value);
+                            //     })
+                            //     .catch(() => {});
                         },
                     }
                 ],
@@ -295,12 +347,33 @@ export default {
                     gcd: item.WithoutGcd ? 0 : 1,
                 };
                 item.n && (obj.n = item.n);
+                item.c && (obj.c = item.c);
+                item.fz && (obj.fz = item.fz);
+                item.fw && (obj.fw = item.fw);
+
                 item.client = this.client;
                 skills_html += `<li class="w-skill-combo-item">${item.SkillID},${item.Name},${item.IconID},${JSON.stringify(obj)}</li>`;
             });
             const html = `<ul class="e-skill-combo w-skill-combo">${skills_html}</ul>`;
             return html;
         },
+        confirm() {
+            if (this.form.n) {
+                this.$set(this.currentSkill, 'n', this.form.n);
+                this.$set(this.currentSkill, 'c', this.form.c);
+                this.$set(this.currentSkill, 'fz', this.form.fz);
+                this.$set(this.currentSkill, 'fw', this.form.fw);
+            }
+
+            this.showRemark = false
+        },
+        itemStyle(item) {
+            return pick({
+                color: item.c,
+                fontSize: (item.fz || 12) + 'px',
+                fontWeight: item.fw
+            }, ['color','fontSize','fontWeight'])
+        }
     },
 };
 </script>
