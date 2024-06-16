@@ -45,6 +45,13 @@
 						</ul>
 						<el-alert v-if="!authors.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
 					</el-tab-pane>
+					<el-tab-pane label="连招" name="combo">
+						<span slot="label" class="u-tab-label">
+							<i class="el-icon-lollipop" style="margin-right: 5px"></i>
+							<b>连招</b>
+						</span>
+						<ComboVue :query="query" ref="combo" :client="comboClient" :strict="strict" :subtype="subtype"></ComboVue>
+					</el-tab-pane>
 					<el-tab-pane label="剑三趣图" name="emotions">
 						<span slot="label" class="u-tab-label">
 							<i class="el-icon-sugar" style="margin-right: 5px"></i>
@@ -59,13 +66,6 @@
 							</li>
 						</ul>
 						<el-alert v-if="!emotions.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
-					</el-tab-pane>
-					<el-tab-pane label="连招" name="combo">
-						<span slot="label" class="u-tab-label">
-							<i class="el-icon-lollipop" style="margin-right: 5px"></i>
-							<b>连招</b>
-						</span>
-						<ComboVue :query="query" ref="combo" :client="comboClient" :strict="strict" :subtype="subtype"></ComboVue>
 					</el-tab-pane>
 					<el-tab-pane label="信纸" name="letter">
 						<span slot="label" class="u-tab-label">

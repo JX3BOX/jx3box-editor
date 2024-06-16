@@ -71,14 +71,14 @@
                     <ul class="m-skills-list">
                         <li v-for="(skill, index) in selected" :key="skill.SkillID + '' + index" class="m-skill" @contextmenu.prevent="(event) => onContextmenu(event, skill)">
                             <div class="u-skill" v-if="skill && skill.IconID">
-                                <img class="u-skill-icon" :src="iconURL(skill.IconID)" :alt="skill.IconID" />
+                                <img class="u-skill-icon" :class="skill.iconSize ? `u-skill-icon_${skill.iconSize}` : ''" :src="iconURL(skill.IconID)" :alt="skill.IconID" />
                                 <i class="u-gcd-icon" v-show="skill.WithoutGcd">
                                     <i class="el-icon-time"></i>
                                 </i>
-                                <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                <span class="u-name" :class="{ 'u-name_underline': skill.underline }" :title="skill.Name">{{ skill.Name }}</span>
                                 <span class="u-note" :title="skill.n" :style="itemStyle(skill)">{{ skill.n }}</span>
                             </div>
-                            <i class="u-remove-icon" title="移除" @click="removeSelected(index)"><i class="el-icon-close"></i></i>
+                            <i class="u-remove-icon" :class="skill.iconSize ? `u-remove-icon_${skill.iconSize}` : ''" title="移除" @click="removeSelected(index)"><i class="el-icon-close"></i></i>
                         </li>
                     </ul>
                 </div>
@@ -312,23 +312,33 @@ export default {
                         icon: !skill?.WithoutGcd ? "el-icon-check" : "el-icon-close",
                     },
                     {
+                        label: "图标大小",
+                        children: [
+                            {
+                                label: "小",
+                                onClick: () => {
+                                    this.$set(skill, "iconSize", "small");
+                                },
+                            },
+                            {
+                                label: "大",
+                                onClick: () => {
+                                    this.$set(skill, "iconSize", "large");
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        label: skill.underline ? "取消下划线" : "设置下划线",
+                        onClick: () => {
+                            this.$set(skill, "underline", !skill.underline);
+                        },
+                    },
+                    {
                         label: "备注",
                         onClick: () => {
                             this.showRemark = true;
                             this.currentSkill = skill
-                            // this.$prompt("请输入备注", "备注", {
-                            //     confirmButtonText: "确定",
-                            //     cancelButtonText: "取消",
-                            //     inputValue: skill?.n || "",
-                            //     // 最长4个字
-                            //     inputValidator: (value) => {
-                            //         return value.length <= 4;
-                            //     },
-                            // })
-                            //     .then(({ value }) => {
-                            //         this.$set(skill, "n", value);
-                            //     })
-                            //     .catch(() => {});
                         },
                     }
                 ],
@@ -345,11 +355,14 @@ export default {
             selected.forEach((item) => {
                 const obj = {
                     gcd: item.WithoutGcd ? 0 : 1,
+                    underline: item.underline ? 1 : 0,
                 };
                 item.n && (obj.n = item.n);
                 item.c && (obj.c = item.c);
                 item.fz && (obj.fz = item.fz);
                 item.fw && (obj.fw = item.fw);
+                item.iconSize && (obj.iconSize = item.iconSize);
+                item.underline && (obj.underline = item.underline);
 
                 item.client = this.client;
                 skills_html += `<li class="w-skill-combo-item">${item.SkillID},${item.Name},${item.IconID},${JSON.stringify(obj)}</li>`;
