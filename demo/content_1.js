@@ -3,9 +3,9 @@ export default
 <p><a class="e-jx3-skill w-jx3-element" href="https://www.jx3box.com/app/database/?type=skill&amp;query=2716&amp;level=0" data-type="skill" data-client="std" data-id="2716" data-level="0">[剑破虚空]</a></p>
 
 <ul class="e-skill-combo w-skill-combo">
-<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1,"n":"炖鸡","c":"red","fz":32,"iconSize":"small","underline":1}</li>
-<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":0,"n":"炖鸡"}</li>
-<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1,"n":"炖鸡"}</li>
+<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1,"n":"炖鸡","c":"red","fz":32,"iconSize":"small","underline":true}</li>
+<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":0,"n":"炖鸡","underline":true}</li>
+<li class="w-skill-combo-item">13047,盾击,6339,{"gcd":1,"n":"炖鸡","underline":0}</li>
 </ul>
 
 <ul class="e-skill-combo w-skill-combo">

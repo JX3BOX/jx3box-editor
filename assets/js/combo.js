@@ -16,7 +16,7 @@ function renderCombo(selector = ".e-skill-combo") {
                 const [id, name, icon, extend] = url.split(/,(?![^{]*\})/);
                 
                 const _extend = extend ? JSON.parse(extend) : {};
-                const { gcd, n = '', c, fz=12, fw='normal',client='std',iconSize='large',underline=0 } = _extend;
+                const { gcd, n = '', c, fz=12, fw='normal',client='std',iconSize='large', underline=0 } = _extend;
 
                 // 渲染
                 let code = `
@@ -24,7 +24,7 @@ function renderCombo(selector = ".e-skill-combo") {
                     <span class="u-skill-icon w-jx3-element">
                         <img class="u-skill-icon_${iconSize}" src="${iconLink(icon)}" alt="${icon}" data-type="skill" data-id="${id}" data-client="${client}" />
                     </span>
-                    <span class="u-skill-name u-skill-name_underline" title="${name}">${name}</span>
+                    <span class="u-skill-name ${underline ? 'u-skill-name_underline' : ''}" title="${name}">${name}</span>
                     <span class="u-skill-note" title="${n}" style="color:${c};font-size:${fz}px;font-weight:${fw}">${n}</span>
                     <i class="u-gcd-icon ${gcd == 0 ? 'is-show' : ''}" title="无GCD技能">
                         <i class="el-icon-time"></i>
