@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Tinymce v-model="content" :attachmentEnable="true" :resourceEnable="true" @update="test"/>
+        <Tinymce v-model="content" :attachmentEnable="true" :resourceEnable="true" @update="test" subtype="冰心诀"/>
     </div>
 </template>
 

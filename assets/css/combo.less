@@ -260,17 +260,17 @@
                 cursor: pointer;
                 // .none;
 
-                background-color:#c00;
+                background-color: #c00;
                 .size(12px);
                 .r(50%);
                 .db;
-                i{
-                    color:#fff;
+                i {
+                    color: #fff;
                     .fz(12px);
                     .db;
                 }
                 &:hover {
-                    background-color:#f00;
+                    background-color: #f00;
                 }
             }
             .u-remove-icon_small {
@@ -288,8 +288,8 @@
                 .r(50%);
                 .db;
 
-                i{
-                    color:#fff;
+                i {
+                    color: #fff;
                     .fz(12px);
                     .db;
                 }
@@ -349,74 +349,107 @@
 
 .m-pvp-martial {
     display: flex;
-    background: #1a2b22;
-    padding: 20px;
-    border-radius: 8px;
-    flex-direction: column;
-    .m-martial-skills {
-        flex: 1;
+    gap: 10px;
+
+    .u-platform-select {
+        .size(30px, 400px);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
-    .m-martial-skill {
-        .u-title {
-            // 竖体显示
-            writing-mode: tb-rl;
-            letter-spacing: 1px;
+
+    .u-platform-option {
+        .pointer;
+        flex-grow: 1;
+        color: white;
+        background-color: #1a2b22;
+        writing-mode: vertical-rl; /* 或者使用 vertical-lr */
+        text-orientation: upright;
+        text-align: center;
+        line-height: 32px;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    .u-platform-option.is-select {
+        background-color: #2a9998;
+        flex-grow: 3;
+    }
+
+    .u-skill-list {
+        flex-grow: 1;
+        width: 0;
+
+        display: flex;
+        background: #1a2b22;
+        padding: 20px;
+        border-radius: 8px;
+        flex-direction: column;
+        .m-martial-skills {
+            flex: 1;
+        }
+        .m-martial-skill {
+            .u-title {
+                // 竖体显示
+                writing-mode: tb-rl;
+                letter-spacing: 1px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .u-title-name {
+                z-index: 1;
+                color: #fff;
+                font-size: 12px;
+            }
+            .u-title-img {
+                width: 24px;
+                height: 71px;
+                position: absolute;
+            }
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-        .u-title-name {
-            z-index: 1;
-            color: #fff;
-            font-size: 12px;
-        }
-        .u-title-img {
-            width: 24px;
-            height: 71px;
-            position: absolute;
-        }
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        // border: 1px solid rgb(40,107,113);
-        padding: 4px 0;
-        position: relative;
+            gap: 20px;
+            // border: 1px solid rgb(40,107,113);
+            padding: 4px 0;
+            position: relative;
 
-        .u-name {
-            display: block;
-            color: #fff;
-            font-size: 12px;
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-            width: 48px;
-        }
-    }
-    .m-skills {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .m-skill {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        cursor: pointer;
-
-        .u-skill-icon {
-            box-sizing: border-box;
-            border: 2px solid #1a2b22;
-        }
-
-        .u-skill.active {
             .u-name {
-                color: #a5ffd0;
-                text-shadow: 0 0 3px #2ffbb2;
+                display: block;
+                color: #fff;
+                font-size: 12px;
+                text-align: center;
+                // overflow: hidden;
+                white-space: nowrap;
+                width: 48px;
+            }
+        }
+        .m-skills {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .m-skill {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+
+            .u-skill-icon {
+                box-sizing: border-box;
+                border: 2px solid #1a2b22;
+            }
+
+            .u-skill.active {
+                .u-name {
+                    color: #a5ffd0;
+                    text-shadow: 0 0 3px #2ffbb2;
+                }
             }
         }
     }
-
 }
