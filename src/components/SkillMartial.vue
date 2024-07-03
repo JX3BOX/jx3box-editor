@@ -1,5 +1,5 @@
 <template>
-    <div class="m-pvp-martial">
+    <div class="m-pvp-martial" >
         <div class="u-platform-select" v-if="client == 'std'">
             <div
                 class="u-platform-option"
@@ -126,7 +126,7 @@
                             )"
                             :key="index"
                             @click="selectSkill(skill)">
-                            <div class="u-skill" v-if="skill && skill.IconID">
+                            <div class="u-skill is-wujie" v-if="skill && skill.IconID">
                                 <img
                                     class="u-skill-icon"
                                     :src="iconLink(skill.IconID)"
