@@ -304,6 +304,10 @@ export default {
         },
     },
     methods: {
+        nl2br: function(str) {
+            // 替换\n \\\n 为 <br>
+            return str.replace(/\\n/g, "<br>").replace(/\n/g, "<br>");
+        },
         getData: function(page = 1, append = false) {
             if (!this.query) return;
 
@@ -424,7 +428,7 @@ export default {
                     o.Level
                 )}" data-client="${this.client}" data-id="${o.BuffID}" data-level="${o.Level}">[${o.Name}]</a>`;
             } else {
-                this.html = `<pre data-type="buff" data-id="${o.BuffID}" class="e-jx3-resource">${this.$refs[this.type][i]["innerHTML"]}</pre>`;
+                this.html = `<pre data-type="buff" data-id="${o.BuffID}" class="e-jx3-resource">${this.nl2br(this.$refs[this.type][i]["innerHTML"])}</pre>`;
             }
         },
         selectSkill: function(o, i) {
@@ -435,7 +439,7 @@ export default {
                     o.SkillID
                 }" data-level="${o.Level}">[${o.Name}]</a>`;
             } else {
-                this.html = `<pre data-type="skill" data-id="${o.SkillID}" class="e-jx3-resource">${this.$refs[this.type][i]["innerHTML"]}</pre>`;
+                this.html = `<pre data-type="skill" data-id="${o.SkillID}" class="e-jx3-resource">${this.nl2br(this.$refs[this.type][i]["innerHTML"])}</pre>`;
             }
         },
         selectItem: function(o, i) {
