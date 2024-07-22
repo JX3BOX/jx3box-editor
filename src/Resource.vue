@@ -372,8 +372,8 @@ export default {
                         let list;
                         if (this.type == "item") {
                             list = this.transformData(data.data);
-                            this.pages = data.last_page;
                             this.total = data.total;
+                            this.pages = Math.ceil(data.total / data.per_page);
                         } else {
                             list = this.transformData(data.list || []);
                             this.pages = data.pages;

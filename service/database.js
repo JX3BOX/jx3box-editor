@@ -6,19 +6,19 @@ function loadResource(type, query, params) {
     switch (type) {
         case "item":
             return axios
-                .get(`${__helperUrl}api/item/search`, {
-                    params: { keyword: query, page: params.page, limit: params.per },
-                    headers: {
-                        Accept: "application/prs.helper.v2+json",
-                        "JX3-Client-Type": params.client == "origin" ? 2 : 1,
+                .get(`${__node}api/node/item/search`, {
+                    params: {
+                        keyword: query,
+                        page: params.page,
+                        limit: params.per,
+                        client: params.client,
                     },
-                    withCredentials: true,
                 })
-                .then((res) => {
+                .then(res => {
                     let data = res.data;
                     return data.code === 200 ? data.data : null;
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         default:
