@@ -117,7 +117,7 @@ export default
 <p>旧版奇穴</p>
 <p><input class="e-jx3qixue-area" type="text" value="{&quot;version&quot;:&quot;v20200113&quot;,&quot;xf&quot;:&quot;焚影圣诀&quot;,&quot;sq&quot;:&quot;2,2,3,1,1,1,1,1,1,3,4,1&quot;}" /></p>
 <p>新版奇穴</p>
-<div class="e-jx3qixue-area">{"version":"v20200309","xf":"凌海诀","sq":"1,1,1,1,1,1,1,1,1,1,1,1"}</div>
+<div class="e-jx3qixue-area">{"version":"v20240725","xf":"凌海诀","sq":"1,1,1,1","client":"wujie"}</div>
 旧版资源插入
 <p><img class="e-jx3-icon" title="IconID:2588" src="https://console.cnyixun.com/icon/2588.png" /></p>
 <pre class="e-jx3-resource"><span class="u-id">ID:551</span> <img class="u-pic" title="IconID:898" src="https://console.cnyixun.com/icon/898.png" /> <span class="u-name">心鼓弦</span> <span class="u-desc">救治一个重伤的友方目标，可在战斗中使用。</span></pre>

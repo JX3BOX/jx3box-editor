@@ -5,7 +5,7 @@
         </span>
 
         <el-dialog :visible.sync="visible" title="插入奇穴方案" :modal-append-to-body="false">
-            <p>💙 请填入<a target="_blank" href="/app/talent">奇穴模拟器</a>生成的编码</p>
+            <p>💙 请填入<a target="_blank" href="/macro/talent">奇穴模拟器</a>生成的编码</p>
 
             <el-input class="u-input u-input-macro" type="textarea" :rows="5" v-model="talent"></el-input>
 

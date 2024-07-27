@@ -5,7 +5,7 @@
         </span>
 
         <el-dialog :visible.sync="visible" title="插入镇派方案" :modal-append-to-body="false">
-            <p>💙 请填入<a target="_blank" href="/app/talent2">镇派模拟器</a>生成的编码</p>
+            <p>💙 请填入<a target="_blank" href="/macro/talent2">镇派模拟器</a>生成的编码</p>
 
             <el-input class="u-input u-input-macro" type="textarea" :rows="5" v-model="talent"></el-input>
 
