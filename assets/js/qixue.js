@@ -17,7 +17,7 @@ function qixue(selector=".e-jx3qixue-area"){
                 qixue = JSON.parse($(this).text())
             }
 
-            let _qixue = Object.assign({container:container},{...qixue, client: qixue?.client || 'std'})
+            let _qixue = Object.assign({container:container},{...qixue, client: qixue.client || 'std'})
             new JX3_QIXUE(_qixue)
         })
     } catch (e) {
