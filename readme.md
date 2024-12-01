@@ -1,7 +1,5 @@
 # Article & Editor
 
-手动更新 cdn `https://oss.jx3box.com/static/`
-
 # Dev
 ```
 $ npm install 
@@ -39,7 +37,7 @@ import Tinymce from "@jx3box/jx3box-editor/src/Tinymce.vue";
 编辑器
 
 ```html
-<script src="https://oss.jx3box.com/static/tinymce/tinymce.min.js?v=$version"></script>
+<script src="https://cdn.jx3box.com/static/tinymce/tinymce.min.js?v=$version"></script>
 <Tinymce
     v-model="content"
     :attachmentEnable="true"
@@ -65,9 +63,8 @@ import Tinymce from "@jx3box/jx3box-editor/src/Tinymce.vue";
    后续 11 月会新增一个文本物品浮层功能（关联物品百科）。
 
 ```html
-<script src="https://oss.jx3box.com/static/jx3box-lib/vue.js?v="></script>
-<script src="https://oss.jx3box.com/static/jx3box-editor/jx3box_article.umd.min.js?v="></script>
-<link rel="stylesheet" href="https://oss.jx3box.com/static/jx3box-editor/jx3box_article.css?v="/>
+<script src="https://cdn.jx3box.com/static/jx3box-lib/vue.js?v="></script>
+<script src="https://cdn.jx3box.com/static/jx3box-editor/jx3box_article.umd.min.js?v="></script>
 ```
 
 2. body标签：需要插入的位置

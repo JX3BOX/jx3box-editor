@@ -10,7 +10,7 @@ function talent2(selector = ".e-jx3talent2-area") {
             // 内容解析
             let talent = $(this).text();
             let code = Base64.encode(talent);
-            let url = "https://oss.jx3box.com/static/jx3box-talent2/index.html" + "?code=" + code;
+            let url = "https://cdn.jx3box.com/static/jx3box-talent2/index.html" + "?code=" + code;
 
             container.html(`<iframe src="${url}" width="100%" height="100%" style="overflow:hidden;border:none;"></iframe>`);
         });

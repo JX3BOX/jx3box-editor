@@ -18,7 +18,7 @@ export default
 <a data-type="emotion" class="e-jx3-emotion w-jx3-element" data-id="940" target="_blank" href="/emotion/940"><img class="e-jx3-emotion-img" data-type="emotion" data-id="940" style="width:80px;" src="https://console.cnyixun.com/upload/post/2022/6/10/76986_7373574.gif" alt="940"/></a>
 <p><a class="e-jx3-author w-jx3-element" href="/author/8" target="_blank" rel="noopener" data-type="author" data-mode="" data-id="8">@浮烟</a></p>
 <pre class="e-pz-iframe">https://www.jx3box.com/pz/iframe.html?id=25402&amp;mode=horizontal</pre>
-<a href="https://oss.jx3box.com/2020/01/%E5%87%8C%E9%9B%AA%E9%98%81%E8%AE%A1%E7%AE%97%E5%99%A83.2%EF%BC%88%E6%9B%B4%E6%96%B0%E5%A4%A7%E9%99%84%E9%AD%94%EF%BC%89.xlsx">凌雪阁计算器</a>
+<a href="https://cdn.jx3box.com/2020/01/%E5%87%8C%E9%9B%AA%E9%98%81%E8%AE%A1%E7%AE%97%E5%99%A83.2%EF%BC%88%E6%9B%B4%E6%96%B0%E5%A4%A7%E9%99%84%E9%AD%94%EF%BC%89.xlsx">凌雪阁计算器</a>
 <h1>一级标题·字体111111111111111111111111111</h1>
 <p><span style="font-size: 12px;">12px字体</span>，<span style="font-size: 14px;">14px字体</span>，16px字体，<span style="font-size: 18px;">18px字体</span>，<span style="font-size: 22px;">22px字体</span>，<span style="font-size: 24px;">24px字体</span>，<span style="font-size: 26px;">26px字体</span>，<span style="font-size: 26px;">28px字体</span>，<span style="font-size: 32px;">32px字体</span>，<span style="font-size: 48px;">48px字体</span>，<span style="font-size: 72px;">72px字体</span></p>
 <p><span style="color: #ff99cc;">粉粉の</span>，<span style="color: #00ff00; background-color: #000000;">辣眼睛</span>，<span style="color: #cc99ff; background-color: #ccffff;">柔和</span></p>
@@ -81,7 +81,7 @@ export default
 <h3>三级标题·表情、图片、媒体2</h3>
 <h3>三级标题·表情、图片、媒体3</h3>
 <p>表情💯</p>
-<p>图片<img src="https://oss.jx3box.com/upload/post/2020/5/18/blobid051.jpg"></p>
+<p>图片<img src="https://cdn.jx3box.com/upload/post/2020/5/18/blobid051.jpg"></p>
 <p><img loading="lazy" src="https://console.cnyixun.com/upload/post/2021/5/29/7898_3119895.png"></p>
 <p>媒体<video controls="controls" width="300" height="150">
 <source src="https://static.jx3.xoyo.com/video/20090828/CG1_fengqidaoxiang.mp4" type="video/mp4"></video></p>
