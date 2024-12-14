@@ -1,6 +1,6 @@
 import { $cms } from "@jx3box/jx3box-common/js/https";
 import axios from "axios";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 
 function uploadFile(data) {
     return $cms().post(`/api/cms/upload`, data);
@@ -27,7 +27,7 @@ function getDecoration(params) {
 }
 
 function getDecorationJson() {
-    let url = __imgPath + "decoration/index.json";
+    let url = __cdn + "design/decoration/index.json";
     return axios.get(url);
 }
 
