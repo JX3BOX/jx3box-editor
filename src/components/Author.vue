@@ -60,7 +60,7 @@
 import { authorLink, getLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { getUserInfo, getUserMedals, getUserPublicTeams } from "../../service/author";
 import { getDecoration, getDecorationJson } from "../../service/cms";
-import { __server, __imgPath, __userLevelColor } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __server, __imgPath, __userLevelColor, __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 import User from "@jx3box/jx3box-common/js/user";
 import { __userLevel } from "@jx3box/jx3box-common/data/jx3box.json";
 import Avatar from "./Avatar.vue";
@@ -264,7 +264,7 @@ export default {
             return __userLevelColor[level];
         },
         showDecoration: function (val, type) {
-            return __imgPath + `decoration/images/${val}/${type}.png`;
+            return __cdn + `design/decoration/images/${val}/${type}.png`;
         },
         authorLink,
     },
@@ -275,7 +275,6 @@ export default {
 @import "../../assets/css/module/author.less";
 .w-author {
     .w-author-wrapper {
-        // background-image: url(https://img.jx3box.com/decoration/images/1_CAT/atcard.png);
         background-repeat: no-repeat;
         background-position: top right;
         background-size: 100% auto;
