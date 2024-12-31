@@ -153,6 +153,7 @@
 .c-article-tinymce a {
   color: #0366d6;
   text-decoration: none;
+  word-break: break-all;
 }
 .c-article-tinymce a:hover {
   box-shadow: 0 1px 0 #0366d6;
