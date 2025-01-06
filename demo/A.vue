@@ -15,7 +15,8 @@
         ></Article>
         <Buff :id="51145" client="origin" :level="0"></Buff>
         <Skill :id="2716" client="std" :level="0"></Skill> -->
-        <Item :item_id="'6_27425'"></Item>
+        <Item :item_id="'5_45100'"></Item>
+        <Item :item_id="'6_40294'"></Item>
         <Item :item_id="'7_101430'"></Item>
         <div id="directory"></div>
     </div>

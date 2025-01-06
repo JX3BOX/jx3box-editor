@@ -17,6 +17,30 @@
                 class="u-title"
                 :style="{ color: color(source.Quality) }"
                 v-text="source.Name"></div>
+            <!-- 装备类型 -->
+            <div class="u-usage" v-if="show_equip_usage">
+                <template v-if="source.EquipUsage == 1">
+                    <img
+                        class="u-label-icon"
+                        src="../assets/img/item/pve.png"
+                        alt="" />
+                    <span>秘境挑战</span>
+                </template>
+                <template v-if="source.EquipUsage == 2">
+                    <img
+                        class="u-label-icon"
+                        src="../assets/img/item/pvp.png"
+                        alt="" />
+                    <span>竞技对抗</span>
+                </template>
+                <template v-if="source.EquipUsage == 3">
+                    <img
+                        class="u-label-icon"
+                        src="../assets/img/item/pvx.png"
+                        alt="" />
+                    <span>休闲</span>
+                </template>
+            </div>
             <!-- 绑定状态 -->
             <div
                 v-if="source.BindType > 1"
@@ -54,7 +78,7 @@
                 class="u-attributes"
                 v-if="source.attributes && source.attributes.length">
                 <div
-                    v-for="(attribute, key) in source.attributes"
+                    v-for="(attribute, key) in common_attributes"
                     :key="key"
                     class="u-field"
                     :class="[`u-${attribute.color}`]">
@@ -78,17 +102,39 @@
                     </span>
                     <span v-else class="u-value">
                         <game-text :text="attribute.label"></game-text>
-                        <!-- <span
-                            class="u-yellow"
-                            v-text="
-                                attribute_percent(
-                                    attribute.type,
-                                    attribute.value
-                                )
-                            "
-                        ></span>-->
                     </span>
                 </div>
+                <template v-if="orange_std_attribute.length > 0">
+                    <div class="u-spec-attribute-title u-yellow">
+                        <img
+                            class="u-label-icon"
+                            src="../assets/img/item/std.png" />
+                        <span>特殊属性效果</span>
+                    </div>
+                    <div
+                        class="u-value u-spec-attribute"
+                        v-for="(attribute, key) in orange_std_attribute"
+                        :key="key">
+                        <game-text :text="attribute.label"></game-text>
+                    </div>
+                </template>
+                <template v-if="orange_wujie_attribute.length > 0">
+                    <div class="u-spec-attribute-title u-yellow">
+                        <img
+                            class="u-label-icon"
+                            src="../assets/img/item/wujie.png" />
+                        <span>特殊属性效果</span>
+                    </div>
+                    <div
+                        class="u-value u-spec-attribute"
+                        v-for="(attribute, key) in orange_wujie_attribute"
+                        :key="key">
+                        <game-text :text="attribute.label"></game-text>
+                    </div>
+                    <div class="u-value u-spec-attribute u-orange"
+                        >属性效果双端一致</div
+                    >
+                </template>
             </div>
             <!-- 家具属性 -->
             <div
@@ -202,12 +248,19 @@
                     <li
                         v-for="(sibling, key) in source.Set.siblings"
                         :key="key"
-                        v-text="sibling"
                         :class="{
                             'u-yellow':
                                 sibling == source.Name ||
                                 sibling?.includes(source.Name),
-                        }"></li>
+                        }">
+                        {{
+                            sibling
+                                .split("/")
+                                .map(s => s.trim())
+                                .sort((a, b) => a.localeCompare(b))
+                                .join(" / ")
+                        }}</li
+                    >
                 </ul>
                 <br />
                 <ul class="u-set-attributes u-gray">
@@ -245,7 +298,7 @@
                 v-text="'品质等级' + source.Level"></div>
             <!-- 装备分数 -->
             <div
-                v-if="source.EquipmentRating"
+                v-if="Number(source.EquipmentRating)"
                 class="u-equipment-rating u-orange"
                 v-text="'装备分数' + source.EquipmentRating"></div>
             <!-- 推荐门派心法 -->
@@ -363,6 +416,30 @@ export default {
         },
         cache_key: function () {
             return `item-${this.final_client}-${this.item_id}`;
+        },
+        // 是否展示装备类型
+        show_equip_usage() {
+            if (Number(this.source?.AucGenre) === 1 && this.source.Quality > 4)
+                return false;
+            if ([1, 2, 3].includes(Number(this.source?.AucGenre))) return true;
+            if (this.source?.AucGenre == 4 && this.source?.AucSubType < 4)
+                return true;
+            return false;
+        },
+        common_attributes() {
+            return this.source?.attributes?.filter(
+                item => item.color != "orange"
+            );
+        },
+        orange_std_attribute() {
+            return this.source?.attributes?.filter(
+                item => item.color == "orange" && !item.is_mobile
+            );
+        },
+        orange_wujie_attribute() {
+            return this.source?.attributes?.filter(
+                item => item.color == "orange" && item.is_mobile
+            );
         },
     },
     methods: {

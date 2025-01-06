@@ -109,6 +109,12 @@
             font-weight: normal;
         }
 
+        .u-label-icon {
+            transform: scale(1.1);
+            width: 14px;
+            vertical-align: text-bottom;
+        }
+
         .u-desc {
             padding-right: @field-padding-right;
         }
@@ -116,6 +122,12 @@
         .u-title,
         .u-desc {
             margin: 0;
+        }
+
+        .u-spec-attribute.u-value::before {
+            content: "·";
+            .bold;
+            .u-orange;
         }
 
         .u-orange {
