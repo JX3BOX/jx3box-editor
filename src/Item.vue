@@ -250,8 +250,9 @@
                         :key="key"
                         :class="{
                             'u-yellow':
-                                sibling == source.Name ||
-                                sibling?.includes(source.Name),
+                                sibling &&
+                                (sibling == source.Name ||
+                                    sibling.includes(source.Name)),
                         }">
                         {{
                             sibling
