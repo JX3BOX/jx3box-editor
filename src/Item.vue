@@ -142,47 +142,11 @@
                 v-if="source.furniture_attributes">
                 <div
                     class="u-field u-green"
-                    v-if="source.furniture_attributes.view">
+                    v-if="source.furniture_attributes.record">
                     <span
                         class="u-value"
                         v-text="
-                            `观赏提高${source.furniture_attributes.view}`
-                        "></span>
-                </div>
-                <div
-                    class="u-field u-green"
-                    v-if="source.furniture_attributes.practical">
-                    <span
-                        class="u-value"
-                        v-text="
-                            `实用提高${source.furniture_attributes.practical}`
-                        "></span>
-                </div>
-                <div
-                    class="u-field u-green"
-                    v-if="source.furniture_attributes.hard">
-                    <span
-                        class="u-value"
-                        v-text="
-                            `坚固提高${source.furniture_attributes.hard}`
-                        "></span>
-                </div>
-                <div
-                    class="u-field u-green"
-                    v-if="source.furniture_attributes.geomantic">
-                    <span
-                        class="u-value"
-                        v-text="
-                            `风水提高${source.furniture_attributes.geomantic}`
-                        "></span>
-                </div>
-                <div
-                    class="u-field u-green"
-                    v-if="source.furniture_attributes.interesting">
-                    <span
-                        class="u-value"
-                        v-text="
-                            `趣味提高${source.furniture_attributes.interesting}`
+                            `装修评分：${source.furniture_attributes.record}`
                         "></span>
                 </div>
             </div>
@@ -357,6 +321,10 @@
                 v-if="source.GetType"
                 class="u-get-type"
                 v-text="`物品来源：${source.GetType}`"></div>
+            <div
+                v-if="source.furniture_attributes && source.furniture_attributes.limit"
+                class="u-get-type"
+                v-text="`摆放上限：${source.furniture_attributes.limit}`"></div>
         </div>
     </div>
 </template>
