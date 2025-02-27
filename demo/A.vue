@@ -6,13 +6,13 @@
         <ItemSimple :item="item4" :only-icon="true" iconSize="56px" />
         <ItemSimple :item="item5" jx3-client-type="1" only-icon="true" iconSize="56px" />
         <ItemSimple :item="item6" jx3-client-type="2" only-icon="true" iconSize="56px" /> -->
-        <!-- <Article
+        <Article
             :content="content"
             directorybox="#directory"
             style="padding: 20px;"
             @contentRendered="test1"
             @directoryRendered="test2"
-        ></Article>
+        ></Article><!-- 
         <Buff :id="51145" client="origin" :level="0"></Buff>
         <Skill :id="2716" client="std" :level="0"></Skill> -->
         <Item :item_id="'10_1913'"></Item>
@@ -37,7 +37,7 @@ export default {
     props: [],
     components: {
         // Buff,
-        // Article,
+        Article,
         // ItemSimple,
         Item,
         // Skill
