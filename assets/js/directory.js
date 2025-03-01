@@ -22,7 +22,7 @@ function directory(from, to = '#directory') {
     // 存在目录
     if (directories.length > 1) {
         let __markTags = analystics(from);
-
+        // <span class="c-article-directory-title-skip" class="c-go-top">↑ 顶部</span>
         $box.html(
             `<div class="c-article-directory" id="c-article-directory">
                 <div class="c-article-directory-title" id="c-article-directory-title">
@@ -34,16 +34,16 @@ function directory(from, to = '#directory') {
         );
 
         const $directory = $("#c-article-directory-content");
-        const $skip = $(".c-article-directory-title-skip");
+        // const $skip = $(".c-article-directory-title-skip");
         const $folder = $(".c-article-directory-title-folder");
 
-        // 顶部按钮
         $folder.on("click", function() {
             $("#c-article-directory-content").slideToggle();
         });
-        $skip.on("click", function() {
-            $(document).scrollTop(0);
-        });
+        // 顶部按钮
+        // $skip.on("click", function() {
+        //     $(document).scrollTop(0);
+        // });
 
         // 遍历捕获的目录项
         directories.each(function(i, item) {

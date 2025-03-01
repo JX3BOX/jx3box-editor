@@ -12,10 +12,12 @@
             style="padding: 20px;"
             @contentRendered="test1"
             @directoryRendered="test2"
-        ></Article>
+        ></Article><!-- 
         <Buff :id="51145" client="origin" :level="0"></Buff>
-        <Skill :id="2716" client="std" :level="0"></Skill>
-        <Item :item_id="'6_27425'"></Item>
+        <Skill :id="2716" client="std" :level="0"></Skill> -->
+        <Item :item_id="'10_1913'"></Item>
+        <Item :item_id="'6_40294'"></Item>
+        <Item :item_id="'7_101430'"></Item>
         <div id="directory"></div>
     </div>
 </template>
@@ -33,6 +35,13 @@ import Skill from "../src/Skill.vue";
 export default {
     name: "A",
     props: [],
+    components: {
+        // Buff,
+        Article,
+        // ItemSimple,
+        Item,
+        // Skill
+    },
     data: function () {
         return {
             content: demohtml,
@@ -95,7 +104,7 @@ export default {
             }
         });
 
-        get_item("5_3028", 1).then((res) => {
+        get_item("5_3028", "std").then((res) => {
             let data = res.data;
             if (data.code === 200) {
                 let item = data.data.item;
@@ -103,20 +112,13 @@ export default {
             }
         });
 
-        get_item("5_3028", 2).then((res) => {
+        get_item("5_3028", "origin").then((res) => {
             let data = res.data;
             if (data.code === 200) {
                 let item = data.data.item;
                 this.item6 = JSON.stringify(item) !== "{}" ? item : null;
             }
         });
-    },
-    components: {
-        Buff,
-        Article,
-        // ItemSimple,
-        Item,
-        Skill
     },
 };
 </script>

@@ -133,6 +133,7 @@
   word-wrap: break-word;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, "Microsoft YaHei", Trebuchet MS, Calibri, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Helvetica, sans-serif;
   text-rendering: optimizelegibility;
+  scroll-behavior: smooth;
 }
 .c-article-tinymce * {
   max-width: 100%;
@@ -1270,6 +1271,18 @@
   padding: 0;
   margin: 0;
 }
+.c-article-tinymce:not(.c-article-editor) .w-skill-combo-item .u-skill-icon {
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.c-article-tinymce:not(.c-article-editor) .w-skill-combo-item .u-skill-icon_small {
+  width: 42px;
+  height: 42px;
+}
 .c-article-tinymce:not(.c-article-editor) .w-skill-combo-item .u-gcd-icon {
   position: absolute;
   left: -4px;
@@ -1297,6 +1310,19 @@
   text-overflow: clip;
   white-space: pre-wrap;
   text-align: center;
+}
+.c-article-tinymce:not(.c-article-editor) .w-skill-combo-item .u-skill-name_underline {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.c-article-tinymce:not(.c-article-editor) .w-skill-combo-item .u-skill-note {
+  font-size: 12px;
+  line-height: 1;
+  width: 56px;
+  text-overflow: clip;
+  white-space: pre-wrap;
+  text-align: center;
+  margin-bottom: 5px;
 }
 .c-article-editor .e-skill-combo {
   font-size: 14px;
@@ -1389,7 +1415,7 @@
   font-weight: 300;
   font-size: 18px;
 }
-.c-article-directory-title .c-article-directory-title-label .u-icon{
+.c-article-directory-title .c-article-directory-title-label .u-icon {
   font-size: 20px;
 }
 .c-article-directory-title .c-article-directory-title-skip,
@@ -1604,6 +1630,15 @@
   text-shadow: 1px 1px 1px #0f2222;
   line-height: 20px;
 }
+.w-skill .w-skill-switch-parse {
+  padding: 5px;
+  float: right;
+  color: #5df9eb;
+  transition: all 0.15s ease;
+}
+.w-skill .w-skill-switch-parse:hover {
+  color: #ff0;
+}
 .w-skill .w-skill-name {
   color: #ff0;
   display: block;
@@ -1615,6 +1650,15 @@
   margin-bottom: 10px;
   font-size: 12px;
   line-height: 20px;
+  white-space: pre-wrap;
+}
+.w-skill .w-skill-talent {
+  color: #04cfb4;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  line-height: 20px;
+  white-space: pre-wrap;
 }
 .w-skill .w-skill-meta {
   display: block;
@@ -1727,12 +1771,22 @@
 .c-item .c-item-wrapper .u-title {
   font-weight: normal;
 }
+.c-item .c-item-wrapper .u-label-icon {
+  transform: scale(1.1);
+  width: 14px;
+  vertical-align: text-bottom;
+}
 .c-item .c-item-wrapper .u-desc {
   padding-right: 0px;
 }
 .c-item .c-item-wrapper .u-title,
 .c-item .c-item-wrapper .u-desc {
   margin: 0;
+}
+.c-item .c-item-wrapper .u-spec-attribute.u-value::before {
+  content: "·";
+  font-weight: bold;
+  color: #ffa500;
 }
 .c-item .c-item-wrapper .u-orange {
   color: #ffa500;
