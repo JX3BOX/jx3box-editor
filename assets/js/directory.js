@@ -26,9 +26,8 @@ function directory(from, to = '#directory') {
         $box.html(
             `<div class="c-article-directory" id="c-article-directory">
                 <div class="c-article-directory-title" id="c-article-directory-title">
-                    <span class="c-article-directory-title-label" class="c-go-top"><i class="el-icon-s-promotion"></i> 导读</span>
-                    <span class="c-article-directory-title-skip" class="c-go-top">↑ 顶部</span>
-                    <span class="c-article-directory-title-folder" class="c-go-top">↕ 折叠</span>
+                    <span class="c-article-directory-title-label" class="c-go-top"><i class="u-icon el-icon-reading"></i> 导读</span>
+                    <span class="c-article-directory-title-folder" class="c-go-top"><i class="el-icon-d-caret"></i> 折叠</span>
                 </div>
                 <div class="c-article-directory-content" id="c-article-directory-content"></div>
             </div>`

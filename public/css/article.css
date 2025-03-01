@@ -1387,6 +1387,9 @@
 }
 .c-article-directory-title .c-article-directory-title-label {
   font-weight: 300;
+  font-size: 18px;
+}
+.c-article-directory-title .c-article-directory-title-label .u-icon{
   font-size: 20px;
 }
 .c-article-directory-title .c-article-directory-title-skip,
