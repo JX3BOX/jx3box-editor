@@ -142,7 +142,10 @@ export default {
 			tinyMCE.editors["tinymce"].insertContent(data);
 		},
 		emotionSelected: function (emotion) {
-			const src = `${__imgPath}emotion/output/${emotion.filename}`;
+			let src = emotion.filename;
+            if (!emotion.filename.startsWith("http")) {
+                src = `${__imgPath}emotion/output/${emotion.filename}`;
+            }
 			const IMAGE = `<img class="t-emotion" src="${src}" alt="${src}" />`;
 			tinyMCE.editors["tinymce"].insertContent(IMAGE);
 		},
