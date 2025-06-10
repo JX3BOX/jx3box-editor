@@ -146,7 +146,7 @@ export default {
             if (!emotion.filename.startsWith("http")) {
                 src = `${__imgPath}emotion/output/${emotion.filename}`;
             }
-			const IMAGE = `<img class="t-emotion" src="${src}" alt="${src}" />`;
+			const IMAGE = `<img class="t-emotion" src="${src}" alt="${src}" style="max-width:60px;max-height:60px" />`;
 			tinyMCE.editors["tinymce"].insertContent(IMAGE);
 		},
 	},
