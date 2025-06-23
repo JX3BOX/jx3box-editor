@@ -1300,6 +1300,7 @@
 .c-article-tinymce:not(.c-article-editor) .w-skill-combo-item .u-gcd-icon i {
   color: #fff;
   font-size: 12px;
+  line-height: 1;
   display: block;
 }
 .c-article-tinymce:not(.c-article-editor) .w-skill-combo-item .u-skill-name {
