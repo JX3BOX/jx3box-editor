@@ -97,7 +97,7 @@
                             <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
                         </p>
                         <ul class="m-resource-list" v-if="item.length">
-                            <el-popover popper-class="m-item-pop" :visible-arrow="false" trigger="hover" placement="left" v-for="(o, i) in item" :key="i">
+                            <el-popover popper-class="m-item-pop" :visible-arrow="false" trigger="hover" placement="left" v-for="(o, i) in item" :key="o.id">
                                 <li slot="reference" class="u-item" :class="{ on: o.isSelected }" @click="selectItem(o, i)" ref="item">
                                     <span class="u-id">ID:{{ o.id }}</span>
                                     <img class="u-pic" :title="'IconID:' + o.IconID" :src="iconURL(o.IconID)" />
