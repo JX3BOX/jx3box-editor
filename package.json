@@ -1,6 +1,6 @@
 {
     "name": "@jx3box/jx3box-editor",
-    "version": "2.2.35",
+    "version": "2.2.36",
     "description": "JX3BOX Article & Editor",
     "main": "index.js",
     "scripts": {
@@ -81,8 +81,5 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/JX3BOX/jx3box-editor.git"
-    },
-    "overrides": {
-      "stylus": "https://github.com/stylus/stylus/archive/refs/tags/0.54.5.tar.gz"
     }
 }
