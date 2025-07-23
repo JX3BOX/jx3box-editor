@@ -61,7 +61,7 @@ import renderDirectory from "../assets/js/directory";
 import renderMacro from "../assets/js/macro";
 import renderTalent from "../assets/js/qixue";
 import renderTalent2 from "../assets/js/talent2";
-import renderKatex from "../assets/js/katex";
+import {renderKatexAll} from "../assets/js/katex";
 import renderCode from "../assets/js/code";
 import renderImgPreview from "../assets/js/renderImgPreview";
 import renderPzIframe from "../assets/js/pz_iframe";
@@ -170,7 +170,7 @@ export default {
             // 代码
             renderCode(`code[class=^'language-']`);
             // Tatex
-            renderKatex();
+            renderKatexAll();
 
             // 画廊（需要在宏、奇穴、物品等之前渲染以排除下方自动生成图片）
             // renderGallery(this)

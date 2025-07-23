@@ -28,7 +28,7 @@ import renderDirectory from "../assets/js/directory";
 import renderMacro from "../assets/js/macro";
 import renderTalent from "../assets/js/qixue";
 import renderTalent2 from "../assets/js/talent2";
-import renderKatex from "../assets/js/katex";
+import {renderKatexAll} from "../assets/js/katex";
 import renderCode from "../assets/js/code";
 
 // 剑三
@@ -111,7 +111,7 @@ export default {
             renderTalent();
             renderTalent2();
             // Tatex
-            renderKatex();
+            renderKatexAll();
             // 画廊
             renderImgPreview(this);
             // 语法高亮
