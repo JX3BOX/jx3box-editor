@@ -1,85 +1,88 @@
 {
-  "name": "@jx3box/jx3box-editor",
-  "version": "2.2.33",
-  "description": "JX3BOX Article & Editor",
-  "main": "index.js",
-  "scripts": {
-    "dev": "env DEV_SERVER=true vue-cli-service serve",
-    "serve": "vue-cli-service serve",
-    "less": "less-watch-compiler public/css public/css",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "inspect": "vue inspect > output.js",
-    "update": "npm --registry https://registry.npmjs.org install @jx3box/jx3box-common@latest @jx3box/jx3box-macro@latest @jx3box/jx3box-talent@latest @jx3box/jx3box-emotion@latest @jx3box/jx3box-data@latest @jx3box/markdown@latest",
-    "article": "vue-cli-service build --target lib --name jx3box_article src/Article.vue --mode production",
-    "tinymce": "vue-cli-service build --target lib --name tinymce src/Tinymce.vue && cp public/tinymce.html dist/tinymce.html"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "@jx3box/jx3box-editor",
+    "version": "2.2.34",
+    "description": "JX3BOX Article & Editor",
+    "main": "index.js",
+    "scripts": {
+        "dev": "env DEV_SERVER=true vue-cli-service serve",
+        "serve": "vue-cli-service serve",
+        "less": "less-watch-compiler public/css public/css",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "inspect": "vue inspect > output.js",
+        "update": "npm --registry https://registry.npmjs.org install @jx3box/jx3box-common@latest @jx3box/jx3box-macro@latest @jx3box/jx3box-talent@latest @jx3box/jx3box-emotion@latest @jx3box/jx3box-data@latest @jx3box/markdown@latest",
+        "article": "vue-cli-service build --target lib --name jx3box_article src/Article.vue --mode production",
+        "tinymce": "vue-cli-service build --target lib --name tinymce src/Tinymce.vue && cp public/tinymce.html dist/tinymce.html"
     },
-    "extends": [
-      "plugin:vue/essential"
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential"
+        ],
+        "rules": {},
+        "parserOptions": {
+            "parser": "babel-eslint"
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions"
     ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
+    "dependencies": {
+        "@jx3box/jx3box-common": "^8.7.1",
+        "@jx3box/jx3box-data": "^3.8.2",
+        "@jx3box/jx3box-emotion": "^1.2.13",
+        "@jx3box/jx3box-macro": "^1.0.1",
+        "@jx3box/jx3box-talent": "^1.3.3",
+        "@jx3box/markdown": "^0.1.5",
+        "@tinymce/tinymce-vue": "^3.2.2",
+        "axios": "^0.19.2",
+        "core-js": "^3.6.5",
+        "csslab": "^4.0.3",
+        "dayjs": "^1.10.7",
+        "element-ui": "^2.13.2",
+        "hevue-img-preview": "^5.0.0",
+        "highlight.js": "^11.3.1",
+        "jquery": "^3.5.1",
+        "js-base64": "^3.6.1",
+        "katex": "^0.13.0",
+        "lodash": "^4.17.15",
+        "photoswipe": "^4.1.2",
+        "prismjs": "^1.20.0",
+        "sortablejs": "^1.15.0",
+        "vue": "^2.6.11",
+        "vue-contextmenujs": "^1.4.9",
+        "vue-gallery-slideshow": "^1.5.2",
+        "vue-photoswipe.js": "^2.0.23",
+        "vue-plugin-load-script": "^1.3.6",
+        "vuedraggable": "^2.24.3",
+        "xss": "^1.0.8"
+    },
+    "devDependencies": {
+        "@babel/plugin-proposal-optional-chaining": "^7.16.5",
+        "@vue/cli-plugin-babel": "~4.3.0",
+        "@vue/cli-plugin-eslint": "~4.3.0",
+        "@vue/cli-plugin-vuex": "^4.0.0",
+        "@vue/cli-service": "~4.3.0",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^6.7.2",
+        "eslint-plugin-vue": "^6.2.2",
+        "less": "^3.0.4",
+        "less-loader": "^5.0.0",
+        "less-watch-compiler": "^1.16.3",
+        "style-resources-loader": "^1.3.3",
+        "vue-cli-plugin-element": "~1.0.1",
+        "vue-svg-inline-loader": "^1.4.6",
+        "vue-template-compiler": "^2.6.11"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/JX3BOX/jx3box-editor.git"
+    },
+    "overrides": {
+        "stylus": "0.55.0"
     }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ],
-  "dependencies": {
-    "@jx3box/jx3box-common": "^8.7.1",
-    "@jx3box/jx3box-data": "^3.8.2",
-    "@jx3box/jx3box-emotion": "^1.2.13",
-    "@jx3box/jx3box-macro": "^1.0.1",
-    "@jx3box/jx3box-talent": "^1.3.3",
-    "@jx3box/markdown": "^0.1.5",
-    "@tinymce/tinymce-vue": "^3.2.2",
-    "axios": "^0.19.2",
-    "core-js": "^3.6.5",
-    "csslab": "^4.0.3",
-    "dayjs": "^1.10.7",
-    "element-ui": "^2.13.2",
-    "hevue-img-preview": "^5.0.0",
-    "highlight.js": "^11.3.1",
-    "jquery": "^3.5.1",
-    "js-base64": "^3.6.1",
-    "katex": "^0.13.0",
-    "lodash": "^4.17.15",
-    "photoswipe": "^4.1.2",
-    "prismjs": "^1.20.0",
-    "sortablejs": "^1.15.0",
-    "vue": "^2.6.11",
-    "vue-contextmenujs": "^1.4.9",
-    "vue-gallery-slideshow": "^1.5.2",
-    "vue-photoswipe.js": "^2.0.23",
-    "vue-plugin-load-script": "^1.3.6",
-    "vuedraggable": "^2.24.3",
-    "xss": "^1.0.8"
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.16.5",
-    "@vue/cli-plugin-babel": "~4.3.0",
-    "@vue/cli-plugin-eslint": "~4.3.0",
-    "@vue/cli-plugin-vuex": "^4.0.0",
-    "@vue/cli-service": "~4.3.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "less": "^3.0.4",
-    "less-loader": "^5.0.0",
-    "less-watch-compiler": "^1.16.3",
-    "style-resources-loader": "^1.3.3",
-    "vue-cli-plugin-element": "~1.0.1",
-    "vue-svg-inline-loader": "^1.4.6",
-    "vue-template-compiler": "^2.6.11"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JX3BOX/jx3box-editor.git"
-  }
 }
