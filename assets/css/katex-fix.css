@@ -1,0 +1,20 @@
+/* KaTeX 字体修复 */
+.katex {
+    font-family: KaTeX_Main, "Times New Roman", serif !important;
+}
+
+.katex .mord,
+.katex .mop {
+    font-family: KaTeX_Main, "Times New Roman", serif !important;
+}
+
+/* 强制求和符号使用正确字体 */
+.katex .mop.op-symbol.large-op {
+    font-family: KaTeX_Size2, KaTeX_Size1, KaTeX_Main, "Times New Roman", serif !important;
+}
+
+/* 确保数学符号显示 */
+.katex .mop:before,
+.katex .mop:after {
+    font-family: KaTeX_Main, "Times New Roman", serif !important;
+}
