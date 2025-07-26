@@ -85,8 +85,8 @@
         background-color: rgba(15, 34, 34, 0.88);
         // background-color: #0f2222;
         color: #ffffff;
-        
-        *{
+
+        * {
             font-weight: normal;
             font-size: 13.6px;
             line-height: 1.5em;
@@ -236,6 +236,39 @@
             span {
                 .pr(10px);
             }
+        }
+
+        .u-get-source {
+            margin-top: 1rem;
+        }
+
+        .u-get-source-header {
+            color: #ffa500;
+        }
+
+        .u-get-source-list {
+            padding-left: 0.9rem;
+        }
+
+        .u-get-source-child {
+            color: #00c848;
+            .pr;
+
+            &.is-link {
+                .pointer;
+            }
+
+            &::before {
+                .pa;
+                left: -0.9rem;
+                content: "➻";
+                margin-right: 0.2rem;
+                color: #00c848;
+            }
+        }
+
+        .u-get-source-type {
+            color: #ffff00;
         }
     }
 }

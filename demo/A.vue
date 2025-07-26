@@ -17,7 +17,9 @@
         <Skill :id="2716" client="std" :level="0"></Skill> -->
         <Item :item_id="'10_1913'"></Item>
         <Item :item_id="'6_40294'"></Item>
-        <Item :item_id="'7_101430'"></Item>
+        <Item :item_id="'5_36016'"></Item>
+        <Item :item_id="'5_30823'"></Item>
+        <Item :item_id="'8_18301'"></Item>
         <div id="directory"></div>
     </div>
 </template>

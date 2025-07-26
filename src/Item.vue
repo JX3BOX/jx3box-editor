@@ -78,8 +78,8 @@
                 class="u-attributes"
                 v-if="source.attributes && source.attributes.length">
                 <div
-                    v-for="(attribute, key) in common_attributes"
-                    :key="key"
+                    v-for="attribute in common_attributes"
+                    :key="attribute.type"
                     class="u-field"
                     :class="[`u-${attribute.color}`]">
                     <span
@@ -113,8 +113,8 @@
                     </div>
                     <div
                         class="u-value u-spec-attribute"
-                        v-for="(attribute, key) in orange_std_attribute"
-                        :key="key">
+                        v-for="attribute in orange_std_attribute"
+                        :key="attribute.label">
                         <game-text :text="attribute.label"></game-text>
                     </div>
                 </template>
@@ -317,12 +317,43 @@
                     "></span>
             </div>
             <!-- 物品来源 -->
+            <div v-if="source.GetSource" class="u-get-source">
+                <span class="u-get-source-header">获取途径：</span>
+                <div
+                    class="u-get-source-list"
+                    v-for="source in source.GetSource"
+                    :key="source.label">
+                    <span class="u-get-source-type"> {{ source.label }} </span>
+                    <template v-if="source.children">
+                        <div
+                            v-for="child in source.children"
+                            :key="child.label || child">
+                            <span
+                                class="u-get-source-child"
+                                v-if="typeof child === 'string'">
+                                {{ child }}
+                            </span>
+                            <span
+                                class="u-get-source-child"
+                                v-else-if="child.label"
+                                @click="onClickSource(child)"
+                                :style="sourceStyle(child)"
+                                :class="{ 'is-link': child.app && child.id }">
+                                {{ sourceLabel(child) }}
+                            </span>
+                        </div>
+                    </template>
+                </div>
+            </div>
             <div
-                v-if="source.GetType"
+                v-else-if="source.GetType"
                 class="u-get-type"
                 v-text="`物品来源：${source.GetType}`"></div>
             <div
-                v-if="source.furniture_attributes && source.furniture_attributes.limit"
+                v-if="
+                    source.furniture_attributes &&
+                    source.furniture_attributes.limit
+                "
                 class="u-get-type"
                 v-text="`摆放上限：${source.furniture_attributes.limit}`"></div>
         </div>
@@ -331,6 +362,7 @@
 
 <script>
 import { get_item } from "../service/item.js";
+import { getLink } from "@jx3box/jx3box-common/js/utils.js";
 
 import GameText from "./GameText.vue";
 
@@ -412,6 +444,26 @@ export default {
         },
     },
     methods: {
+        sourceLabel(child) {
+            if (typeof child === "string") return child;
+            if (child.app == "item") return `[${child.label}]`;
+            return child.label;
+        },
+        sourceStyle(child) {
+            if (child.quality)
+                return {
+                    color: color(child.quality),
+                };
+            return null;
+        },
+        onClickSource(child) {
+            const { app, id } = child;
+            if (!app || !id) return;
+            const link = getLink(app, id);
+            if (link) {
+                window.open(link, "_blank");
+            }
+        },
         iconLink: function (id) {
             return iconLink(id, this.final_client);
         },
