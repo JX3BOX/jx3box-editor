@@ -1,6 +1,11 @@
 // 输出样式
 .w-qixue-box {
     @url: "https://img.jx3box.com/img/";
+    @color-0-border: "@{url}qixue/newqixue1_9.png";
+    @color-1-border: "@{url}qixue/newqixue1_1.png";
+    @color-2-border: "@{url}qixue/newqixue1_2.png";
+    @color-3-border: "@{url}qixue/newqixue1_4.png";
+    @color-4-border: "@{url}qixue/newqixue1_5.png";
 
     zoom: 1;
 
@@ -12,6 +17,7 @@
     @out-bo: 2px;
     @lp:@xf-l + @xf-r + @xf + @out-bo;
     @space: 10px;
+    @big-space: 30px;
     @bo: 2px;
 
     //局部z级别
@@ -22,9 +28,7 @@
         color: #fff;
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.9);
     }
-    // .dbi;
-    display:inline-flex;
-
+    .dbi;
     background-color: @color;
     .r(5px);
     border: @out-bo solid @gray;
@@ -33,14 +37,13 @@
     padding-top: 8px;
     padding-bottom: 8px;
     padding-right: 20px;
-    // padding-left: 10px;
     white-space: nowrap;
     font-size: 0;
     // width:860px;
     // overflow-x: auto;
     // display: block;
 
-    &.isQQBrowser{
+    &.isQQBrowser {
         padding-right: 30px !important; //fix
     }
 
@@ -63,12 +66,12 @@
 
     //心法label
     .w-qixue-xf {
-        // .dbi;
+        .dbi;
         .y(top);
         .fz(14px);
         .white;
         .x;
-        
+        padding: 0 4px 0 0;
         box-sizing: border-box;
         .retext(y);
         background: url("@{url}qixue/label.png") no-repeat 0 0;
@@ -82,12 +85,6 @@
         margin-top: 0;
         margin-bottom: 0;
         line-height: 1.1;
-        padding-right:5px;
-        letter-spacing:1px;
-
-        // word-wrap: break-word;
-        // padding-left:26px;
-        // white-space: wrap;
     }
 
     .w-qixue-clist {
@@ -97,6 +94,32 @@
     //公共单项
     .w-qixue-clist-item,
     .w-qixue-olist-item {
+        &[data-color="0"]:not([data-is_skill="1"]) .u-pic {
+            &:after {
+                background: url("@{color-0-border}") no-repeat 0 0;
+            }
+        }
+        &[data-color="1"] .u-pic {
+            &:after {
+                background: url("@{color-1-border}") no-repeat 0 0;
+            }
+        }
+        &[data-color="2"] .u-pic {
+            &:after {
+                background: url("@{color-2-border}") no-repeat 0 0;
+            }
+        }
+        &[data-color="3"] .u-pic {
+            &:after {
+                background: url("@{color-3-border}") no-repeat 0 0;
+            }
+        }
+        &[data-color="4"] .u-pic {
+            &:after {
+                background: url("@{color-4-border}") no-repeat 0 0;
+            }
+        }
+
         .u-pic {
             .db;
             .pr;
@@ -106,11 +129,13 @@
                 .db;
             }
             &:after {
-                .size(52px);
+                .size(80px);
                 .pa;
-                .lt(-2px,-2px);
-                background: url("@{url}qixue/bg.png") no-repeat 0 0;
+                .lt(-10px,-10px);
                 .z(@icon-decorate + 1);
+                pointer-events: none;
+                transform: scale(1.06);
+                transform-origin: center;
             }
         }
         img {
@@ -119,6 +144,8 @@
             padding: 0;
             margin: 0;
             border: none;
+            border: 2px solid #485053;
+            box-sizing: border-box;
         }
         .u-title {
             .white;
@@ -156,19 +183,22 @@
             margin-right: 0;
         }
 
-        /* &.w-qixue-isskill .u-pic{
-            &:before{
-                .pa;.lt(0);
-                .full;
-                border:2px solid @color-cyan;
-            }
-        } */
+        &.w-qixue-type-1-last,
+        &.w-qixue-type-2-last {
+            .mr(@big-space);
+        }
+
+        &[data-type="3"]:not(.w-qixue-type-3-center)::before {
+            opacity: 0;
+        }
 
         &:before {
+            .pr;
             content: "";
-            .size(44px,11px);
+            .size(46px,12px);
             background: url("@{url}qixue/fold.png") no-repeat 0 0;
-            margin: 0 2px;
+            bottom: 2px;
+            .z(@icon-decorate + 2);
 
             .none;
         }
@@ -187,20 +217,27 @@
         .none;
     }
     //全部扩展列表容器
+
     .w-qixue-obox {
         .pa;
         .lb(@lp,100%);
         white-space: nowrap;
         font-size: 0;
         &.on {
-            .db;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
         }
     }
-    //单个扩展列表
+    // 新版奇穴限制最大高度，旧版的最多五个无需限制
+    &:not(.w-qixue-v20250921) {
+        .w-qixue-olist {
+            max-height: unset;
+        }
+    }
     .w-qixue-olist {
         .pr;
         .z(1000);
-        .dbi;
         .y(bottom);
         background-color: @color;
         padding: @space - @bo;
@@ -209,6 +246,22 @@
         border: @bo solid @gray;
         border-bottom: none;
         box-shadow: 3px -3px 3px rgba(0, 0, 0, 0.4);
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: min-content;
+        max-height: 304px;
+        gap: 8px 20px;
+
+        &.w-qixue-type-3 {
+            width: 184px;
+        }
+
+        &.w-qixue-type-1-last,
+        &.w-qixue-type-2-last {
+            .mr(30px);
+        }
 
         &:last-child {
             margin-right: 0;
@@ -220,7 +273,6 @@
         }
     }
     .w-qixue-olist-item {
-        margin-bottom: 8px;
         .pr;
 
         .u-pic {
@@ -234,12 +286,17 @@
             }
         }
 
-        &:hover {
+        &:hover:not(.is-disabled),
+        &.is-active {
             .u-pic {
                 &:before {
                     .tm(0);
                 }
             }
+        }
+
+        &.is-disabled {
+            cursor: not-allowed;
         }
 
         &:last-child {
@@ -254,9 +311,6 @@
             img {
                 .r(0);
             }
-            &:after {
-                .none;
-            }
         }
     }
 
@@ -270,7 +324,7 @@
         .r(3px);
         padding: 10px;
         width: 320px;
-        max-width:none;
+        max-width: none;
 
         * {
             .db;
@@ -325,18 +379,24 @@
         .w-qixue-xf {
             .none;
         }
-        .w-qixue-clist{
+        .w-qixue-clist {
             // .w(100%);
             // overflow-x: auto;
             .db;
             .clearfix;
-            margin-top:0;
+            margin-top: 0;
+            .w-qixue-clist-item {
+                &.w-qixue-type-1-last,
+                &.w-qixue-type-2-last {
+                    .mr(unset);
+                }
+            }
         }
     }
 }
 
 .w-qixue-editable {
-    .w-qixue-xf{
+    .w-qixue-xf {
         margin-top: 5px;
     }
     li {
@@ -386,11 +446,13 @@
         .w-qixue-obox {
             left: 0;
         }
+
         .w-qixue-olist {
             .clearfix;
             .none;
             &.on {
                 .db;
+                width: unset;
             }
 
             li {
@@ -411,13 +473,13 @@
 }
 
 // 打印样式
-@media print{
-	.w-qixue-box{
+@media print {
+    .w-qixue-box {
         page-break-inside: avoid !important;
-        padding-right:40px;
-        .w-qixue-clist-item{
-            padding-left:5px;
-            padding-right:0;
+        padding-right: 40px;
+        .w-qixue-clist-item {
+            padding-left: 5px;
+            padding-right: 0;
             transform: scale(0.85);
         }
     }
