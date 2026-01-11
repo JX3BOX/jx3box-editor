@@ -1,6 +1,6 @@
 {
     "name": "@jx3box/jx3box-editor",
-    "version": "2.2.41",
+    "version": "2.2.42",
     "description": "JX3BOX Article & Editor",
     "main": "index.js",
     "scripts": {
@@ -40,6 +40,7 @@
         "@jx3box/markdown": "^0.1.5",
         "@tinymce/tinymce-vue": "^3.2.2",
         "axios": "^0.19.2",
+        "cheerio": "^1.1.2",
         "core-js": "^3.6.5",
         "csslab": "^4.0.3",
         "dayjs": "^1.10.7",
@@ -52,6 +53,7 @@
         "lodash": "^4.17.15",
         "photoswipe": "^4.1.2",
         "prismjs": "^1.20.0",
+        "sanitize-html": "^2.17.0",
         "sortablejs": "^1.15.0",
         "vue": "^2.6.11",
         "vue-contextmenujs": "^1.4.9",

@@ -43,11 +43,11 @@ import hevueImgPreview from "hevue-img-preview";
 Vue.use(hevueImgPreview);
 
 // XSS
-import execFilterXSS from "../assets/js/script";
+import execFilterXSS from "../assets/js/xss";
 // const execFilterXSS = require("xss");
-const xss_options = {
-    allowCommentTag: true,
-};
+// const xss_options = {
+//     allowCommentTag: true,
+// };
 
 // 基本文本
 import execLazyload from "../assets/js/img";
@@ -61,7 +61,7 @@ import renderDirectory from "../assets/js/directory";
 import renderMacro from "../assets/js/macro";
 import renderTalent from "../assets/js/qixue";
 import renderTalent2 from "../assets/js/talent2";
-import {renderKatexAll} from "../assets/js/katex";
+import { renderKatexAll } from "../assets/js/katex";
 import renderCode from "../assets/js/code";
 import renderImgPreview from "../assets/js/renderImgPreview";
 import renderPzIframe from "../assets/js/pz_iframe";
@@ -80,6 +80,30 @@ export default {
     name: "Article",
     props: {
         content: String,
+        // 拼接相对路径地址的图片，需要自带协议
+        cdnDomain: {
+            type: String,
+            default: "https://cdn.jx3box.com",
+        },
+        // 链接白名单检查，不在白名单，使用新窗跳转
+        linkWhitelist: {
+            type: Array,
+            default: function () {
+                return [];
+            },
+        },
+        // 链接白名单强制模式，开启后不在白名单的链接一律置空，不允许跳转
+        linkStrict: {
+            type: Boolean,
+            default: false,
+        },
+        // iframe白名单检查，不在白名单，移除iframe
+        iframeWhitelist: {
+            type: Array,
+            default: function () {
+                return [];
+            },
+        },
         directorybox: String,
         pageable: {
             type: Boolean,
@@ -154,11 +178,18 @@ export default {
     methods: {
         doReg: function (data) {
             if (data) {
-                // 过滤内容
-                data = execLazyload(data);
-                data = execFilterIframe(data);
-                data = execFilterXSS(data, xss_options);
-                data = execFilterLink(data);
+                // 1. 先执行 XSS 过滤（xss.js 已包含所有配置）
+                data = execFilterXSS(data);
+
+                // 2. 然后执行 iframe 白名单过滤
+                data = execFilterIframe(data, ["player.bilibili.com", "docs.qq.com", "open.douyu.com", ...this.iframeWhitelist]);
+
+                // 3. 处理图片懒加载
+                data = execLazyload(data, this.cdnDomain);
+
+                // 4. 最后处理链接
+                data = execFilterLink(data, this.linkWhitelist, this.linkStrict);
+
                 return data;
             } else {
                 return "";
@@ -199,10 +230,10 @@ export default {
             let dir = renderDirectory(target, this.directorybox);
             this.$emit("directoryRendered", dir);
 
-            if(window.location.hash?.includes('directory')){
-                let id = window.location.hash
+            if (window.location.hash?.includes("directory")) {
+                let id = window.location.hash;
                 let target = $(`${id}`).offset().top;
-                console.log(target)
+                console.log(target);
                 $(document).scrollTop(target - HEADER_HEIGHT);
             }
 
