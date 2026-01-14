@@ -90,7 +90,7 @@ export default function formatLink(html, whitelist = ["*.jx3box.com"], strict = 
 
   $("a[href]").each((_, el) => {
     const a = $(el);
-    const hrefRaw = a.attr("href") ?? "";
+    const hrefRaw = a.attr("href") || "";
     const href = String(hrefRaw).trim();
     if (!href) return;
 

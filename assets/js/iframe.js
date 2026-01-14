@@ -81,7 +81,7 @@ export default function iframeFilter(html, whitelist, options = {}) {
 
     $("iframe").each((_, el) => {
         const iframe = $(el);
-        const srcRaw = iframe.attr("src") ?? "";
+        const srcRaw = iframe.attr("src") || "";
         const src = String(srcRaw).trim();
         if (!src) return;
 
