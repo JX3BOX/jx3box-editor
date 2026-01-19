@@ -27,7 +27,7 @@
 <script>
 import ItemSimple from "../src/ItemSimple.vue";
 import Article from "../src/Article.vue";
-import demohtml from "./content_1";
+import demohtml from "./test_2";
 import { get_item } from "../service/item";
 import { getBuff, getSkill } from "../service/database";
 import Item from "../src/Item.vue";
