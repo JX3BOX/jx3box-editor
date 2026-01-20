@@ -6,13 +6,8 @@
         <ItemSimple :item="item4" :only-icon="true" iconSize="56px" />
         <ItemSimple :item="item5" jx3-client-type="1" only-icon="true" iconSize="56px" />
         <ItemSimple :item="item6" jx3-client-type="2" only-icon="true" iconSize="56px" /> -->
-        <Article
-            :content="content"
-            directorybox="#directory"
-            style="padding: 20px;"
-            @contentRendered="test1"
-            @directoryRendered="test2"
-        ></Article><!-- 
+        <Article :content="content" directorybox="#directory" style="padding: 20px" @contentRendered="test1" @directoryRendered="test2"></Article
+        ><!-- 
         <Buff :id="51145" client="origin" :level="0"></Buff>
         <Skill :id="2716" client="std" :level="0"></Skill> -->
         <Item :item_id="'10_1913'"></Item>
@@ -27,7 +22,7 @@
 <script>
 import ItemSimple from "../src/ItemSimple.vue";
 import Article from "../src/Article.vue";
-import demohtml from "./test_2";
+import demohtml from "./content_1";
 import { get_item } from "../service/item";
 import { getBuff, getSkill } from "../service/database";
 import Item from "../src/Item.vue";
@@ -54,7 +49,7 @@ export default {
             item5: null,
             item6: null,
             buff: null,
-            skill: null
+            skill: null,
         };
     },
     computed: {},
@@ -72,7 +67,6 @@ export default {
         //         this.content = data.data.post.post_content
         //     })
         // });
-
 
         get_item("10_310").then((res) => {
             let data = res.data;
