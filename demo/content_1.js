@@ -1,5 +1,6 @@
 export default 
 `
+<pre class="w-audio e-audio">name:123;author:1231;user_id:;src:https://cdn.jx3box.com/upload/voice/jx3cxk/2026/8719-1768912381447.mp3</pre>
 <pre class="e-jx3qixue-area">{"version":"v20250923","xf":"惊羽诀","sq":"1,1,1,1,1,1,1,1,2,3","client":"std"}</pre>
 <p><a class="e-jx3-skill w-jx3-element" href="https://www.jx3box.com/app/database/?type=skill&amp;query=2716&amp;level=0" data-type="skill" data-client="std" data-id="2716" data-level="0">[剑破虚空]</a></p>
 

@@ -53,8 +53,8 @@ export default {
 
 				// 样式
 				// TODO:
-				content_css: process.env.VUE_APP_DEV_COMPONENT == "true" ? "/css/article.css" : `https://cdn.jx3box.com/static/jx3box-editor/css/article.css`,
-				// content_css: `http://localhost:3000/skins/content/default/content.min.css`,
+				// content_css: process.env.VUE_APP_DEV_COMPONENT == "true" ? "/css/article.css" : `https://cdn.jx3box.com/static/jx3box-editor/css/article.css`,
+				content_css: `http://localhost:3000/skins/content/default/content.min.css`,
 				body_class: "c-article c-article-editor c-article-tinymce",
 				height: this.height || 800,
 				autosave_ask_before_unload: false,
@@ -69,15 +69,15 @@ export default {
 					"link autolink",
 					"hr lists advlist table codeinline codesample checklist foldtext latex anchor",
 					"image emoticons media videox macro qixue talent2",
-					"code fullscreen wordcount powerpaste pagebreak printpage pz", // template anchor jx3icon autosave
+					"code fullscreen wordcount powerpaste pagebreak printpage pz voice", // template anchor jx3icon autosave
 				],
 				toolbar: [
 					"undo | formatselect | fontsizeselect | forecolor backcolor | bold italic underline strikethrough superscript subscript | link unlink | fullscreen code", //anchor restoredraft
-					"removeformat | hr alignleft aligncenter alignright alignjustify indent outdent | bullist numlist checklist table blockquote foldtext codeinline codesample latex | emoticons image media videox | macro pz qixue talent2 pagebreak printpage", // template anchor jx3icon
+					"removeformat | hr alignleft aligncenter alignright alignjustify indent outdent | bullist numlist checklist table blockquote foldtext codeinline codesample latex | emoticons image media videox voice | macro pz qixue talent2 pagebreak printpage", // template anchor jx3icon
 				],
 				mobile: {
 					toolbar_drawer: true,
-					toolbar: ["undo emoticons bold italic underline strikethrough superscript subscript link unlink forecolor backcolor removeformat pagebreak fullscreen code", "hr alignleft aligncenter alignright alignjustify indent outdent bullist numlist checklist table blockquote foldtext codeinline codesample latex macro pz qixue talent2 media videox"],
+					toolbar: ["undo emoticons bold italic underline strikethrough superscript subscript link unlink forecolor backcolor removeformat pagebreak fullscreen code", "hr alignleft aligncenter alignright alignjustify indent outdent bullist numlist checklist table blockquote foldtext codeinline codesample latex macro pz qixue talent2 media videox voice"],
 				},
 				block_formats: "段落=p;一级标题=h1;二级标题=h2;三级标题=h3;四级标题=h4;五级标题=h5;六级标题=h6;",
 				fontsize_formats: "12px 14px 16px 18px 22px 24px 26px 28px 32px 48px 72px",

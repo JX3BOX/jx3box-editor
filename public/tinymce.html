@@ -8,11 +8,12 @@
         <title><%= htmlWebpackPlugin.options.title %></title>
         <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
         <script>
-            window.RX_TINYMCE_ROOT = "https://cdn.jx3box.com/static/tinymce";
+            // window.RX_TINYMCE_ROOT = "https://cdn.jx3box.com/static/tinymce";
+            window.RX_TINYMCE_ROOT = "http://localhost:3000";
         </script>
-        <script src="https://cdn.jx3box.com/static/tinymce/tinymce.min.js?v=1.9.0"></script>
+        <!-- <script src="https://cdn.jx3box.com/static/tinymce/tinymce.min.js?v=1.9.0"></script> -->
         <!-- TODO: -->
-        <!-- <script src="http://localhost:3000/tinymce.min.js"></script> -->
+        <script src="http://localhost:3000/tinymce.min.js?v=1.9.0"></script>
     </head>
     <body>
         <div id="app"></div>
