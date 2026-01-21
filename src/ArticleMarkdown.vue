@@ -38,7 +38,7 @@ import Skill from "./Skill";
 import Npc from "./Npc";
 import renderJx3Element from "../assets/js/jx3_element";
 import renderImgPreview from "../assets/js/renderImgPreview";
-import renderVoice from "../assets/js/voice";
+import renderAudio from "../assets/js/audio";
 
 import {xssOptions} from '../assets/data/markdown_whitelist.json'
 
@@ -118,7 +118,7 @@ export default {
             // 语法高亮
             renderCode(`code[class=^'lang-']`)
             // 音频
-            renderVoice();
+            renderAudio();
             // 物品
             renderJx3Element(this);
         },

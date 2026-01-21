@@ -66,7 +66,7 @@ import renderCode from "../assets/js/code";
 import renderImgPreview from "../assets/js/renderImgPreview";
 import renderPzIframe from "../assets/js/pz_iframe";
 import renderCombo from "../assets/js/combo";
-import renderVoice from "../assets/js/voice";
+import renderAudio from "../assets/js/audio";
 
 // 剑三
 import Item from "./Item";
@@ -217,7 +217,7 @@ export default {
             // 连招
             renderCombo();
             // 音频
-            renderVoice();
+            renderAudio();
             // 物品
             renderJx3Element(this);
         },

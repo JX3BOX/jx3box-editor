@@ -59,8 +59,7 @@ export default {
 
                 // 样式
                 // TODO:
-                content_css:
-                    process.env.VUE_APP_DEV_COMPONENT == "true" ? "http://localhost:3000/skins/content/default/content.min.css" : `https://cdn.jx3box.com/static/jx3box-editor/css/article.css`,
+                content_css: process.env.VUE_APP_DEV_COMPONENT == "true" ? "/css/article.css" : `https://cdn.jx3box.com/static/jx3box-editor/css/article.css`,
                 // content_css: `http://localhost:3000/skins/content/default/content.min.css`,
                 body_class: "c-article c-article-editor c-article-tinymce",
                 height: this.height || 800,
@@ -76,17 +75,17 @@ export default {
                     "link autolink",
                     "hr lists advlist table codeinline codesample checklist foldtext latex anchor",
                     "image emoticons media videox macro qixue talent2",
-                    "code fullscreen wordcount powerpaste pagebreak printpage pz audio_x", // template anchor jx3icon autosave
+                    "code fullscreen wordcount powerpaste pagebreak printpage pz audiox", // template anchor jx3icon autosave
                 ],
                 toolbar: [
                     "undo | formatselect | fontsizeselect | forecolor backcolor | bold italic underline strikethrough superscript subscript | link unlink | fullscreen code", //anchor restoredraft
-                    "removeformat | hr alignleft aligncenter alignright alignjustify indent outdent | bullist numlist checklist table blockquote foldtext codeinline codesample latex | emoticons image media videox audio_x | macro pz qixue talent2 pagebreak printpage", // template anchor jx3icon
+                    "removeformat | hr alignleft aligncenter alignright alignjustify indent outdent | bullist numlist checklist table blockquote foldtext codeinline codesample latex | emoticons image media videox audiox | macro pz qixue talent2 pagebreak printpage", // template anchor jx3icon
                 ],
                 mobile: {
                     toolbar_drawer: true,
                     toolbar: [
                         "undo emoticons bold italic underline strikethrough superscript subscript link unlink forecolor backcolor removeformat pagebreak fullscreen code",
-                        "hr alignleft aligncenter alignright alignjustify indent outdent bullist numlist checklist table blockquote foldtext codeinline codesample latex macro pz qixue talent2 media videox audio_x",
+                        "hr alignleft aligncenter alignright alignjustify indent outdent bullist numlist checklist table blockquote foldtext codeinline codesample latex macro pz qixue talent2 media videox audiox",
                     ],
                 },
                 block_formats: "段落=p;一级标题=h1;二级标题=h2;三级标题=h3;四级标题=h4;五级标题=h5;六级标题=h6;",

@@ -1,5 +1,6 @@
 import $ from "jquery";
 import { showAvatar } from "@jx3box/jx3box-common/js/utils";
+import {getUserInfo} from "../../service/author";
 
 /**
  * 渲染音频组件
@@ -8,7 +9,7 @@ import { showAvatar } from "@jx3box/jx3box-common/js/utils";
  */
 function renderVoice(selector = ".w-audio, .e-audio") {
     try {
-        $(selector).each(function (i, ele) {
+        $(selector).each(async function (i, ele) {
             const $audio = $(this);
             const content = $audio.text().trim();
 
@@ -22,18 +23,20 @@ function renderVoice(selector = ".w-audio, .e-audio") {
             });
 
             // 提取参数
-            const { name = "未命名音频", author = "未知", user_id = "", src = "" } = params;
+            let { name = "未命名音频", author = "未知", user_id = "", src = "", avatar = "" } = params;
 
             if (!src) {
                 console.warn("音频源地址为空", content);
                 return;
             }
 
+            const user_info = await fetchUserInfo(user_id);
+            console.log("用户信息:", user_info);
+            avatar = showAvatar(user_info?.user_avatar || '', 240);
+            author = author || user_info?.display_name || '匿名用户';
+            
             // 生成唯一ID
             const playerId = `audio-player-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-            // 获取用户头像，如果没有则使用默认图片
-            const avatar = showAvatar(params.avatar, 240);
 
             // 渲染音频播放器 - 使用项目中定义的样式结构
             const html = `
@@ -233,6 +236,14 @@ function checkTextWidth($player) {
         $wrapper.css("animation-duration", `${duration}s`);
         $wrapper.addClass("marquee-animate");
     }
+}
+
+function fetchUserInfo(userId) {
+    return getUserInfo(userId).then((res) => {
+        return res || null;
+    }).catch((err) => {
+        console.error("获取用户信息失败:", err);
+    });
 }
 
 export default renderVoice;
