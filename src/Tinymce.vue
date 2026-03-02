@@ -26,6 +26,7 @@
 
 <script>
 import Vue from "vue";
+import axios from "axios";
 import Editor from "@tinymce/tinymce-vue";
 import Upload from "./Upload";
 import Resource from "./Resource";
@@ -143,9 +144,10 @@ export default {
                 image_advtab: true,
                 // paste_data_images: true,
                 file_picker_types: "file image",
-                images_upload_url: API,
                 automatic_uploads: true,
-                images_upload_credentials: true,
+                images_upload_handler: (blobInfo, success, failure, progress) => {
+                    this.imagesUploadHandler(blobInfo, success, failure, progress);
+                },
 
                 // Hook
                 // setup: this.setup,
@@ -183,6 +185,53 @@ export default {
         },
     },
     methods: {
+        imagesUploadHandler: function (blobInfo, success, failure, progress) {
+            let fdata = new FormData();
+            fdata.append("file", blobInfo.blob(), blobInfo.filename());
+
+            axios
+                .post(API, fdata, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    withCredentials: true,
+                    auth: {
+                        username: (localStorage && localStorage.getItem("token")) || "",
+                        password: "cms common request",
+                    },
+                    onUploadProgress: function (e) {
+                        if (progress && e.total > 0) {
+                            progress((e.loaded / e.total) * 100);
+                        }
+                    },
+                })
+                .then((res) => {
+                    const payload = res.data || {};
+                    if (payload.code) {
+                        failure(payload.msg || payload.message || "上传失败");
+                        return;
+                    }
+
+                    const url =
+                        payload.location ||
+                        payload.url ||
+                        (payload.data &&
+                            (Array.isArray(payload.data)
+                                ? payload.data[0]
+                                : payload.data.url || payload.data.location || payload.data));
+
+                    if (!url) {
+                        failure("上传成功但未返回图片地址");
+                        return;
+                    }
+
+                    success(url);
+                })
+                .catch((err) => {
+                    const message = (err.response && err.response.data && (err.response.data.msg || err.response.data.message)) || "图片上传请求异常";
+                    failure(message);
+                });
+        },
         setup: function (editor) {
             // console.log("ID为: " + editor.id + " 的编辑器即将初始化.");
         },
