@@ -33,14 +33,8 @@
 import $ from "jquery";
 const HEADER_HEIGHT = 112; //头部高度
 
-import { Pagination, Button, Popover } from "element-ui";
-import "@jx3box/jx3box-common/css/element.css";
-
 // 相册
 // import gallery from "vue-gallery-slideshow";
-import Vue from "vue";
-import hevueImgPreview from "hevue-img-preview";
-Vue.use(hevueImgPreview);
 
 // XSS
 import execFilterXSS from "./assets/js/xss";
@@ -206,7 +200,7 @@ export default {
 
             // 画廊（需要在宏、奇穴、物品等之前渲染以排除下方自动生成图片）
             // renderGallery(this)
-            renderImgPreview(this);
+            renderImgPreview($root, "img:not(.e-jx3-emotion-img)");
             // 宏
             renderMacro();
             // 奇穴
@@ -240,7 +234,7 @@ export default {
                 $(document).scrollTop(target - HEADER_HEIGHT);
             }
 
-            $(".w-directory-anchor").on("click", function () {
+            $(".w-directory-anchor").on("click", function (e) {
                 e.preventDefault();
                 let id = $(this).attr("id");
                 let target = $(`#${id}`).offset().top;
@@ -297,9 +291,6 @@ export default {
         this.run();
     },
     components: {
-        "el-pagination": Pagination,
-        "el-button": Button,
-        // "el-popover": Popover,
         "jx3-item": Item,
         "jx3-buff": Buff,
         "jx3-skill": Skill,
@@ -313,5 +304,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "./assets/css/resource.less/article.less";
+@import "./assets/css/article.less";
 </style>

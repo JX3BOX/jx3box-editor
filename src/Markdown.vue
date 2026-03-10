@@ -274,5 +274,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "./assets/css/resource.less/markdown.less";
+@import "./assets/css/markdown.less";
 </style>

@@ -96,5 +96,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "./assets/css/resource.less/module/skill.less";
+@import "./assets/css/module/skill.less";
 </style>

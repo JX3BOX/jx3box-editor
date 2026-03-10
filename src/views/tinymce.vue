@@ -44,11 +44,6 @@ export default {
             },
         },
     },
-    methods: {
-        uploadFn() {
-            return Promise.reject(new Error("tinymceUploadFn 未实现（仅用于 demo 页面预览）"));
-        },
-    },
 };
 </script>
 

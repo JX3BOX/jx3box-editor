@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { showAvatar } from "@jx3box/jx3box-common/js/utils";
-import {getUserInfo} from "../../service/author";
+import { getUserInfo } from "../../service/author";
 
 /**
  * 渲染音频组件
@@ -34,7 +34,7 @@ function renderVoice(selector = ".w-audio, .e-audio") {
             console.log("用户信息:", user_info);
             avatar = showAvatar(user_info?.user_avatar || '', 240);
             author = author || user_info?.display_name || '匿名用户';
-            
+
             // 生成唯一ID
             const playerId = `audio-player-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 

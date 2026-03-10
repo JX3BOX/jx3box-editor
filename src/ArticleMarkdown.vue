@@ -13,10 +13,6 @@
 <script>
 import markdownRender from '@jx3box/markdown/src/render.vue'
 
-import Vue from "vue";
-import hevueImgPreview from "hevue-img-preview";
-Vue.use(hevueImgPreview);
-
 // 基本文本
 import execLazyload from "./assets/js/img";
 import execFilterIframe from "./assets/js/iframe";
@@ -114,7 +110,7 @@ export default {
             // Tatex
             renderKatexAll();
             // 画廊
-            renderImgPreview(this);
+            renderImgPreview(this.$refs.article, "img:not(.e-jx3-emotion-img)");
             // 语法高亮
             renderCode(`code[class=^'lang-']`)
             // 音频
@@ -166,7 +162,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "./assets/css/resource.less/article_markdown.less";
+@import "./assets/css/article_markdown.less";
 
 .v-note-img-wrapper {
     display: none;

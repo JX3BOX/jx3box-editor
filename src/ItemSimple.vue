@@ -114,5 +114,5 @@ export default {
 }
 </style>
 <style lang="less">
-@import "./assets/css/resource.less/module/item_simple.less";
+@import "./assets/css/module/item_simple.less";
 </style>

@@ -85,5 +85,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "./assets/css/resource.less/module/buff.less";
+@import "./assets/css/module/buff.less";
 </style>
