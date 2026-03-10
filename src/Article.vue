@@ -1,15 +1,27 @@
 <template>
     <div class="c-article-tinymce c-article-box">
         <!-- <div id="c-article-origin" class="c-article-origin" ref="origin"><slot></slot></div> -->
+
         <div id="c-article" class="c-article" ref="article" v-if="pageable">
-            <div class="c-article-chunk" v-for="(text, i) in data" :key="i" v-html="text" :class="{ on: i == page - 1 || all == true }" :id="'c-article-part' + ~~(i + 1)"></div>
+            <div
+                class="c-article-chunk"
+                v-for="(text, i) in data"
+                :key="i"
+                v-html="text"
+                :class="{ on: i == page - 1 || all == true }"
+                :id="'c-article-part' + ~~(i + 1)"
+            ></div>
         </div>
+
         <div id="c-article" class="c-article" ref="article" v-else-if="data && data.length" v-html="data[0]"></div>
+
         <el-button class="c-article-all" type="primary" v-if="!all && hasPages" @click="showAll">加载全部</el-button>
+
         <el-pagination
             class="c-article-pages"
             v-if="!all"
             background
+            center
             :page-size="1"
             :hide-on-single-page="true"
             @current-change="changePage"
@@ -17,15 +29,20 @@
             layout="total, prev, pager, next, jumper"
             :total="total"
         ></el-pagination>
+
         <div class="w-jx3-element-pop" :style="jx3_element.style">
             <jx3-item :item_id="item.id" :jx3ClientType="item.client" v-show="jx3_element.type == 'item'" />
             <jx3-buff :client="buff.client" :id="buff.id" :level="buff.level" v-show="jx3_element.type == 'buff'" />
-            <jx3-skill :client="skill.client" :id="skill.id" :level="skill.level" v-show="jx3_element.type == 'skill'" />
+            <jx3-skill
+                :client="skill.client"
+                :id="skill.id"
+                :level="skill.level"
+                v-show="jx3_element.type == 'skill'"
+            />
             <jx3-npc :client="npc.client" :id="npc.id" v-show="jx3_element.type === 'npc'" />
             <jx3-author :uid="author.id" v-show="jx3_element.type === 'author'" />
             <jx3-emotion-author :id="emotion.id" v-show="jx3_element.type === 'emotion'" />
         </div>
-        <!-- <gallery :images="images" :index="gallery_index" @close="index = null"></gallery> -->
     </div>
 </template>
 
@@ -33,15 +50,8 @@
 import $ from "jquery";
 const HEADER_HEIGHT = 112; //头部高度
 
-// 相册
-// import gallery from "vue-gallery-slideshow";
-
 // XSS
 import execFilterXSS from "./assets/js/xss";
-// const execFilterXSS = require("xss");
-// const xss_options = {
-//     allowCommentTag: true,
-// };
 
 // 基本文本
 import execLazyload from "./assets/js/img";
@@ -52,34 +62,38 @@ import execSplitPages from "./assets/js/nextpage";
 // 扩展文本
 import renderFoldBlock from "./assets/js/fold";
 import renderDirectory from "./assets/js/directory";
+import renderKatex from "../assets/js/katex";
+import renderCode from "../assets/js/code";
+import renderImgPreview from "../assets/js/renderImgPreview";
+
+// 魔盒
 import renderMacro from "./assets/js/macro";
 import renderTalent from "./assets/js/qixue";
 import renderTalent2 from "./assets/js/talent2";
-import { renderKatexAll } from "./assets/js/katex";
-import renderCode from "./assets/js/code";
-import renderImgPreview from "./assets/js/renderImgPreview";
 import renderPzIframe from "./assets/js/pz_iframe";
 import renderCombo from "./assets/js/combo";
 import renderAudio from "./assets/js/audio";
+import Author from "./components/Author";
+import PostAuthor from "./components/PostAuthor.vue";
 
 // 剑三
 import Item from "./Item";
 import Buff from "./Buff";
 import Skill from "./Skill";
 import Npc from "./Npc";
-import Author from "./components/Author";
-import PostAuthor from "./components/PostAuthor.vue";
 import renderJx3Element from "./assets/js/jx3_element";
 
 export default {
     name: "Article",
     props: {
         content: String,
+
         // 拼接相对路径地址的图片，需要自带协议
         cdnDomain: {
             type: String,
             default: "https://cdn.jx3box.com",
         },
+
         // 链接白名单检查，不在白名单，使用新窗跳转
         linkWhitelist: {
             type: Array,
@@ -99,7 +113,10 @@ export default {
                 return [];
             },
         },
+
+        // 目录容器选择器
         directorybox: String,
+        // 是否开启分页
         pageable: {
             type: Boolean,
             default: true,
@@ -177,7 +194,12 @@ export default {
                 data = execFilterXSS(data);
 
                 // 2. 然后执行 iframe 白名单过滤
-                data = execFilterIframe(data, ["player.bilibili.com", "docs.qq.com", "open.douyu.com", ...this.iframeWhitelist]);
+                data = execFilterIframe(data, [
+                    "player.bilibili.com",
+                    "docs.qq.com",
+                    "open.douyu.com",
+                    ...this.iframeWhitelist,
+                ]);
 
                 // 3. 处理图片懒加载
                 data = execLazyload(data, this.cdnDomain);
@@ -196,11 +218,10 @@ export default {
             // 代码
             renderCode(`code[class=^'language-']`);
             // Tatex
-            renderKatexAll();
-
-            // 画廊（需要在宏、奇穴、物品等之前渲染以排除下方自动生成图片）
-            // renderGallery(this)
+            renderKatex();
+            // 画廊
             renderImgPreview($root, "img:not(.e-jx3-emotion-img)");
+
             // 宏
             renderMacro();
             // 奇穴
@@ -297,8 +318,6 @@ export default {
         "jx3-npc": Npc,
         "jx3-author": Author,
         "jx3-emotion-author": PostAuthor,
-        // "gallery":gallery,
-        // VueViewer
     },
 };
 </script>
