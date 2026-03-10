@@ -1,0 +1,77 @@
+// md编辑器样式
+.c-editor-markdown {
+    .c-editor-header {
+        .mb(10px);
+        .clearfix;
+
+        .c-upload,
+        .c-resource {
+            .fl;
+        }
+        .c-upload {
+            .mr(5px);
+        }
+    }
+
+    .c-markdown {
+        .h(780px);
+        .v-note-wrapper {
+            .h(780px);
+        }
+        a:hover {
+            text-decoration: none;
+        }
+    }
+
+    .c-markdown-toolbar-item {
+        .mr(5px);
+        .pointer;
+        padding: 2px 5px 3px 5px;
+
+        &:hover {
+            background: #e9e9eb;
+            .r(4px);
+        }
+    }
+    .c-markdown-store-item {
+        .none;
+    }
+    .c-editor-markdown-dialog {
+        display: inline-block;
+        .u-input {
+            .el-textarea__inner {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            }
+        }
+        .el-dialog__body {
+            padding-top: 0;
+        }
+
+        .u-help {
+            margin-bottom: 10px;
+            // display: inline-block;
+            // color: #0366d6;
+            // font-weight: bold;
+            // cursor: pointer;
+            // text-decoration: none;
+
+            a:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+@import "markdown/video.less";
+@import "markdown/macro.less";
+@import "markdown/talent.less";
+
+@import 'module/directory.less';
+@import 'module/icon.less';
+@import 'module/resource.less';
+@import 'module/jx3_element.less';
+
+@import 'module/buff.less';
+@import 'module/skill.less';
+@import 'module/item.less';
+@import 'module/npc.less';

@@ -1,4 +1,6 @@
 // tinymce编辑器样式
+@import 'var.less';
+
 .c-editor-header{
     .mb(10px);
     .clearfix;
@@ -18,18 +20,18 @@
     &::-webkit-scrollbar {
         width: 4px;
       }
-    
+
       &::-webkit-scrollbar-track,
       &::-webkit-scrollbar-track-piece {
         background-color: #fafafa;
         border-radius: 6px;
       }
-    
+
       &::-webkit-scrollbar-thumb {
         background-color: #eee;
         border-radius: 6px;
       }
-    
+
       &::-webkit-scrollbar-button,
       &::-webkit-scrollbar-corner,
       &::-webkit-resizer {
@@ -57,7 +59,9 @@
             color: @primary;
         }
         a:hover {
-            box-shadow: 0 1px 0 @primary;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-color: @primary;
         }
         .el-alert__description{
             margin:0 !important;

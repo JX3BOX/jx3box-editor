@@ -60,17 +60,17 @@ module.exports = {
     },
 
     //❤️ 配置需要被 Babel 转译的 node_modules 依赖 ~
-    transpileDependencies: [
-        'htmlparser2',
-        'cheerio',
-        'dom-serializer',
-        'domelementtype',
-        'domhandler',
-        'domutils',
-        'entities',
-        'parse5',
-        'parse5-htmlparser2-tree-adapter'
-    ],
+    // transpileDependencies: [
+    //     'htmlparser2',
+    //     'cheerio',
+    //     'dom-serializer',
+    //     'domelementtype',
+    //     'domhandler',
+    //     'domutils',
+    //     'entities',
+    //     'parse5',
+    //     'parse5-htmlparser2-tree-adapter'
+    // ],
 
     chainWebpack: config => {
 

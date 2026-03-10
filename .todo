@@ -1,3 +1,10 @@
 vuedraggable:^2.24.3：你在 /Users/iruxu/Desktop/jx3box/组件/jx3box-editor/src/UploadAlbum.vue:26 有在用，但该版本是 Vue2 体系；Vue3 需要换到 vuedraggable@next / v4（或改用其它拖拽方案）。
 
 @jx3box/jx3box-common-ui（/Users/iruxu/Desktop/jx3box/组件/jx3box-editor/src/Equip.vue:44）
+
+连招样式测试combo,样式有问题
+
+魔盒资源
+
+h4样式调整
+th

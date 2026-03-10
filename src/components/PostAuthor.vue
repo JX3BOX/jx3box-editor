@@ -85,7 +85,7 @@ export default {
     }
     .u-meta-label {
         .mr(10px);
-        background-color: @bg-gray;
+        background-color: #f6f8fa;
         padding: 0 8px;
         .r(2px);
     }

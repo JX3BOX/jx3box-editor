@@ -19,7 +19,7 @@
         padding: 8px 0;
         &:hover {
             // font-weight: 600;
-            color: #0366d6;
+            color: @primary;
         }
         font-size: 12px;
     }
@@ -29,7 +29,10 @@
 
     h1,
     h2,
-    h3,h4,h5,h6 {
+    h3,
+    h4,
+    h5,
+    h6 {
         &::before {
             content: "\e78b";
 
@@ -48,36 +51,17 @@
         }
     }
 
-    // .hasChild {
-    //     font-size: 14px;
-    //     &::before {
-    //         content: "\e784";
-    //     }
-    // }
-
-    // h2,h3,h4,h5,h6{
-    //     margin-left: 20px;
-    // }
-    // .hasChild{
-    //     margin-left: 0;
-    // }
-
-    // h3 + h2,h4 + h3,h5 + h4,h6 + h5{
-    //     margin-left: 0;
-    // }
-
-    .lv2{
-        padding-left:20px;
+    .lv2 {
+        padding-left: 20px;
     }
 
-    .lv3{
-        padding-left:40px;
+    .lv3 {
+        padding-left: 40px;
     }
 
-    .lv0{
+    .lv0 {
         display: none;
     }
-
 }
 
 .c-article-directory-title {
@@ -89,7 +73,8 @@
             font-size: 20px;
         }
     }
-    .c-article-directory-title-skip,.c-article-directory-title-folder{
+    .c-article-directory-title-skip,
+    .c-article-directory-title-folder {
         font-size: 14px;
         float: right;
         padding: 0 5px;
@@ -117,6 +102,7 @@
 .c-article .isScrollFocus {
     animation: focusFade 0.5s ease-in-out;
 }
+
 
 .w-directory-anchor{
     .fz(16px);
