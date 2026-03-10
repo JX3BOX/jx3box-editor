@@ -1,4 +1,4 @@
-import { $node, axios } from "@jx3box/jx3box-common/js/https";
+import { $node, axios } from "@jx3box/jx3box-common/js/api";
 
 function getSkill(query, params) {
     let condition = isNaN(query) ? "name" : "id";

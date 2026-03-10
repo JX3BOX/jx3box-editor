@@ -1,4 +1,5 @@
 <template>
+    <!-- TODO:应该被合并 -->
     <div class="m-medal">
         <a :href="medalLink(item)" target="_blank" class="u-medal" v-for="item in medals" :key="item.id" :title="item.medal_desc">
             <img class="u-medal-img" :src="showIcon(item.medal)">

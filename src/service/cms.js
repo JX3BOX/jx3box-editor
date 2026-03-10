@@ -1,4 +1,4 @@
-import { $cms } from "@jx3box/jx3box-common/js/https";
+import { $cms } from "@jx3box/jx3box-common/js/api";
 import axios from "axios";
 import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 

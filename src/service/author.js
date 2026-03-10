@@ -1,4 +1,4 @@
-import { $next, $cms, $team } from "@jx3box/jx3box-common/js/https";
+import { $next, $cms, $team } from "@jx3box/jx3box-common/js/api";
 
 async function getUserMedals(uid) {
     const res = await $next({ mute: true })

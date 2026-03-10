@@ -1,4 +1,6 @@
 <template>
+    <!-- 连招 -->
+    <!-- TODO: 命名规范 -->
     <div class="c-combo m-resource-combo">
         <el-tabs v-model="activeName" type="card" class="m-skill-tabs">
             <el-tab-pane label="门派武学" name="special">
@@ -43,7 +45,14 @@
 
                     <template v-if="multipage">
                         <!-- 下一页 -->
-                        <el-button class="m-archive-more" :class="{ show: hasNextPage }" type="primary" icon="el-icon-arrow-down" @click="appendPage">加载更多</el-button>
+                        <el-button
+                            class="m-archive-more"
+                            :class="{ show: hasNextPage }"
+                            type="primary"
+                            icon="el-icon-arrow-down"
+                            @click="appendPage"
+                            >加载更多</el-button
+                        >
                         <!-- 分页 -->
                         <el-pagination
                             class="m-archive-pages"
@@ -59,32 +68,66 @@
 
                     <div class="m-database-tip" v-show="isBlank">❤ 请输入搜索条件查询</div>
                 </div>
-                <skill-martial v-show="activeName === 'special'" :client="client" :subtype="subtype" @selectSkill="selectSkill"></skill-martial>
+                <skill-martial
+                    v-show="activeName === 'special'"
+                    :client="client"
+                    :subtype="subtype"
+                    @selectSkill="selectSkill"
+                ></skill-martial>
             </div>
 
             <div class="c-combo-content__right">
                 <!-- 已选技能 -->
-                <el-divider>已选技能
+                <el-divider
+                    >已选技能
                     <!-- <el-checkbox v-model="sort" border size="small">开启排序</el-checkbox> -->
                 </el-divider>
                 <div class="m-selected-skills">
                     <ul class="m-skills-list">
-                        <li v-for="(skill, index) in selected" :key="skill.SkillID + '' + index" class="m-skill" @contextmenu.prevent="(event) => onContextmenu(event, skill)">
+                        <li
+                            v-for="(skill, index) in selected"
+                            :key="skill.SkillID + '' + index"
+                            class="m-skill"
+                            @contextmenu.prevent="(event) => onContextmenu(event, skill)"
+                        >
                             <div class="u-skill" v-if="skill && skill.IconID">
-                                <img class="u-skill-icon" :class="skill.iconSize ? `u-skill-icon_${skill.iconSize}` : ''" :src="iconURL(skill.IconID)" :alt="skill.IconID" />
+                                <img
+                                    class="u-skill-icon"
+                                    :class="skill.iconSize ? `u-skill-icon_${skill.iconSize}` : ''"
+                                    :src="iconURL(skill.IconID)"
+                                    :alt="skill.IconID"
+                                />
                                 <i class="u-gcd-icon" v-show="skill.WithoutGcd">
                                     <i class="el-icon-time"></i>
                                 </i>
-                                <span class="u-name" :class="{ 'u-name_underline': skill.underline }" :title="skill.Name">{{ skill.Name }}</span>
+                                <span
+                                    class="u-name"
+                                    :class="{ 'u-name_underline': skill.underline }"
+                                    :title="skill.Name"
+                                    >{{ skill.Name }}</span
+                                >
                                 <span class="u-note" :title="skill.n" :style="itemStyle(skill)">{{ skill.n }}</span>
                             </div>
-                            <i class="u-remove-icon" :class="skill.iconSize ? `u-remove-icon_${skill.iconSize}` : ''" title="移除" @click="removeSelected(index)"><i class="el-icon-close"></i></i>
+                            <i
+                                class="u-remove-icon"
+                                :class="skill.iconSize ? `u-remove-icon_${skill.iconSize}` : ''"
+                                title="移除"
+                                @click="removeSelected(index)"
+                                ><i class="el-icon-close"></i
+                            ></i>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <el-dialog :visible.sync="showRemark" width="600px" append-to-body v-draggable class="c-large-dialog" title="设置备注">
+        <el-dialog
+            :visible.sync="showRemark"
+            width="600px"
+            append-to-body
+            v-draggable
+            class="c-large-dialog"
+            title="设置备注"
+        >
             <el-form label-position="left" label-width="80px">
                 <el-form-item label="备注">
                     <el-input placeholder="输入备注" v-model="form.n"></el-input>
@@ -101,14 +144,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="预览">
-                    <span :style="nStyle">{{ form.n || '示例文字' }}</span>
+                    <span :style="nStyle">{{ form.n || "示例文字" }}</span>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-				<el-button @click="showRemark = false">取 消</el-button>
-				<el-button type="primary" @click="confirm">确 定
-				</el-button>
-			</span>
+                <el-button @click="showRemark = false">取 消</el-button>
+                <el-button type="primary" @click="confirm">确 定 </el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -176,27 +218,27 @@ export default {
                 n: "",
                 c: "",
                 fz: "14",
-                fw: "500"
+                fw: "500",
             },
             showRemark: false,
             currentSkill: {},
 
             predefineColors: [
-                '#ff4500',
-                '#ff8c00',
-                '#ffd700',
-                '#90ee90',
-                '#00ced1',
-                '#1e90ff',
-                '#c71585',
-                'rgba(255, 69, 0, 0.68)',
-                'rgb(255, 120, 0)',
-                'hsv(51, 100, 98)',
-                'hsva(120, 40, 94, 0.5)',
-                'hsl(181, 100%, 37%)',
-                'hsla(209, 100%, 56%, 0.73)',
-                '#c7158577',
-            ]
+                "#ff4500",
+                "#ff8c00",
+                "#ffd700",
+                "#90ee90",
+                "#00ced1",
+                "#1e90ff",
+                "#c71585",
+                "rgba(255, 69, 0, 0.68)",
+                "rgb(255, 120, 0)",
+                "hsv(51, 100, 98)",
+                "hsva(120, 40, 94, 0.5)",
+                "hsl(181, 100%, 37%)",
+                "hsla(209, 100%, 56%, 0.73)",
+                "#c7158577",
+            ],
         };
     },
     computed: {
@@ -210,12 +252,15 @@ export default {
             return !this.query && !this.skill["length"];
         },
         nStyle() {
-            return pick({
-                color: this.form.c,
-                fontSize: (this.form.fz || 12) + 'px',
-                fontWeight: this.form.fw
-            }, ['color','fontSize','fontWeight'])
-        }
+            return pick(
+                {
+                    color: this.form.c,
+                    fontSize: (this.form.fz || 12) + "px",
+                    fontWeight: this.form.fw,
+                },
+                ["color", "fontSize", "fontWeight"]
+            );
+        },
     },
     mounted() {
         this.$nextTick(() => {
@@ -338,9 +383,9 @@ export default {
                         label: "备注",
                         onClick: () => {
                             this.showRemark = true;
-                            this.currentSkill = skill
+                            this.currentSkill = skill;
                         },
-                    }
+                    },
                 ],
                 event,
                 customClass: "custom-class",
@@ -365,28 +410,33 @@ export default {
                 item.underline && (obj.underline = item.underline);
 
                 item.client = this.client;
-                skills_html += `<li class="w-skill-combo-item">${item.SkillID},${item.Name},${item.IconID},${JSON.stringify(obj)}</li>`;
+                skills_html += `<li class="w-skill-combo-item">${item.SkillID},${item.Name},${
+                    item.IconID
+                },${JSON.stringify(obj)}</li>`;
             });
             const html = `<ul class="e-skill-combo w-skill-combo">${skills_html}</ul>`;
             return html;
         },
         confirm() {
             if (this.form.n) {
-                this.$set(this.currentSkill, 'n', this.form.n);
-                this.$set(this.currentSkill, 'c', this.form.c);
-                this.$set(this.currentSkill, 'fz', this.form.fz);
-                this.$set(this.currentSkill, 'fw', this.form.fw);
+                this.$set(this.currentSkill, "n", this.form.n);
+                this.$set(this.currentSkill, "c", this.form.c);
+                this.$set(this.currentSkill, "fz", this.form.fz);
+                this.$set(this.currentSkill, "fw", this.form.fw);
             }
 
-            this.showRemark = false
+            this.showRemark = false;
         },
         itemStyle(item) {
-            return pick({
-                color: item.c,
-                fontSize: (item.fz || 12) + 'px',
-                fontWeight: item.fw
-            }, ['color','fontSize','fontWeight'])
-        }
+            return pick(
+                {
+                    color: item.c,
+                    fontSize: (item.fz || 12) + "px",
+                    fontWeight: item.fw,
+                },
+                ["color", "fontSize", "fontWeight"]
+            );
+        },
     },
 };
 </script>

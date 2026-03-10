@@ -1,4 +1,4 @@
-import { $node, $cms } from "@jx3box/jx3box-common/js/https";
+import { $node, $cms } from "@jx3box/jx3box-common/js/api";
 
 // 获取物品
 function get_item(item_id, client = 'std') {

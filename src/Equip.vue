@@ -41,7 +41,7 @@
 import EquipPosition from "./service/enum/EquipPosition";
 import ItemSimple from "./ItemSimple";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import QRcode from "@jx3box/jx3box-common-ui/src/interact/QRcode.vue";
+import QRcode from "./components/QRcode.vue";
 import { showTime } from "@jx3box/jx3box-common/js/moment.js";
 import { get_plan } from "./service/item.js";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";

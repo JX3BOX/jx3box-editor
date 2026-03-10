@@ -1,4 +1,5 @@
 <template>
+    <!-- @圈人pop：作者卡片 -->
     <div class="w-author" v-loading="loading">
         <div class="w-author-wrapper el-popover" v-if="data" :style="{ backgroundImage: `url(${bg})` }">
             <div class="u-author">
@@ -58,12 +59,12 @@
 
 <script>
 import { authorLink, getLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
-import { getUserInfo, getUserMedals, getUserPublicTeams } from "../service/author";
-import { getDecoration, getDecorationJson } from "../service/cms";
+import { getUserInfo, getUserMedals, getUserPublicTeams } from "../../service/author";
+import { getDecoration, getDecorationJson } from "../../service/cms";
 import { __server, __imgPath, __userLevelColor, __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 import User from "@jx3box/jx3box-common/js/user";
 import { __userLevel } from "@jx3box/jx3box-common/data/jx3box.json";
-import Avatar from "./Avatar.vue";
+import Avatar from "./common/Avatar.vue";
 import medal from "./medal.vue";
 const ATCARD_KEY = "decoration_atcard";
 const DECORATION_JSON = "decoration_json";

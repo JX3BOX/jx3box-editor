@@ -35,7 +35,7 @@ import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import { getEmotion } from "../service/author";
 import { __server, __imgPath, __userLevelColor } from "@jx3box/jx3box-common/data/jx3box.json";
 import dayjs from "dayjs";
-import Avatar from "./Avatar.vue";
+import Avatar from "./common/Avatar.vue";
 export default {
     name: "PostAuthor",
     components: {
