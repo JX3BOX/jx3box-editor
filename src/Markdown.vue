@@ -34,7 +34,7 @@
 import markdownEditor from '@jx3box/markdown/src/editor.vue'
 
 import {xssOptions} from '../assets/data/markdown_whitelist.json'
-import { uploadFile } from "../service/cms";
+import { uploadFile } from "./service/cms";
 
 import Upload from "./Upload";
 import Resource from "./Resource";

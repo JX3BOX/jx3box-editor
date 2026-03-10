@@ -2,7 +2,7 @@
  * @Author: iRuxu
  * @Date: 2022-07-17 00:13:35
  * @LastEditTime: 2022-07-17 00:40:25
- * @Description: 
+ * @Description:
 -->
 <template>
     <div class="w-author w-author__post" v-loading="loading">
@@ -32,7 +32,7 @@
 
 <script>
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { getEmotion } from "../../service/author";
+import { getEmotion } from "../service/author";
 import { __server, __imgPath, __userLevelColor } from "@jx3box/jx3box-common/data/jx3box.json";
 import dayjs from "dayjs";
 import Avatar from "./Avatar.vue";

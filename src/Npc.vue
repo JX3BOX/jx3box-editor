@@ -163,7 +163,7 @@
 </template>
 
 <script>
-import { getNpc } from "../service/database.js";
+import { getNpc } from "./service/database.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Npc",

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { getSkill } from "../service/database.js";
+import { getSkill } from "./service/database.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Skill",

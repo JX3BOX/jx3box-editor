@@ -116,7 +116,7 @@
 <script>
 import Vue from "vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
-import { getSkill } from "../../service/resource";
+import { getSkill } from "../service/resource";
 import SkillMartial from "./SkillMartial.vue";
 
 import Sortable from "sortablejs";

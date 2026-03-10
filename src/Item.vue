@@ -361,7 +361,7 @@
 </template>
 
 <script>
-import { get_item } from "../service/item.js";
+import { get_item } from "./service/item.js";
 import { getLink } from "@jx3box/jx3box-common/js/utils.js";
 
 import GameText from "./GameText.vue";

@@ -15,7 +15,7 @@ import {
     getLink,
     iconLink,
 } from "@jx3box/jx3box-common/js/utils";
-import { getResource as getResourceFromNode } from "../service/resource";
+import { getResource as getResourceFromNode } from "./service/resource";
 import { escape } from "lodash";
 
 export default {

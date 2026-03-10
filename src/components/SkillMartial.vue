@@ -178,7 +178,7 @@ import {
     getSkills,
     getTalents,
     getMobileForceSkillList,
-} from "../../service/node";
+} from "../service/node";
 import kungfumap_std from "@jx3box/jx3box-data/data/martial/kungfu_std.json";
 import kungfumap_origin from "@jx3box/jx3box-data/data/martial/kungfu_origin.json";
 import { flattenDeep, uniqBy } from "lodash";
