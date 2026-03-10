@@ -1,25 +1,30 @@
-import $ from 'jquery'
+import $ from "jquery";
+import "viewerjs/dist/viewer.css";
+import Viewer from "viewerjs";
 
-function renderImgPreview(vm, selector='.c-article img'){
-    // 获取src不为空的图片
-    let imgs = $(selector).filter(function(){
-        return $(this).attr('src') != ''
-    })
-    imgs.each((i, ele) => {
-        // 加载全部src（lazyload）
-        vm.images.push($(ele).attr('src'))
-        // 绑定事件挂钩索引位置
-        $(ele).on('click', (e) => {
-            if (e.target.classList.contains('e-jx3-emotion-img')) return
-            vm.$hevueImgPreview({
-                multiple: true,
-                nowImgIndex: i,
-                imgList: vm.images,
-                controlBar: false,
-                clickMaskCLose: true
-            })
-        })
-    })
+const viewerMap = new WeakMap();
+
+export default function renderImgPreview(rootEl, selector = "img") {
+    if (!rootEl) return;
+
+    const $root = $(rootEl);
+    const imgs = $root
+        .find(selector)
+        .filter(function () {
+            const src = $(this).attr("src");
+            if (!src) return false;
+            // 保留本项目的业务规则：表情图片不启用预览
+            if (this.classList && this.classList.contains("e-jx3-emotion-img"))
+                return false;
+            return true;
+        });
+
+    imgs.each((_, ele) => {
+        if (viewerMap.has(ele)) return;
+        const viewer = new Viewer(ele, {
+            toolbar: false,
+            navbar: false,
+        });
+        viewerMap.set(ele, viewer);
+    });
 }
-
-export default renderImgPreview
