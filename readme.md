@@ -5,7 +5,7 @@
 Article|文章详情|✅
 Tinymce|编辑器|❌
 Markdown|MD编辑器|❌
-Upload|上传(按钮+弹窗)|✅
+Upload|上传(按钮+弹窗)|❌
 UploadAlbum|上传(仅图片)|❌
 BoxResource|魔盒资源|❌
 Resource|剑三资源|❌
@@ -22,6 +22,7 @@ Equip|剑三配装|❓
 ## 组件文档
 + [Article](./docs/article.md)
 + [Tinymce](./docs/tinymce.md)
++ [Markdown](./docs/markdown.md)
 + [Upload](./docs/upload.md)
 
 
