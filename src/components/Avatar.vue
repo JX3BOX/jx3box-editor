@@ -51,7 +51,7 @@ export default {
 }
 .c-avatar-pic {
     .db;
-    .full;
+    .size(100%);
     .r(100%);
 }
 .c-avatar-frame {
