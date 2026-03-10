@@ -1,6 +1,39 @@
 const path = require('path');
 const { spawn } = require("child_process");
 
+const pages = {
+    index: {
+        title: "导航",
+        entry: "src/pages/index.js",
+        template: "public/index.html",
+        filename: "index.html",
+    },
+    article: {
+        title: "Article渲染",
+        entry: "src/pages/article.js",
+        template: "public/index.html",
+        filename: "article/index.html",
+    },
+    tinymce: {
+        title: "Tinymce编辑器",
+        entry: "src/pages/tinymce.js",
+        template: "public/tinymce.html",
+        filename: "tinymce/index.html",
+    },
+    markdown: {
+        title: 'Markdown',
+        entry: "src/pages/markdown.js",
+        template: 'public/index.html',
+        filename: 'markdown/index.html',
+    },
+    upload: {
+        title: '文件上传',
+        entry: "src/pages/upload.js",
+        template: 'public/index.html',
+        filename: 'upload/index.html',
+    }
+}
+
 let chokidar = null;
 try {
     chokidar = require("chokidar");
@@ -93,57 +126,11 @@ module.exports = {
     },
 
     //❤️ Multiple pages ~
-    pages: {
-        index: {
-            title: "导航",
-            entry: "src/pages/index.js",
-            template: "public/index.html",
-            filename: "index.html",
-        },
-        // article: {
-        //     title: "Article渲染",
-        //     entry: "src/pages/article.js",
-        //     template: "public/article.html",
-        //     filename: "article/index.html",
-        // },
-        tinymce: {
-            title: "Tinymce编辑器",
-            entry: "src/pages/tinymce.js",
-            template: "public/tinymce.html",
-            filename: "tinymce/index.html",
-        },
-        // markdown: {
-        //     title: 'Markdown编辑器',
-        //     entry: "src/pages/markdown.js",
-        //     template: 'public/article.html',
-        //     filename: 'markdown/index.html',
-        // },
-    },
+    pages: pages,
 
 
     //❤️ Porxy ~
     devServer: {
-        proxy: {
-            "/api/cms": {
-                "target": process.env["DEV_SERVER"] == "true" ? "http://localhost:7100" : "https://cms.jx3box.com",
-                "onProxyReq": function (request) {
-                    request.setHeader("origin", "");
-                }
-            },
-            "/api/team": {
-                target: "https://team.api.jx3box.com",
-                onProxyReq: function (request) {
-                    request.setHeader("origin", "");
-                },
-            },
-            "/api": {
-                target: "https://next2.jx3box.com",
-                onProxyReq: function (request) {
-                    request.setHeader("origin", "");
-                },
-            },
-        }
-    ,
         setupMiddlewares(middlewares, devServer) {
             // 暴露一个全局方法，给上面的 watcher/build 插件用来强制刷新当前打开的 dev 页面
             global.__JX3BOX_DEV_TRIGGER_RELOAD__ = (file = "manual") => {

@@ -2,16 +2,13 @@
     <div class="c-editor-tinymce">
         <slot name="prepend"></slot>
 
-        <!-- TODO: -->
         <div class="c-editor-header">
-            <!-- <Upload v-if="attachmentEnable" @insert="insertAttachments" /> -->
-             <!-- <Upload v-if="attachmentEnable" @insert="insertAttachments" :uploadFn="attachmentUploadFn" :domain="attachmentCdnDomain" /> -->
-
-
+            <Upload v-if="attachmentEnable" @insert="insertAttachments" />
             <!-- <Resource v-if="resourceEnable" @insert="insertResource" /> -->
             <!-- <BoxResource v-if="resourceEnable" @insert="insertResource" :subtype="subtype" /> -->
-            <Emotion v-if="emotionEnable" class="c-editor-emotion" @selected="emotionSelected"></Emotion>
         </div>
+
+        <Emotion v-if="emotionEnable" class="c-editor-emotion" @selected="emotionSelected"></Emotion>
 
         <slot></slot>
 
@@ -38,13 +35,16 @@
 <script>
 import GlobalConf from "../config/global.js";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
-const { __cdn, __imgPath } = JX3BOX;
+const { __cdn, __imgPath, __cms } = JX3BOX;
+// 开发环境走 devServer proxy，避免跨域导致粘贴图片上传“看起来没反应”
+const apiUrl = process.env.NODE_ENV === "development" ? "/api/cms/upload/tinymce" : __cms + "api/cms/upload/tinymce";
 
-// import Upload from "./Upload";
+import Upload from "./Upload";
 // import Resource from "./Resource";
 // import BoxResource from "./BoxResource";
 import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
 
+import axios from "axios";
 import Editor from "@tinymce/tinymce-vue";
 import hljs_languages from "./assets/js/item/hljs_languages.js";
 import { draggable } from "./assets/js/drag";
@@ -55,7 +55,7 @@ export default {
     name: "Tinymce",
     components: {
         Editor,
-        // Upload,
+        Upload,
         // Resource,
         // BoxResource,
         Emotion,
@@ -149,8 +149,10 @@ export default {
                 file_picker_types: "file image",
                 // images_upload_url: this.uploadUrl,
                 automatic_uploads: true,
+                // 允许直接粘贴图片（会以 blob 形式触发 images_upload_handler）
+                paste_data_images: true,
                 // images_upload_credentials: true,
-                images_upload_handler: this.image_upload_handler,
+                images_upload_handler: this.imagesUploadHandler,
                 valid_children: "+body[style]",
             },
             mode: "tinymce",
@@ -191,27 +193,53 @@ export default {
             // eslint-disable-next-line no-undef
             tinyMCE.editors["tinymce"].insertContent(data);
         },
-        image_upload_handler: function (blobInfo, success, failure) {
-            const formData = new FormData();
-            formData.append("file", blobInfo.blob(), blobInfo.filename());
+        imagesUploadHandler: function (blobInfo, success, failure, progress) {
+            let fdata = new FormData();
+            fdata.append("file", blobInfo.blob(), blobInfo.filename());
 
-            this.tinymceUploadFn(formData)
-                .then((res) => {
-                    const json = res.data;
-
-                    success(json.location);
+            axios
+                .post(apiUrl, fdata, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    withCredentials: true,
+                    auth: {
+                        username: (localStorage && localStorage.getItem("token")) || "",
+                        password: "cms common request",
+                    },
+                    onUploadProgress: function (e) {
+                        if (progress && e.total > 0) {
+                            progress((e.loaded / e.total) * 100);
+                        }
+                    },
                 })
-                .catch((error) => {
-                    if (error.response) {
-                        // 请求已发出，但服务器响应的状态码不在 2xx 范围内
-                        failure("Image upload failed. Status: " + error.response.status);
-                    } else if (error.request) {
-                        // 请求已发出，但没有收到响应
-                        failure("Image upload failed. No response received.");
-                    } else {
-                        // 发送请求时出了some问题
-                        failure("Image upload failed. Error: " + error.message);
+                .then((res) => {
+                    const payload = res.data || {};
+                    if (payload.code) {
+                        failure(payload.msg || payload.message || "上传失败");
+                        return;
                     }
+
+                    const url =
+                        payload.location ||
+                        payload.url ||
+                        (payload.data &&
+                            (Array.isArray(payload.data)
+                                ? payload.data[0]
+                                : payload.data.url || payload.data.location || payload.data));
+
+                    if (!url) {
+                        failure("上传成功但未返回图片地址");
+                        return;
+                    }
+
+                    success(url);
+                })
+                .catch((err) => {
+                    const message =
+                        (err.response && err.response.data && (err.response.data.msg || err.response.data.message)) ||
+                        "图片上传请求异常";
+                    failure(message);
                 });
         },
         emotionSelected: function (emotion) {
