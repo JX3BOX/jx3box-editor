@@ -5,10 +5,12 @@
         <!-- TODO: -->
         <div class="c-editor-header">
             <!-- <Upload v-if="attachmentEnable" @insert="insertAttachments" /> -->
+             <!-- <Upload v-if="attachmentEnable" @insert="insertAttachments" :uploadFn="attachmentUploadFn" :domain="attachmentCdnDomain" /> -->
+
+
             <!-- <Resource v-if="resourceEnable" @insert="insertResource" /> -->
             <!-- <BoxResource v-if="resourceEnable" @insert="insertResource" :subtype="subtype" /> -->
-            <!-- <Upload v-if="attachmentEnable" @insert="insertAttachments" :uploadFn="attachmentUploadFn" :domain="attachmentCdnDomain" /> -->
-             <!-- <Emotion class="c-editor-emotion" @selected="emotionSelected"></Emotion> -->
+            <Emotion v-if="emotionEnable" class="c-editor-emotion" @selected="emotionSelected"></Emotion>
         </div>
 
         <slot></slot>
@@ -21,7 +23,8 @@
             placeholder="✔ 图片可右键粘贴或拖拽至编辑器内自动上传 ✔ 支持word/excel内容一键粘贴"
         />
         <el-alert class="u-tutorial" type="warning" show-icon
-            >进入特殊区域（代码块，折叠块等等）脱离或使用工具栏触发后，请使用键盘方向 → ↓ 键进行脱离，回车只是正常在区块内换行。去掉样式点击第二行第一个&lt;清除格式&gt;即可复位。<a
+            >进入特殊区域（代码块，折叠块等等）脱离或使用工具栏触发后，请使用键盘方向 → ↓
+            键进行脱离，回车只是正常在区块内换行。去掉样式点击第二行第一个&lt;清除格式&gt;即可复位。<a
                 href="/collection/31"
                 target="_blank"
                 >[编辑器使用指南]</a
@@ -35,12 +38,12 @@
 <script>
 import GlobalConf from "../config/global.js";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
-const {__cdn} = JX3BOX
+const { __cdn, __imgPath } = JX3BOX;
 
 // import Upload from "./Upload";
 // import Resource from "./Resource";
 // import BoxResource from "./BoxResource";
-// import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
+import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
 
 import Editor from "@tinymce/tinymce-vue";
 import hljs_languages from "./assets/js/item/hljs_languages.js";
@@ -50,6 +53,13 @@ import { draggable } from "./assets/js/drag";
 
 export default {
     name: "Tinymce",
+    components: {
+        Editor,
+        // Upload,
+        // Resource,
+        // BoxResource,
+        Emotion,
+    },
     directives: {
         draggable: {
             mounted: draggable,
@@ -84,13 +94,17 @@ export default {
             type: Boolean,
             default: true,
         },
+        // 是否启用表情插入
+        emotionEnable: {
+            type: Boolean,
+            default: true,
+        },
 
         // 心法（技能连招使用）
         subtype: {
             type: String,
             default: "",
         },
-
     },
     emits: ["update:modelValue", "update:content", "update"],
     data: function () {
@@ -107,7 +121,10 @@ export default {
                 convert_urls: false,
 
                 // 样式
-                content_css: process.env.VUE_APP_TINYMCE_DEV === "true" ? `http://localhost:5120/skins/content/default/content.min.css` : `${__cdn}/static/tinymce/skins/content/default/content.min.css`,
+                content_css:
+                    process.env.VUE_APP_TINYMCE_DEV === "true"
+                        ? `http://localhost:5120/skins/content/default/content.min.css`
+                        : `${__cdn}/static/tinymce/skins/content/default/content.min.css`,
                 body_class: "c-article c-article-editor c-article-tinymce",
                 height: this.height || 800,
                 autosave_ask_before_unload: false,
@@ -208,13 +225,6 @@ export default {
     },
     mounted: function () {
         // console.log(process.env.VUE_APP_TINYMCE_DEV)
-    },
-    components: {
-        Editor,
-        // Upload,
-        // Resource,
-        // BoxResource,
-        // Emotion,
     },
 };
 </script>

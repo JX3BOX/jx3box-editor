@@ -1,5 +1,11 @@
 # Tinymce
 
++ 基于tinymce v5.2.2扩展
++ 保留v4版本分割线规则
++ 内置powerpaste&checklist插件
++ 增加魔盒大量定制插件
+
+
 ## 注意事项
 版本迭代时，注意刷新cdn（css+js）  
 $path-to/static/tinymce/tinymce.min.js  
@@ -33,8 +39,15 @@ import Tinymce from '@jx3box/jx3box-editor/src/Tinymce.vue'
 | `height` | 默认高度 | `Number` | `800` | 否 | 指px |
 | `attachmentEnable` | 是否启用附件上传 | `Boolean` | `true` | 否 |  |
 | `resourceEnable` | 是否启用资源插入 | `Boolean` | `true` | 否 |  |
+| `emotionEnable` | 是否启用表情插入 | `Boolean` | `true` | 否 |  |
 | `subtype` | 心法 | `String` | `冰心诀` | 否 | 技能连招用 |
 
 ## tinymce自带上传函数实现规范
 + 右键粘贴
 + 图像上传
+
+
+## 插件添加步骤
+1. tinymce/icons/custom/icons.js 添加svg图标,需设置尺寸,注意视口大小,移除换行符等
+2. tinymce/plugins目录，复制videox(input),foldtext(null)目录作为参考新建插件目录，替换videox为新插件名
+3. 编辑器配置中激活插件和添加工具栏项
