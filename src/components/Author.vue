@@ -61,15 +61,16 @@
 import { authorLink, getLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { getUserInfo, getUserMedals, getUserPublicTeams } from "../../service/author";
 import { getDecoration, getDecorationJson } from "../../service/cms";
-import { __server, __imgPath, __userLevelColor, __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 import User from "@jx3box/jx3box-common/js/user";
-import { __userLevel } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import Avatar from "./common/Avatar.vue";
 import medal from "./medal.vue";
 const ATCARD_KEY = "decoration_atcard";
 const DECORATION_JSON = "decoration_json";
 const DECORATION_KEY = "decoration_me";
 const HONOR_KEY = "honor_me";
+
+const { __server, __imgPath, __userLevelColor, __cdn, __userLevel } = JX3BOX;
 export default {
     name: "Author",
     components: {
@@ -273,7 +274,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/css/module/author.less";
+@import ".././assets/css/resource.less/module/author.less";
 .w-author {
     .w-author-wrapper {
         background-repeat: no-repeat;

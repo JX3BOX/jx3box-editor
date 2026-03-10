@@ -53,7 +53,7 @@ export default {
             if ([item.r, item.g, item.b].every(v => v != undefined && v > 0)) {
                 style = `color: rgb(${item.r}, ${item.g}, ${item.b});`;
             } else if (item.font != undefined && item.font != 100) {
-                const fonts = require("../assets/data/game_font.json");
+                const fonts = require("./assets/data/game_font.json");
                 for (let color in fonts) {
                     if (fonts[color].includes(item.font)) {
                         style = `color: ${color};`;

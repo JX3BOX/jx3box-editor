@@ -1,7 +1,7 @@
 <template>
     <div class="c-resource">
         <!-- 上传触发按钮 -->
-        <el-button class="u-switch" type="primary" @click="openDialog" :disabled="!enable"> <img class="u-icon" svg-inline src="../assets/img/jx3.svg" />剑三资源 </el-button>
+        <el-button class="u-switch" type="primary" @click="openDialog" :disabled="!enable"> <img class="u-icon" svg-inline src="./assets/img/jx3.svg" />剑三资源 </el-button>
 
         <!-- 弹出界面 -->
         <el-dialog class="c-large-dialog" title="剑三数据库" :visible.sync="dialogVisible" v-draggable>
@@ -22,7 +22,7 @@
                 <el-tabs class="m-database-tabs" v-model="type" type="card" @tab-click="changeType">
                     <el-tab-pane label="Buff" name="buff">
                         <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="../assets/img/buff.svg" />
+                            <img class="u-icon" svg-inline src="./assets/img/buff.svg" />
                             <b>Buff</b>
                             <em class="u-count">{{ stat.buff }}</em>
                         </span>
@@ -56,7 +56,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="技能" name="skill">
                         <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="../assets/img/skill.svg" />
+                            <img class="u-icon" svg-inline src="./assets/img/skill.svg" />
                             <b>技能</b>
                             <em class="u-count">{{ stat.skill }}</em>
                         </span>
@@ -89,7 +89,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="物品" name="item">
                         <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="../assets/img/item.svg" />
+                            <img class="u-icon" svg-inline src="./assets/img/item.svg" />
                             <b>物品</b>
                             <em class="u-count">{{ stat.item }}</em>
                         </span>
@@ -117,7 +117,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="Npc" name="npc">
                         <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="../assets/img/npc/skull.svg" />
+                            <img class="u-icon" svg-inline src="./assets/img/npc/skull.svg" />
                             <b>Npc</b>
                             <em class="u-count">{{ stat.npc }}</em>
                         </span>
@@ -146,7 +146,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="图标" name="icon">
                         <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="../assets/img/icons.svg" />
+                            <img class="u-icon" svg-inline src="./assets/img/icons.svg" />
                             <b>图标</b>
                             <em class="u-count">{{ stat.icon }}</em>
                         </span>
@@ -201,12 +201,14 @@
 <script>
 import { loadResource, loadStat, getIcons } from "./service/database";
 import { loadEmotions } from "./service/cms";
-import { __iconPath, __Root, __OriginRoot } from "@jx3box/jx3box-common/data/jx3box.json";
-import detach_types from "../assets/data/detach_type.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+import detach_types from "./assets/data/detach_type.json";
 import { iconLink, getLink, showAvatar } from "@jx3box/jx3box-common/js/utils";
 import GameText from "./GameText.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import Item from './Item.vue';
+
+const { __iconPath, __Root, __OriginRoot } = JX3BOX;
 export default {
     name: "Resource",
     props: {
@@ -522,7 +524,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/resource.less";
+@import "./assets/css/resource.less";
 
 .m-item-pop {
     padding: 0 !important;

@@ -1,6 +1,8 @@
 import axios from "axios";
-import { __node, __helperUrl, __iconPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import { $node } from "@jx3box/jx3box-common/js/api";
+
+const { __node } = JX3BOX;
 
 function loadResource(type, query, params) {
     switch (type) {

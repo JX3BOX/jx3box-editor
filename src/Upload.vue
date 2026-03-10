@@ -31,7 +31,7 @@
                     <img v-if="file.is_img" class="el-upload-list__item-thumbnail u-imgbox" :src="file.url" alt />
                     <!-- 其他类型 -->
                     <div v-else class="u-filebox">
-                        <img class="u-fileplaceholder" svg-inline src="../assets/img/file.svg" />
+                        <img class="u-fileplaceholder" svg-inline src="./assets/img/file.svg" />
                         <span class="u-filename">{{ file.name }}</span>
                     </div>
                     <!-- 勾选角标 -->
@@ -54,7 +54,8 @@
 
 <script>
 import axios from "axios";
-import { __cms } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+const { __cms } = JX3BOX;
 const API_Root = process.env.NODE_ENV === "production" ? __cms : "/";
 const API = API_Root + "api/cms/upload";
 
@@ -244,5 +245,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/upload.less";
+@import "./assets/css/upload.less";
 </style>

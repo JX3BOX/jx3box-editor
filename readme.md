@@ -20,9 +20,6 @@ GameText|剑三文字|✅
 Equip|剑三配装|❓
 
 
-
-
-
 ## 组件文档
 + [Article](./docs/article.md)
 + [Tinymce](./docs/tinymce.md)

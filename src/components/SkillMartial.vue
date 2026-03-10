@@ -26,7 +26,7 @@
                             showKungfuName(kungfu)
                         }}</span>
                         <img
-                            src="../../assets/img/skillset.png"
+                            src=".././assets/img/skillset.png"
                             class="u-title-img"
                             alt="" />
                     </div>
@@ -57,7 +57,7 @@
                     <div class="u-title">
                         <span class="u-title-name">奇穴技能</span>
                         <img
-                            src="../../assets/img/skillset.png"
+                            src=".././assets/img/skillset.png"
                             class="u-title-img"
                             alt="" />
                     </div>
@@ -84,7 +84,7 @@
                     <div class="u-title">
                         <span class="u-title-name">江湖轻功</span>
                         <img
-                            src="../../assets/img/skillset.png"
+                            src=".././assets/img/skillset.png"
                             class="u-title-img"
                             alt="" />
                     </div>
@@ -114,7 +114,7 @@
                     <div class="u-title">
                         <span class="u-title-name">门派技能</span>
                         <img
-                            src="../../assets/img/skillset.png"
+                            src=".././assets/img/skillset.png"
                             class="u-title-img"
                             alt="" />
                     </div>
@@ -143,7 +143,7 @@
                     <div class="u-title">
                         <span class="u-title-name">通用技能</span>
                         <img
-                            src="../../assets/img/skillset.png"
+                            src=".././assets/img/skillset.png"
                             class="u-title-img"
                             alt="" />
                     </div>

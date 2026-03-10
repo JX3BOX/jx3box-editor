@@ -22,21 +22,21 @@
                 <template v-if="source.EquipUsage == 1">
                     <img
                         class="u-label-icon"
-                        src="../assets/img/item/pve.png"
+                        src="./assets/img/item/pve.png"
                         alt="" />
                     <span>秘境挑战</span>
                 </template>
                 <template v-if="source.EquipUsage == 2">
                     <img
                         class="u-label-icon"
-                        src="../assets/img/item/pvp.png"
+                        src="./assets/img/item/pvp.png"
                         alt="" />
                     <span>竞技对抗</span>
                 </template>
                 <template v-if="source.EquipUsage == 3">
                     <img
                         class="u-label-icon"
-                        src="../assets/img/item/pvx.png"
+                        src="./assets/img/item/pvx.png"
                         alt="" />
                     <span>休闲</span>
                 </template>
@@ -108,7 +108,7 @@
                     <div class="u-spec-attribute-title u-yellow">
                         <img
                             class="u-label-icon"
-                            src="../assets/img/item/std.png" />
+                            src="./assets/img/item/std.png" />
                         <span>特殊属性效果</span>
                     </div>
                     <div
@@ -122,7 +122,7 @@
                     <div class="u-spec-attribute-title u-yellow">
                         <img
                             class="u-label-icon"
-                            src="../assets/img/item/wujie.png" />
+                            src="./assets/img/item/wujie.png" />
                         <span>特殊属性效果</span>
                     </div>
                     <div
@@ -366,12 +366,12 @@ import { getLink } from "@jx3box/jx3box-common/js/utils.js";
 
 import GameText from "./GameText.vue";
 
-import attribute_percent from "../assets/js/item/attribute_percent.js";
-import bind from "../assets/js/item/bind.js";
-import color from "../assets/js/item/color.js";
+import attribute_percent from "./assets/js/item/attribute_percent.js";
+import bind from "./assets/js/item/bind.js";
+import color from "./assets/js/item/color.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
-import second_format from "../assets/js/item/second_format.js";
+import second_format from "./assets/js/item/second_format.js";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
@@ -525,5 +525,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/module/item.less";
+@import "./assets/css/module/item.less";
 </style>

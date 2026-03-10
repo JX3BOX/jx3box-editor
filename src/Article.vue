@@ -43,30 +43,30 @@ import hevueImgPreview from "hevue-img-preview";
 Vue.use(hevueImgPreview);
 
 // XSS
-import execFilterXSS from "../assets/js/xss";
+import execFilterXSS from "./assets/js/xss";
 // const execFilterXSS = require("xss");
 // const xss_options = {
 //     allowCommentTag: true,
 // };
 
 // 基本文本
-import execLazyload from "../assets/js/img";
-import execFilterIframe from "../assets/js/iframe";
-import execFilterLink from "../assets/js/a";
-import execSplitPages from "../assets/js/nextpage";
+import execLazyload from "./assets/js/img";
+import execFilterIframe from "./assets/js/iframe";
+import execFilterLink from "./assets/js/a";
+import execSplitPages from "./assets/js/nextpage";
 
 // 扩展文本
-import renderFoldBlock from "../assets/js/fold";
-import renderDirectory from "../assets/js/directory";
-import renderMacro from "../assets/js/macro";
-import renderTalent from "../assets/js/qixue";
-import renderTalent2 from "../assets/js/talent2";
-import { renderKatexAll } from "../assets/js/katex";
-import renderCode from "../assets/js/code";
-import renderImgPreview from "../assets/js/renderImgPreview";
-import renderPzIframe from "../assets/js/pz_iframe";
-import renderCombo from "../assets/js/combo";
-import renderAudio from "../assets/js/audio";
+import renderFoldBlock from "./assets/js/fold";
+import renderDirectory from "./assets/js/directory";
+import renderMacro from "./assets/js/macro";
+import renderTalent from "./assets/js/qixue";
+import renderTalent2 from "./assets/js/talent2";
+import { renderKatexAll } from "./assets/js/katex";
+import renderCode from "./assets/js/code";
+import renderImgPreview from "./assets/js/renderImgPreview";
+import renderPzIframe from "./assets/js/pz_iframe";
+import renderCombo from "./assets/js/combo";
+import renderAudio from "./assets/js/audio";
 
 // 剑三
 import Item from "./Item";
@@ -75,7 +75,7 @@ import Skill from "./Skill";
 import Npc from "./Npc";
 import Author from "./components/Author";
 import PostAuthor from "./components/PostAuthor.vue";
-import renderJx3Element from "../assets/js/jx3_element";
+import renderJx3Element from "./assets/js/jx3_element";
 
 export default {
     name: "Article",
@@ -313,5 +313,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/article.less";
+@import "./assets/css/resource.less/article.less";
 </style>

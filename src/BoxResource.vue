@@ -106,9 +106,11 @@
 import { loadStat } from "./service/database";
 import { loadAuthors, loadEmotions, getLetterPaper } from "./service/cms";
 import { getUserInfo } from "./service/author";
-import { __iconPath, __Root, __OriginRoot, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import { getLink, showAvatar, resolveImagePath } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user";
+
+const { __iconPath, __Root, __OriginRoot, __imgPath } = JX3BOX;
 
 import ComboVue from "./components/Combo.vue";
 import LetterPaper from "./components/Letter.vue";
@@ -416,7 +418,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/resource.less";
+@import "./assets/css/resource.less";
 
 .m-item-pop {
 	padding: 0 !important;

@@ -33,9 +33,11 @@
 <script>
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
 import { getEmotion } from "../service/author";
-import { __server, __imgPath, __userLevelColor } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import dayjs from "dayjs";
 import Avatar from "./common/Avatar.vue";
+
+const { __server, __imgPath, __userLevelColor } = JX3BOX;
 export default {
     name: "PostAuthor",
     components: {
@@ -74,7 +76,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../../assets/css/module/author.less";
+@import ".././assets/css/resource.less/module/author.less";
 .w-author {
     .u-meta {
         display: flex;

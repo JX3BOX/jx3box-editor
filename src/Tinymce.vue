@@ -3,21 +3,22 @@
         <slot name="prepend"></slot>
 
         <div class="c-editor-header">
-            <Upload v-if="attachmentEnable" @insert="insertAttachments" />
-            <Resource v-if="resourceEnable" @insert="insertResource" />
-            <BoxResource v-if="resourceEnable" @insert="insertResource" :subtype="subtype" />
+            <Upload v-if="attachmentEnable" @insert="insertAttachments" :uploadFn="attachmentUploadFn" :domain="attachmentCdnDomain" />
         </div>
-        <Emotion class="c-editor-emotion" @selected="emotionSelected"></Emotion>
 
         <slot></slot>
 
-        <editor id="tinymce" v-model="data" :init="init" class="c-tinymce" placeholder="✔ 图片可右键粘贴或拖拽至编辑器内自动上传 ✔ 支持word/excel内容一键粘贴" />
-        <el-alert class="u-tutorial" type="warning" show-icon
-            >进入特殊区域（代码块，折叠块等等）脱离或使用工具栏触发后，请使用键盘方向 → ↓ 键进行脱离，回车只是正常在区块内换行。去掉样式点击第二行第一个&lt;清除格式&gt;即可复位。<a
-                href="/collection/31"
-                target="_blank"
-                >[编辑器使用指南]</a
-            >
+        <editor
+            id="tinymce"
+            v-model="data"
+            :init="init"
+            class="c-tinymce"
+            placeholder="✔ 图片可右键粘贴或拖拽至编辑器内自动上传 ✔ 支持word/excel内容一键粘贴"
+        />
+        <el-alert class="u-tutorial" type="warning" show-icon v-if="showTips"
+            >进入特殊区域（代码块，折叠块等等）脱离或使用工具栏触发后，请使用键盘方向 → ↓
+            键进行脱离，回车只是正常在区块内换行。去掉样式点击第二行第一个&lt;清除格式&gt;即可复位。
+            <!-- <a href="" target="_blank">[编辑器使用指南]</a> -->
         </el-alert>
 
         <slot name="append"></slot>
@@ -25,29 +26,62 @@
 </template>
 
 <script>
-import Vue from "vue";
-import axios from "axios";
 import Editor from "@tinymce/tinymce-vue";
 import Upload from "./Upload";
-import Resource from "./Resource";
-import BoxResource from "./BoxResource";
-import { __cms } from "@jx3box/jx3box-common/data/jx3box.json";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
-import hljs_languages from "../assets/js/item/hljs_languages.js";
-const API_Root = process.env.NODE_ENV === "production" ? __cms : "/";
-const API = API_Root + "api/cms/upload/tinymce";
-
-// directive
-import { draggable } from "../assets/js/drag";
-Vue.directive("draggable", draggable);
+import hljs_languages from "./assets/js/item/hljs_languages.js";
+import GlobalConf from "../config/global.js";
 
 export default {
     name: "Tinymce",
-    props: ["content", "height", "attachmentEnable", "resourceEnable", "subtype"],
+    props: {
+        // 内容
+        modelValue: {
+            type: String,
+            default: "",
+        },
+        // 默认高度
+        height: {
+            type: Number,
+            default: 800,
+        },
+        // Tinymce右键粘贴上传函数
+        tinymceUploadFn: {
+            type: Function,
+            default: () => {},
+        },
+        // Tinymce资源CDN拼接域名
+        tinymceAssetsDomain: {
+            type: String,
+            default: "https://cdn.jx3box.com",
+        },
+        // 是否显示编辑器使用提示
+        showTips: {
+            type: Boolean,
+            default: true,
+        },
+
+
+        // 是否启用附件上传
+        attachmentEnable: {
+            type: Boolean,
+            default: true,
+        },
+        // 附件上传函数
+        attachmentUploadFn: {
+            type: Function,
+            default: () => {},
+        },
+        // 附件CDN拼接域名
+        attachmentCdnDomain: {
+            type: String,
+            default: "",
+        },
+
+    },
+    emits: ["update:modelValue"],
     data: function () {
         return {
-            data: this.content,
+            data: "",
             init: {
                 // 选择器
                 selector: "#tinymce",
@@ -59,212 +93,97 @@ export default {
                 convert_urls: false,
 
                 // 样式
-                // TODO:
-                content_css: process.env.VUE_APP_DEV_COMPONENT == "true" ? "/css/article.css" : `https://cdn.jx3box.com/static/jx3box-editor/css/article.css`,
-                // content_css: `http://localhost:3000/skins/content/default/content.min.css`,
+                content_css: process.env.VUE_APP_TINYMCE_DEV === "true" ? `http://localhost:5120/skins/content/default/content.min.css` : `${this.tinymceAssetsDomain}/static/tinymce/skins/content/default/content.min.css`,
                 body_class: "c-article c-article-editor c-article-tinymce",
                 height: this.height || 800,
                 autosave_ask_before_unload: false,
-                content_style: "",
 
                 // UI
                 icons: "custom",
                 menubar: false,
                 branding: false,
                 contextmenu: "",
-                plugins: [
-                    "link autolink",
-                    "hr lists advlist table codeinline codesample checklist foldtext latex anchor",
-                    "image emoticons media videox macro qixue talent2",
-                    "code fullscreen wordcount powerpaste pagebreak printpage pz audiox", // template anchor jx3icon autosave
-                ],
-                toolbar: [
-                    "undo | formatselect | fontsizeselect | forecolor backcolor | bold italic underline strikethrough superscript subscript | link unlink | fullscreen code", //anchor restoredraft
-                    "removeformat | hr alignleft aligncenter alignright alignjustify indent outdent | bullist numlist checklist table blockquote foldtext codeinline codesample latex | emoticons image media videox audiox | macro pz qixue talent2 pagebreak printpage", // template anchor jx3icon
-                ],
-                mobile: {
-                    toolbar_drawer: true,
-                    toolbar: [
-                        "undo emoticons bold italic underline strikethrough superscript subscript link unlink forecolor backcolor removeformat pagebreak fullscreen code",
-                        "hr alignleft aligncenter alignright alignjustify indent outdent bullist numlist checklist table blockquote foldtext codeinline codesample latex macro pz qixue talent2 media videox audiox",
-                    ],
-                },
+                plugins: GlobalConf.plugins,
+                toolbar: GlobalConf.toolbar,
+                mobile: GlobalConf.mobile,
                 block_formats: "段落=p;一级标题=h1;二级标题=h2;三级标题=h3;四级标题=h4;五级标题=h5;六级标题=h6;",
                 fontsize_formats: "12px 14px 16px 18px 22px 24px 26px 28px 32px 48px 72px",
-                color_map: [
-                    "FF99CC",
-                    "浅粉",
-                    "FF3399",
-                    "深粉",
-                    "FF0000",
-                    "正红",
-                    "CC99FF",
-                    "紫色",
-                    "9933ff",
-                    "深紫",
-                    "FFFF99",
-                    "浅黄",
-                    "FFFF00",
-                    "金黄",
-                    "FFCC00",
-                    "亮黄",
-                    "FFCC99",
-                    "浅桃",
-                    "FF6600",
-                    "橘色",
-                    "CCFFCC",
-                    "浅绿",
-                    "9bf915",
-                    "荧光绿",
-                    "00FF00",
-                    "辣眼绿",
-                    "49c10f",
-                    "深绿",
-                    "008080",
-                    "深青",
-                    "CCFFFF",
-                    "浅蓝",
-                    "00FFFF",
-                    "参考线",
-                    "00CCFF",
-                    "天蓝",
-                    "99CCFF",
-                    "蔚蓝",
-                    "0000FF",
-                    "辣眼蓝",
-                    "CC0000",
-                    "深红",
-                    "000000",
-                    "黑色",
-                ],
+                color_map: GlobalConf.color_map,
 
                 codesample_languages: hljs_languages,
 
                 // Image
                 image_advtab: true,
-                // paste_data_images: true,
                 file_picker_types: "file image",
+                // images_upload_url: this.uploadUrl,
                 automatic_uploads: true,
-                images_upload_handler: (blobInfo, success, failure, progress) => {
-                    this.imagesUploadHandler(blobInfo, success, failure, progress);
-                },
-
-                // Hook
-                // setup: this.setup,
-                // init_instance_callback: this.ready,
-
-                // Template
-                // templates: [
-                //     {
-                //         title: "剑三宏",
-                //         description: "",
-                //         content: `
-                //             <pre class="e-jx3macro-area w-jx3macro">/cast 自绝经脉</pre>
-                //         `,
-                //     },
-                // ],
+                // images_upload_credentials: true,
+                images_upload_handler: this.image_upload_handler,
                 valid_children: "+body[style]",
             },
             mode: "tinymce",
-            style: "",
         };
     },
-    model: {
-        prop: "content",
-        event: "update",
-    },
     watch: {
-        data: function (newval) {
-            this.$emit("update", newval);
+        data: function (val) {
+            this.$emit("update:modelValue", val);
         },
-        content: function (newval) {
-            this.data = newval;
-        },
-        style(val) {
-            this.init.content_style = val;
+        modelValue: {
+            immediate: true,
+            handler: function (val) {
+                this.data = val;
+            },
         },
     },
     methods: {
-        imagesUploadHandler: function (blobInfo, success, failure, progress) {
-            let fdata = new FormData();
-            fdata.append("file", blobInfo.blob(), blobInfo.filename());
-
-            axios
-                .post(API, fdata, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                    withCredentials: true,
-                    auth: {
-                        username: (localStorage && localStorage.getItem("token")) || "",
-                        password: "cms common request",
-                    },
-                    onUploadProgress: function (e) {
-                        if (progress && e.total > 0) {
-                            progress((e.loaded / e.total) * 100);
-                        }
-                    },
-                })
-                .then((res) => {
-                    const payload = res.data || {};
-                    if (payload.code) {
-                        failure(payload.msg || payload.message || "上传失败");
-                        return;
-                    }
-
-                    const url =
-                        payload.location ||
-                        payload.url ||
-                        (payload.data &&
-                            (Array.isArray(payload.data)
-                                ? payload.data[0]
-                                : payload.data.url || payload.data.location || payload.data));
-
-                    if (!url) {
-                        failure("上传成功但未返回图片地址");
-                        return;
-                    }
-
-                    success(url);
-                })
-                .catch((err) => {
-                    const message = (err.response && err.response.data && (err.response.data.msg || err.response.data.message)) || "图片上传请求异常";
-                    failure(message);
-                });
-        },
         setup: function (editor) {
-            // console.log("ID为: " + editor.id + " 的编辑器即将初始化.");
+            console.log("ID为: " + editor.id + " 的编辑器即将初始化.");
         },
         ready: function (editor) {
-            // console.log("ID为: " + editor.id + " 的编辑器已初始化完成.");
+            console.log("ID为: " + editor.id + " 的编辑器已初始化完成.");
         },
         insertAttachments: function (data) {
+            // eslint-disable-next-line no-undef
             tinyMCE.editors["tinymce"].insertContent(data.html);
         },
         insertResource: function (data) {
+            // eslint-disable-next-line no-undef
             tinyMCE.editors["tinymce"].insertContent(data);
         },
-        emotionSelected: function (emotion) {
-            let src = emotion.filename;
-            if (!emotion.filename.startsWith("http")) {
-                src = `${__imgPath}emotion/output/${emotion.filename}`;
-            }
-            const IMAGE = `<img class="t-emotion" src="${src}" alt="${src}" style="max-width:60px;max-height:60px" />`;
-            tinyMCE.editors["tinymce"].insertContent(IMAGE);
+        image_upload_handler: function (blobInfo, success, failure) {
+            const formData = new FormData();
+            formData.append("file", blobInfo.blob(), blobInfo.filename());
+
+            this.tinymceUploadFn(formData)
+                .then((res) => {
+                    const json = res.data;
+
+                    success(json.location);
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        // 请求已发出，但服务器响应的状态码不在 2xx 范围内
+                        failure("Image upload failed. Status: " + error.response.status);
+                    } else if (error.request) {
+                        // 请求已发出，但没有收到响应
+                        failure("Image upload failed. No response received.");
+                    } else {
+                        // 发送请求时出了some问题
+                        failure("Image upload failed. Error: " + error.message);
+                    }
+                });
         },
     },
-    mounted: function () {},
+    mounted: function () {
+        // console.log(process.env.VUE_APP_TINYMCE_DEV)
+    },
     components: {
         Editor,
         Upload,
-        Resource,
-        Emotion,
-        BoxResource,
     },
 };
 </script>
 
 <style lang="less">
-@import "../assets/css/tinymce.less";
-@import "../assets/css/tinymce/combo.less";
+@import "./assets/css/tinymce.less";
 </style>

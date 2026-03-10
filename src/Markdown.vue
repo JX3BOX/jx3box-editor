@@ -33,7 +33,7 @@
 <script>
 import markdownEditor from '@jx3box/markdown/src/editor.vue'
 
-import {xssOptions} from '../assets/data/markdown_whitelist.json'
+import {xssOptions} from './assets/data/markdown_whitelist.json'
 import { uploadFile } from "./service/cms";
 
 import Upload from "./Upload";
@@ -274,5 +274,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/markdown.less";
+@import "./assets/css/resource.less/markdown.less";
 </style>

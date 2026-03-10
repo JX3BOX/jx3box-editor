@@ -18,29 +18,29 @@ import hevueImgPreview from "hevue-img-preview";
 Vue.use(hevueImgPreview);
 
 // 基本文本
-import execLazyload from "../assets/js/img";
-import execFilterIframe from "../assets/js/iframe";
-import execFilterLink from "../assets/js/a";
-import execFilterXSS from "../assets/js/script";
+import execLazyload from "./assets/js/img";
+import execFilterIframe from "./assets/js/iframe";
+import execFilterLink from "./assets/js/a";
+import execFilterXSS from "./assets/js/script";
 
 // 扩展文本
-import renderDirectory from "../assets/js/directory";
-import renderMacro from "../assets/js/macro";
-import renderTalent from "../assets/js/qixue";
-import renderTalent2 from "../assets/js/talent2";
-import {renderKatexAll} from "../assets/js/katex";
-import renderCode from "../assets/js/code";
+import renderDirectory from "./assets/js/directory";
+import renderMacro from "./assets/js/macro";
+import renderTalent from "./assets/js/qixue";
+import renderTalent2 from "./assets/js/talent2";
+import {renderKatexAll} from "./assets/js/katex";
+import renderCode from "./assets/js/code";
 
 // 剑三
 import Item from "./Item";
 import Buff from "./Buff";
 import Skill from "./Skill";
 import Npc from "./Npc";
-import renderJx3Element from "../assets/js/jx3_element";
-import renderImgPreview from "../assets/js/renderImgPreview";
-import renderAudio from "../assets/js/audio";
+import renderJx3Element from "./assets/js/jx3_element";
+import renderImgPreview from "./assets/js/renderImgPreview";
+import renderAudio from "./assets/js/audio";
 
-import {xssOptions} from '../assets/data/markdown_whitelist.json'
+import {xssOptions} from './assets/data/markdown_whitelist.json'
 
 export default {
     name: "ArticleMarkdown",
@@ -166,7 +166,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/article_markdown.less";
+@import "./assets/css/resource.less/article_markdown.less";
 
 .v-note-img-wrapper {
     display: none;

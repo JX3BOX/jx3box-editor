@@ -9,8 +9,10 @@
 </template>
 
 <script>
-import { __server, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
+
+const { __server, __imgPath } = JX3BOX;
 export default {
     name: "Avatar",
     props: ["uid", "url", "size", "frame"],

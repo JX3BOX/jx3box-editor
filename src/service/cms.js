@@ -1,6 +1,8 @@
 import { $cms } from "@jx3box/jx3box-common/js/api";
 import axios from "axios";
-import { __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+
+const { __cdn } = JX3BOX;
 
 function uploadFile(data) {
     return $cms().post(`/api/cms/upload`, data);

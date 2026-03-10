@@ -1,10 +1,12 @@
 const path = require('path');
 
-const pkg = require("./package.json");
-const { JX3BOX } = require("@jx3box/jx3box-common");
-const webpack = require('webpack')
+// const pkg = require("./package.json");
+// const { JX3BOX } = require("@jx3box/jx3box-common");
+// const webpack = require('webpack')
 
 module.exports = {
+    // 项目不需要 eslint，关闭 lintOnSave 以避免启动/编译时报错
+    lintOnSave: false,
 
     //❤️ Multiple pages ~
     pages: {
@@ -14,24 +16,24 @@ module.exports = {
             template: "public/index.html",
             filename: "index.html",
         },
-        article: {
-            title: "Article渲染",
-            entry: "src/pages/article.js",
-            template: "public/article.html",
-            filename: "article/index.html",
-        },
+        // article: {
+        //     title: "Article渲染",
+        //     entry: "src/pages/article.js",
+        //     template: "public/article.html",
+        //     filename: "article/index.html",
+        // },
         tinymce: {
             title: "Tinymce编辑器",
             entry: "src/pages/tinymce.js",
             template: "public/tinymce.html",
             filename: "tinymce/index.html",
         },
-        markdown: {
-            title: 'Markdown编辑器',
-            entry: "src/pages/markdown.js",
-            template: 'public/article.html',
-            filename: 'markdown/index.html',
-        },
+        // markdown: {
+        //     title: 'Markdown编辑器',
+        //     entry: "src/pages/markdown.js",
+        //     template: 'public/article.html',
+        //     filename: 'markdown/index.html',
+        // },
     },
 
 

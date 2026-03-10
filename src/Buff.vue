@@ -22,7 +22,7 @@
 <script>
 import { getBuff } from "./service/database.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
-import detach_types from "../assets/data/detach_type.json";
+import detach_types from "./assets/data/detach_type.json";
 export default {
     name: "Buff",
     props: ["client", "id", "level"],
@@ -85,5 +85,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/module/buff.less";
+@import "./assets/css/resource.less/module/buff.less";
 </style>
