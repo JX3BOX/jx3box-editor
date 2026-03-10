@@ -1,18 +1,14 @@
 <template>
-    
     <h1 class="title">Tinymce编辑器</h1>
     <div class="tab">
-        <el-segmented v-model="group" :options="groupOptions"/>
+        <el-segmented v-model="group" :options="groupOptions" />
     </div>
-    
+
     <div>
         <Tinymce
             v-model="content"
-            :tinymceUploadFn="uploadFn"
-            :tinymceAssetsDomain="domain"
             :attachmentEnable="true"
-            :attachmentUploadFn="uploadFn"
-            :attachmentCdnDomain="domain"
+            :resourceEnable="true"
         />
     </div>
 </template>
@@ -34,23 +30,32 @@ export default {
     components: {
         Tinymce,
     },
+    watch: {
+        group: {
+            immediate: true,
+            handler(val) {
+                const url = val === "basic" ? "/demo/article_basic.html" : "/demo/article_jx3box.html";
+                fetch(url)
+                    .then((res) => res.text())
+                    .then((data) => {
+                        this.content = data;
+                    });
+            },
+        },
+    },
     methods: {
         uploadFn() {
             return Promise.reject(new Error("tinymceUploadFn 未实现（仅用于 demo 页面预览）"));
         },
     },
-    async mounted() {
-        const res = await fetch("/demo/article_basic.html");
-        this.content = await res.text();
-    },
 };
 </script>
 
 <style lang="less">
-.title{
+.title {
     .x;
 }
-.tab{
+.tab {
     .flex(x);
     margin-bottom: 1rem;
 }
