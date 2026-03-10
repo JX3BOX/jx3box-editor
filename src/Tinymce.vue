@@ -45,13 +45,22 @@ const {__cdn} = JX3BOX
 import Editor from "@tinymce/tinymce-vue";
 import hljs_languages from "./assets/js/item/hljs_languages.js";
 import { draggable } from "./assets/js/drag";
-Vue.directive("draggable", draggable);
 
 // TODO:请求代理问题
 
 export default {
     name: "Tinymce",
+    directives: {
+        draggable: {
+            mounted: draggable,
+            updated: draggable,
+        },
+    },
     props: {
+        // Vue3 默认 v-model
+        modelValue: {
+            type: String,
+        },
 
         // 内容
         content: {
@@ -83,9 +92,10 @@ export default {
         },
 
     },
+    emits: ["update:modelValue", "update:content", "update"],
     data: function () {
         return {
-            data: this.content,
+            data: this.modelValue ?? this.content ?? "",
             init: {
                 // 选择器
                 selector: "#tinymce",
@@ -132,15 +142,21 @@ export default {
     watch: {
         data: function (val) {
             this.$emit("update:modelValue", val);
+            this.$emit("update:content", val);
+            this.$emit("update", val);
         },
         modelValue: {
             immediate: true,
             handler: function (val) {
-                this.data = val;
+                if (val !== undefined && val !== this.data) this.data = val ?? "";
             },
         },
-        style(val) {
-            this.init.content_style = val;
+        content: {
+            immediate: true,
+            handler: function (val) {
+                // 当外部未使用默认 v-model（modelValue 未传入）时，走 :content / v-model:content
+                if (this.modelValue === undefined && val !== this.data) this.data = val ?? "";
+            },
         },
     },
     methods: {

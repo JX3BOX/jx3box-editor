@@ -29,7 +29,7 @@ import Tinymce from '@jx3box/jx3box-editor/src/Tinymce.vue'
 
 | 字段 | 含义 | 类型 | 默认值 | 必填 | 备注 |
 |---|---|---|---|---|---|
-| `content` | 内容 | `String` | `""` | 否 | - |
+| `v-model` | 内容 | `String` | `""` | 否 | - |
 | `height` | 默认高度 | `Number` | `800` | 否 | 指px |
 | `attachmentEnable` | 是否启用附件上传 | `Boolean` | `true` | 否 |  |
 | `resourceEnable` | 是否启用资源插入 | `Boolean` | `true` | 否 |  |

@@ -23,6 +23,7 @@ export default {
             group: "basic",
             groupOptions: [
                 { label: "基础内容", value: "basic" },
+                { label: "剑三内容", value: "jx3" },
                 { label: "魔盒内容", value: "jx3box" },
             ],
         };
@@ -34,7 +35,7 @@ export default {
         group: {
             immediate: true,
             handler(val) {
-                const url = val === "basic" ? "/demo/article_basic.html" : "/demo/article_jx3box.html";
+                const url = `/demo/article_${val}.html`;
                 fetch(url)
                     .then((res) => res.text())
                     .then((data) => {
