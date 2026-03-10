@@ -3,8 +3,9 @@
     <div class="tab">
         <el-segmented v-model="group" :options="groupOptions" />
     </div>
-    <div>
-        <Article :content="content"></Article>
+    <div class="container">
+        <Article class="article" :content="content"></Article>
+        <div id="directory"></div>
     </div>
 </template>
 
@@ -51,5 +52,21 @@ export default {
 .tab {
     .flex(x);
     margin-bottom: 1rem;
+}
+.container{
+    #directory{
+        .w(200px);
+        position: fixed;
+        right:20px;
+        top:20px;
+    }
+    .article{
+        margin-right: 320px;
+    }
+
+}
+body{
+    min-height:2000px;
+    padding:0 20px;
 }
 </style>

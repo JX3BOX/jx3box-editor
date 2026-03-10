@@ -48,7 +48,6 @@
 
 <script>
 import $ from "jquery";
-const HEADER_HEIGHT = 112; //头部高度
 
 // XSS
 import execFilterXSS from "./assets/js/xss";
@@ -62,9 +61,9 @@ import execSplitPages from "./assets/js/nextpage";
 // 扩展文本
 import renderFoldBlock from "./assets/js/fold";
 import renderDirectory from "./assets/js/directory";
-import renderKatex from "../assets/js/katex";
-import renderCode from "../assets/js/code";
-import renderImgPreview from "../assets/js/renderImgPreview";
+import renderKatex from "./assets/js/katex";
+import renderCode from "./assets/js/code";
+import renderImgPreview from "./assets/js/renderImgPreview";
 
 // 魔盒
 import renderMacro from "./assets/js/macro";
@@ -86,6 +85,12 @@ import renderJx3Element from "./assets/js/jx3_element";
 export default {
     name: "Article",
     props: {
+
+        post_mode : {
+            type: String,
+            default: "tinymce",
+        },
+
         content: String,
 
         // 拼接相对路径地址的图片，需要自带协议
@@ -188,6 +193,21 @@ export default {
         },
     },
     methods: {
+        getHeaderHeight: function () {
+            // 页面上可能没有这些元素，取存在的第一个：.c-header 优先，其次 .c-breadcrumb
+            const el =
+                document.querySelector(".c-header") ||
+                document.querySelector(".c-breadcrumb");
+            if (!el) return 0;
+            const rect = el.getBoundingClientRect && el.getBoundingClientRect();
+            const h = (rect && rect.height) || el.offsetHeight || 0;
+            return Math.max(0, Math.round(h));
+        },
+        scrollToTopWithOffset: function (top) {
+            const headerHeight = this.getHeaderHeight();
+            const targetTop = Math.max(0, (top || 0) - headerHeight);
+            window.scrollTo(0, targetTop);
+        },
         doReg: function (data) {
             if (data) {
                 // 1. 先执行 XSS 过滤（xss.js 已包含所有配置）
@@ -250,18 +270,27 @@ export default {
 
             if (window.location.hash?.includes("directory")) {
                 let id = window.location.hash;
-                let target = $(`${id}`).offset().top;
-                console.log(target);
-                $(document).scrollTop(target - HEADER_HEIGHT);
+                const $target = $(`${id}`);
+                if ($target.length) {
+                    const top = $target.offset().top;
+                    // 等待目录 DOM 真正插入并布局后再滚动
+                    requestAnimationFrame(() => this.scrollToTopWithOffset(top));
+                }
             }
 
-            $(".w-directory-anchor").on("click", function (e) {
-                e.preventDefault();
-                let id = $(this).attr("id");
-                let target = $(`#${id}`).offset().top;
-                $(document).scrollTop(target - HEADER_HEIGHT);
-                window.location.hash = `#${id}`;
-            });
+            const vm = this;
+            $(".w-directory-anchor")
+                .off("click.jx3boxArticleDir")
+                .on("click.jx3boxArticleDir", function (e) {
+                    e.preventDefault();
+                    let id = $(this).attr("id");
+                    const $target = $(`#${id}`);
+                    if ($target.length) {
+                        const top = $target.offset().top;
+                        vm.scrollToTopWithOffset(top);
+                    }
+                    window.location.hash = `#${id}`;
+                });
         },
         changePage: function (i) {
             this.page = i;
