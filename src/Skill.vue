@@ -8,7 +8,7 @@
             />
             <div class="w-skill-content">
                 <el-button
-                    type="text"
+                    link
                     class="w-skill-switch-parse"
                     @click="show_parse = !show_parse"
                 >
