@@ -21,7 +21,20 @@
 import QrcodeVue from "qrcode.vue";
 export default {
     name: "QRcode",
-    props: ["href", "v", "s"],
+    props: {
+        href: {
+            type: String,
+            default: "",
+        },
+        s: {
+            type: [String, Number],
+            default: 100,
+        },
+        v: {
+            type: String,
+            default: "cms",
+        },
+    },
     data: function () {
         return {
             value: this.href || location.href,

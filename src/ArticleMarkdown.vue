@@ -1,17 +1,30 @@
 <template>
     <div class="c-article-markdown">
-        <markdown-render id="c-article" class="c-markdown c-article" ref="article" v-model="origin" @change="updateOrigin" :preRender="doReg" :xssOptions="xssOptions"></markdown-render>
+        <markdown-render
+            id="c-article"
+            class="c-markdown c-article"
+            ref="article"
+            v-model="origin"
+            @change="updateOrigin"
+            :preRender="doReg"
+            :xssOptions="xssOptions"
+        ></markdown-render>
         <div class="w-jx3-element-pop" :style="jx3_element.style">
             <jx3-item :item_id="item.id" :jx3ClientType="item.client" v-show="jx3_element.type == 'item'" />
             <jx3-buff :client="buff.client" :id="buff.id" :level="buff.level" v-show="jx3_element.type == 'buff'" />
-            <jx3-skill :client="skill.client" :id="skill.id" :level="skill.level" v-show="jx3_element.type == 'skill'" />
+            <jx3-skill
+                :client="skill.client"
+                :id="skill.id"
+                :level="skill.level"
+                v-show="jx3_element.type == 'skill'"
+            />
             <jx3-npc :client="npc.client" :id="npc.id" v-show="jx3_element.type === 'npc'"></jx3-npc>
         </div>
     </div>
 </template>
 
 <script>
-import markdownRender from '@jx3box/markdown/src/render.vue'
+import markdownRender from "@jx3box/markdown/src/render.vue";
 
 // 基本文本
 import execLazyload from "./assets/js/img";
@@ -24,7 +37,7 @@ import renderDirectory from "./assets/js/directory";
 import renderMacro from "./assets/js/macro";
 import renderTalent from "./assets/js/qixue";
 import renderTalent2 from "./assets/js/talent2";
-import {renderKatexAll} from "./assets/js/katex";
+import { renderKatexAll } from "./assets/js/katex";
 import renderCode from "./assets/js/code";
 
 // 剑三
@@ -36,7 +49,7 @@ import renderJx3Element from "./assets/js/jx3_element";
 import renderImgPreview from "./assets/js/renderImgPreview";
 import renderAudio from "./assets/js/audio";
 
-import {xssOptions} from './assets/data/markdown_whitelist.json'
+import { xssOptions } from "./assets/data/markdown_whitelist.json";
 
 export default {
     name: "ArticleMarkdown",
@@ -44,10 +57,10 @@ export default {
         content: String,
         directorybox: String,
     },
-    data: function() {
+    data: function () {
         return {
             // 原始md
-            origin : '',
+            origin: "",
             // 原始渲染md后的html(传入文本回调处理函数)
             html: "",
 
@@ -70,8 +83,8 @@ export default {
             },
             // NPC
             npc: {
-                client: 'std',
-                id: ""
+                client: "std",
+                id: "",
             },
             jx3_element: {
                 style: {
@@ -83,13 +96,12 @@ export default {
             },
             images: [],
 
-            xssOptions
+            xssOptions,
         };
     },
-    computed: {
-    },
+    computed: {},
     methods: {
-        doReg: function(data) {
+        doReg: function (data) {
             if (data) {
                 // 过滤内容
                 data = execLazyload(data);
@@ -101,7 +113,7 @@ export default {
                 return "";
             }
         },
-        doDOM: function() {
+        doDOM: function () {
             // 宏
             renderMacro();
             // 奇穴
@@ -112,22 +124,22 @@ export default {
             // 画廊
             renderImgPreview(this.$refs.article, "img:not(.e-jx3-emotion-img)");
             // 语法高亮
-            renderCode(`code[class=^'lang-']`)
+            renderCode(`code[class=^'lang-']`);
             // 音频
             renderAudio();
             // 物品
             renderJx3Element(this);
         },
-        doDir: function() {
+        doDir: function () {
             let target = "#c-article";
             let dir = renderDirectory(target, this.directorybox);
-            this.$emit("directoryRendered",dir);
+            this.$emit("directoryRendered", dir);
         },
-        updateOrigin : function (md,html){
-            this.html = html
-            this.render()
+        updateOrigin: function (md, html) {
+            this.html = html;
+            this.render();
         },
-        render: function() {
+        render: function () {
             // 等待html加载完毕后
             this.$nextTick(() => {
                 this.$emit("contentLoaded");
@@ -142,15 +154,14 @@ export default {
         },
     },
     watch: {
-        content : {
-            immediate : true,
-            handler : function (val){
-                this.origin = val
-            }
-        }
+        content: {
+            immediate: true,
+            handler: function (val) {
+                this.origin = val;
+            },
+        },
     },
-    mounted: function() {
-    },
+    mounted: function () {},
     components: {
         "jx3-item": Item,
         "jx3-buff": Buff,

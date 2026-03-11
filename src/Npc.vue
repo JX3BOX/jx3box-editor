@@ -153,9 +153,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="u-id">
-                        ID : {{id}}
-                    </div>
+                    <div class="u-id">ID : {{ id }}</div>
                 </div>
             </div>
         </div>
@@ -167,44 +165,67 @@ import { getNpc } from "./service/database.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Npc",
-    props: ["client", "id"],
+    props: {
+        client: {
+            type: String,
+            default: "std",
+        },
+        id: {
+            type: [String, Number],
+            default: "",
+        },
+    },
     data: () => ({
         data: null,
+        requestVersion: 0,
     }),
     computed: {
-        params: function() {
+        params: function () {
             return [this.client, this.id];
         },
     },
     watch: {
         params: {
             immediate: true,
-            deep: true,
             handler(val) {
+                this.requestVersion += 1;
+                const currentVersion = this.requestVersion;
+
                 if (val) {
                     let [client, id] = val;
+                    if (!id) {
+                        this.data = null;
+                        return;
+                    }
+
                     // 读取本地数据
                     const cache = sessionStorage.getItem(`npc-${client}-${id}`);
                     if (cache) {
-                        this.data = JSON.parse(cache);
-                        // 没有缓存则发起请求获取数据
-                    } else {
-                        id &&
-                            getNpc(...this.params).then((res) => {
-                                let data = res.data?.list?.[0];
-                                if (!data) data = null;
-                                this.data = data;
-
-                                // 将数据放入 sessionStorage
-                                sessionStorage.setItem(`npc-${client}-${id}`, JSON.stringify(data));
-                            });
+                        try {
+                            this.data = JSON.parse(cache);
+                            return;
+                        } catch (e) {
+                            console.log(e, "[Npc]无法解析本地缓存");
+                        }
                     }
+
+                    // 没有缓存则发起请求获取数据
+                    getNpc(client, id).then((res) => {
+                        if (currentVersion !== this.requestVersion) return;
+
+                        let data = res.data?.list?.[0];
+                        if (!data) data = null;
+                        this.data = data;
+
+                        // 将数据放入 sessionStorage
+                        sessionStorage.setItem(`npc-${client}-${id}`, JSON.stringify(data));
+                    });
                 }
             },
         },
     },
     methods: {
-        iconLink: function(id) {
+        iconLink: function (id) {
             return iconLink(id, this.client);
         },
     },

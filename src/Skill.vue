@@ -1,17 +1,9 @@
 <template>
     <div class="w-skill" v-if="data">
         <div class="w-skill-wrapper">
-            <img
-                class="w-skill-icon"
-                :src="iconLink(data.IconID || 13)"
-                :alt="data.Name"
-            />
+            <img class="w-skill-icon" :src="iconLink(data.IconID || 13)" :alt="data.Name" />
             <div class="w-skill-content">
-                <el-button
-                    link
-                    class="w-skill-switch-parse"
-                    @click="show_parse = !show_parse"
-                >
+                <el-button link class="w-skill-switch-parse" @click="show_parse = !show_parse">
                     <i class="el-icon-refresh"></i>
                 </el-button>
                 <span class="w-skill-name">{{ data.Name }}</span>
@@ -30,24 +22,38 @@ import { getSkill } from "./service/database.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Skill",
-    props: ["client", "id", "level"],
+    props: {
+        client: {
+            type: String,
+            default: "std",
+        },
+        id: {
+            type: [String, Number],
+            default: "",
+        },
+        level: {
+            type: [String, Number],
+            default: "",
+        },
+    },
     data: () => ({
         data: null,
         show_parse: true,
+        requestVersion: 0,
     }),
     computed: {
         params: function () {
             return [this.client, this.id, this.level];
         },
         desc: function () {
-            if (this.data.parse && this.show_parse) {
+            if (this.data?.parse && this.show_parse) {
                 const result = this.data.parse.desc;
                 return result.replace(/\\n/g, "\n");
             }
             return this.data?.Desc;
         },
         talent_desc: function () {
-            if (this.data.parse && this.show_parse) {
+            if (this.data?.parse && this.show_parse) {
                 return this.data.parse.talent_desc;
             }
             return "";
@@ -56,32 +62,36 @@ export default {
     watch: {
         params: {
             immediate: true,
-            deep: true,
             handler(val) {
+                this.requestVersion += 1;
+                const currentVersion = this.requestVersion;
+
                 if (val) {
                     let [client, id, level] = val;
+                    if (!id) {
+                        this.data = null;
+                        return;
+                    }
                     // 读取本地数据
-                    const cache = sessionStorage.getItem(
-                        `skill-${client}-${id}-${level}`
-                    );
+                    const cache = sessionStorage.getItem(`skill-${client}-${id}-${level}`);
                     if (cache) {
                         try {
                             this.data = JSON.parse(cache);
                             return;
-                        } catch {}
+                        } catch (e) {
+                            console.log(e, "[Skill]无法解析本地缓存");
+                        }
                         // 没有缓存则发起请求获取数据
                     }
-                    if (!id) return;
-                    getSkill(...this.params).then(res => {
+                    getSkill(client, id, level).then((res) => {
+                        if (currentVersion !== this.requestVersion) return;
+
                         let data = res.data?.list?.[0];
                         if (!data) data = null;
                         this.data = data;
 
                         // 将数据放入 sessionStorage
-                        sessionStorage.setItem(
-                            `skill-${client}-${id}-${level}`,
-                            JSON.stringify(data)
-                        );
+                        sessionStorage.setItem(`skill-${client}-${id}-${level}`, JSON.stringify(data));
                     });
                 }
             },
