@@ -21,9 +21,9 @@
                     </a>
                     <div class="u-extend">
                         <el-tooltip class="item" effect="dark" placement="top">
-                            <div slot="content">
+                            <template #content>
                                 <span class="u-tips">经验值：{{ data.experience }}</span>
-                            </div>
+                            </template>
                             <span
                                 class="u-level"
                                 :class="'lv-' + level"
@@ -265,7 +265,7 @@ export default {
         },
 
         showMedalIcon: function (val) {
-            return __imgPath + "image/medals/user/" + val + ".gif";
+            return __cdn + "/design/medals/user/" + val + ".gif";
         },
         medalLink: function ({ rank_id, medal_type = "rank" }) {
             return getMedalLink(rank_id, medal_type);

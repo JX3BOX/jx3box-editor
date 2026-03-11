@@ -17,18 +17,60 @@ const EXTRA_TAGS = [
 
 // 必须顶层的 at-rule（你说不需要动画，但 keyframes 也可能被编辑器/作者写进来，留着更稳）
 const TOP_LEVEL_AT = new Set(["keyframes", "-webkit-keyframes", "font-face"]);
+const CSS_URL_ALLOWED_HOSTS = new Set(["cdn.jx3box.com"]);
+
+function unquoteCssUrl(raw = "") {
+    const s = String(raw).trim();
+    if (!s) return "";
+    if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) {
+        return s.slice(1, -1).trim();
+    }
+    return s;
+}
+
+function isSafeCssUrl(url = "") {
+    const s = String(url).trim();
+    if (!s) return false;
+    if (/[\u0000-\u001F\u007F]/.test(s)) return false;
+    if (/^(javascript|vbscript|data|file):/i.test(s)) return false;
+
+    // 站内相对地址保留
+    if (/^(\/|\.\/|\.\.\/|#)/.test(s)) return true;
+
+    // 绝对地址与协议相对地址：仅允许白名单域名
+    try {
+        const normalized = s.startsWith("//") ? `https:${s}` : s;
+        const u = new URL(normalized);
+        if (!/^https?:$/i.test(u.protocol)) return false;
+        return CSS_URL_ALLOWED_HOSTS.has(u.hostname.toLowerCase());
+    } catch {
+        return false;
+    }
+}
+
+function sanitizeCssUrls(css = "") {
+    return String(css).replace(/url\s*\(\s*([^)]*?)\s*\)/gi, (all, rawUrl) => {
+        const clean = unquoteCssUrl(rawUrl);
+        if (!isSafeCssUrl(clean)) return "";
+        const escaped = clean.replace(/"/g, '\\"');
+        return `url("${escaped}")`;
+    });
+}
 
 function stripDangerousCss(css) {
     if (!css) return css;
     return css
         .replace(/@import\s+[^;]+;?/gi, "")
-        .replace(/url\s*\(\s*[^)]+\s*\)/gi, "")
-        .replace(/expression\s*\([^)]*\)/gi, "");
+        .replace(/expression\s*\([^)]*\)/gi, "")
+        .replace(/-moz-binding\s*:\s*[^;]+;?/gi, "")
+        .replace(/behavior\s*:\s*[^;]+;?/gi, "")
+        .replace(/@charset\s+[^;]+;?/gi, "");
 }
 
 // 暴力把 style 内容 nest 到 .c-article
 function nestCssBrutally(cssText, scope = ".c-article") {
     let css = stripDangerousCss(cssText || "");
+    css = sanitizeCssUrls(css);
     if (!css.trim()) return css;
 
     const root = postcss.parse(css, { parser: safeParser });
@@ -101,11 +143,12 @@ export default function sanitizeRichText(html) {
                 // 移除 on*
                 for (const k of Object.keys(out)) if (/^on/i.test(k)) delete out[k];
 
-                // style 属性：禁 @import / url(
+                // style 属性：禁 @import / expression，url() 仅保留安全协议
                 if (typeof out.style === "string" && out.style) {
                     let s = out.style;
                     s = s.replace(/@import\s+[^;]+;?/gi, "");
-                    s = s.replace(/url\s*\(\s*[^)]+\s*\)/gi, "");
+                    s = sanitizeCssUrls(s);
+                    s = s.replace(/expression\s*\([^)]*\)/gi, "");
                     s = s.replace(/;;+/g, ";").trim();
                     if (!s) delete out.style;
                     else out.style = s;

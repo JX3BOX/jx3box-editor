@@ -2,7 +2,7 @@ const path = require('path');
 const { spawn } = require("child_process");
 const JX3BOX = require("@jx3box/jx3box-common/data/jx3box.json");
 const CMS_PROXY_TARGET = (process.env.VUE_APP_CMS || JX3BOX.__cms || "https://cms.jx3box.com").replace(/\/$/, "");
-const { __cms, __node } = JX3BOX;
+const { __cms, __node, __team, __next } = JX3BOX;
 
 const pages = {
     index: {
@@ -161,13 +161,29 @@ module.exports = {
                     "^/__proxy/node": "",
                 },
             },
+            "^/__proxy/team": {
+                target: __team,
+                changeOrigin: true,
+                secure: true,
+                pathRewrite: {
+                    "^/__proxy/team": "",
+                },
+            },
+            "^/__proxy/next": {
+                target: __next,
+                changeOrigin: true,
+                secure: true,
+                pathRewrite: {
+                    "^/__proxy/next": "",
+                },
+            },
         },
         setupMiddlewares(middlewares, devServer) {
             // 暴露一个全局方法，给上面的 watcher/build 插件用来强制刷新当前打开的 dev 页面
             global.__JX3BOX_DEV_TRIGGER_RELOAD__ = (file = "manual") => {
                 try {
                     if (devServer && devServer.webSocketServer && devServer.webSocketServer.clients) {
-                        devServer.sendMessage(devServer.webSocketServer.clients, "static-changed", file);
+                        // devServer.sendMessage(devServer.webSocketServer.clients, "static-changed", file);
                     }
                 } catch (e) {
                     // ignore

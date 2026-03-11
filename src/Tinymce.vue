@@ -3,8 +3,11 @@
         <slot name="prepend"></slot>
 
         <div class="c-editor-header">
+            <!-- 上传附件 -->
             <Upload v-if="attachmentEnable" @insert="insertAttachments" />
-            <!-- <Resource v-if="resourceEnable" @insert="insertResource" /> -->
+            <!-- 剑三资源库 -->
+            <Resource v-if="resourceEnable" @insert="insertResource" />
+            <!-- 魔盒资源库 -->
             <BoxResource v-if="resourceEnable" @insert="insertResource" :subtype="subtype" />
         </div>
 
@@ -40,7 +43,7 @@ const { __cdn, __imgPath, __cms } = JX3BOX;
 const apiUrl = process.env.NODE_ENV === "development" ? "/api/cms/upload/tinymce" : __cms + "api/cms/upload/tinymce";
 
 import Upload from "./Upload";
-// import Resource from "./Resource";
+import Resource from "./Resource";
 import BoxResource from "./BoxResource";
 import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
 
@@ -54,7 +57,7 @@ export default {
     components: {
         Editor,
         Upload,
-        // Resource,
+        Resource,
         BoxResource,
         Emotion,
     },
@@ -171,21 +174,21 @@ export default {
         },
     },
     methods: {
-        setup: function (editor) {
+        setup(editor) {
             console.log("ID为: " + editor.id + " 的编辑器即将初始化.");
         },
-        ready: function (editor) {
+        ready(editor) {
             console.log("ID为: " + editor.id + " 的编辑器已初始化完成.");
         },
-        insertAttachments: function (data) {
+        insertAttachments(data) {
             // eslint-disable-next-line no-undef
             tinyMCE.editors["tinymce"].insertContent(data.html);
         },
-        insertResource: function (data) {
+        insertResource(data) {
             // eslint-disable-next-line no-undef
             tinyMCE.editors["tinymce"].insertContent(data);
         },
-        imagesUploadHandler: function (blobInfo, success, failure, progress) {
+        imagesUploadHandler(blobInfo, success, failure, progress) {
             let fdata = new FormData();
             fdata.append("file", blobInfo.blob(), blobInfo.filename());
 
@@ -234,7 +237,7 @@ export default {
                     failure(message);
                 });
         },
-        emotionSelected: function (emotion) {
+        emotionSelected(emotion) {
             let src = emotion.filename;
             if (!emotion.filename.startsWith("http")) {
                 src = `${__imgPath}emotion/output/${emotion.filename}`;
@@ -243,7 +246,7 @@ export default {
             tinyMCE.editors["tinymce"].insertContent(IMAGE);
         },
     },
-    mounted: function () {
+    mounted() {
         // console.log(process.env.VUE_APP_TINYMCE_DEV)
     },
 };
