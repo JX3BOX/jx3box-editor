@@ -72,6 +72,12 @@ export default {
             type: String,
         },
 
+        // 内容 兼容旧用法
+        content: {
+            type: String,
+            default: "",
+        },
+
         // 默认高度
         height: {
             type: Number,
@@ -100,10 +106,10 @@ export default {
             default: "",
         },
     },
-    emits: ["update:modelValue", "update"],
+    emits: ["update:modelValue", "update:content", "update"],
     data: function () {
         return {
-            data: this.modelValue ?? "",
+            data: this.modelValue ?? this.content ?? "",
             init: {
                 // 选择器
                 selector: "#tinymce",
@@ -155,12 +161,20 @@ export default {
     watch: {
         data: function (val) {
             this.$emit("update:modelValue", val);
+            this.$emit("update:content", val);
             this.$emit("update", val);
         },
         modelValue: {
             immediate: true,
             handler: function (val) {
+                // 当外部未使用默认 v-model（modelValue 未传入）时，走 :content / v-model:content
                 if (val !== undefined && val !== this.data) this.data = val ?? "";
+            },
+        },
+        content: {
+            immediate: true,
+            handler: function (val) {
+                if (this.modelValue === undefined && val !== this.data) this.data = val ?? "";
             },
         },
     },
