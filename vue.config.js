@@ -2,6 +2,7 @@ const path = require('path');
 const { spawn } = require("child_process");
 const JX3BOX = require("@jx3box/jx3box-common/data/jx3box.json");
 const CMS_PROXY_TARGET = (process.env.VUE_APP_CMS || JX3BOX.__cms || "https://cms.jx3box.com").replace(/\/$/, "");
+const { __cms, __node } = JX3BOX;
 
 const pages = {
     index: {
@@ -138,6 +139,27 @@ module.exports = {
                 target: CMS_PROXY_TARGET,
                 changeOrigin: true,
                 secure: true,
+            },
+            "^/api/node": {
+                target: __node,
+                changeOrigin: true,
+                secure: true,
+            },
+            "^/__proxy/cms": {
+                target: __cms,
+                changeOrigin: true,
+                secure: true,
+                pathRewrite: {
+                    "^/__proxy/cms": "",
+                },
+            },
+            "^/__proxy/node": {
+                target: __node,
+                changeOrigin: true,
+                secure: true,
+                pathRewrite: {
+                    "^/__proxy/node": "",
+                },
             },
         },
         setupMiddlewares(middlewares, devServer) {
