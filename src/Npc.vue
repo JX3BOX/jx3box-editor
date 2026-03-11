@@ -167,7 +167,16 @@ import { getNpc } from "./service/database.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Npc",
-    props: ["client", "id"],
+    props: {
+        client: {
+            type: String,
+            default: "std",
+        },
+        id: {
+            type: [String, Number],
+            default: "",
+        },
+    },
     data: () => ({
         data: null,
     }),

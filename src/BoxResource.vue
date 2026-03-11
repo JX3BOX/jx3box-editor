@@ -91,7 +91,7 @@
 
 				<template v-if="multipage && type !== 'combo'">
 				<!-- 下一页 -->
-				<el-button class="m-archive-more" :class="{ show: hasNextPage }" type="primary" icon="ArrowDown" @click="appendPage">加载更多</el-button>
+				<el-button class="m-archive-more" :class="{ show: hasNextPage }" type="primary" icon="ArrowDown" @click="appendPage" size="large">加载更多</el-button>
 					<!-- 分页 -->
 					<el-pagination class="m-archive-pages" background layout="total, prev, pager, next,jumper" :hide-on-single-page="true" :page-size="per" :total="total" v-model:current-page="page" @current-change="changePage"></el-pagination>
 				</template>
@@ -102,8 +102,8 @@
 			<!-- 插入按钮 -->
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="dialogVisible = false">取 消</el-button>
-					<el-button type="primary" @click="insert">
+					<el-button @click="dialogVisible = false" size="large">取 消</el-button>
+					<el-button type="primary" @click="insert" size="large">
 						{{ buttonTXT }}
 					</el-button>
 				</span>

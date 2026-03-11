@@ -30,7 +30,20 @@ import { getSkill } from "./service/database.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Skill",
-    props: ["client", "id", "level"],
+    props: {
+        client: {
+            type: String,
+            default: "std",
+        },
+        id: {
+            type: [String, Number],
+            default: "",
+        },
+        level: {
+            type: [String, Number],
+            default: "",
+        },
+    },
     data: () => ({
         data: null,
         show_parse: true,

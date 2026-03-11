@@ -38,7 +38,12 @@ export default {
     components: {
         Avatar,
     },
-    props: ["id"],
+    props: {
+        id: {
+            type: [String, Number],
+            default: "",
+        },
+    },
     data: () => ({
         data: null,
         loading: false,

@@ -25,7 +25,20 @@ import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import detach_types from "./assets/data/detach_type.json";
 export default {
     name: "Buff",
-    props: ["client", "id", "level"],
+    props: {
+        client: {
+            type: String,
+            default: "std",
+        },
+        id: {
+            type: [String, Number],
+            default: "",
+        },
+        level: {
+            type: [String, Number],
+            default: "",
+        },
+    },
     data: () => ({
         data: null,
     }),

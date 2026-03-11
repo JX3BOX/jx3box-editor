@@ -48,7 +48,16 @@ import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 
 const { __Root } = JX3BOX;
 export default {
-    props: ["data", "id"],
+    props: {
+        data: {
+            type: Object,
+            default: () => ({}),
+        },
+        id: {
+            type: [String, Number],
+            default: "",
+        },
+    },
     data: function() {
         return {
             plan_data: "",
