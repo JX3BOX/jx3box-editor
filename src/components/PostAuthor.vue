@@ -1,9 +1,4 @@
-<!--
- * @Author: iRuxu
- * @Date: 2022-07-17 00:13:35
- * @LastEditTime: 2022-07-17 00:40:25
- * @Description:
--->
+<!-- 骚图hover：来源作者-->
 <template>
     <div class="w-author w-author__post" v-loading="loading">
         <div class="w-author-wrapper el-popover" v-if="data">
