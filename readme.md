@@ -16,7 +16,6 @@ Item|剑三物品|✅
 ItemSimple|剑三物品(简化)|✅
 Npc|剑三NPC|✅
 GameText|剑三文字|✅
-Equip|剑三配装|❓
 
 
 ## 组件文档

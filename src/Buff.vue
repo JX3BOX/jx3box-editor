@@ -9,7 +9,7 @@
                 <span class="w-buff-name">{{ data.Name }}</span>
                 <span class="w-buff-desc">{{ data.Desc }}</span>
                 <span class="w-buff-type" v-if="data.DetachType"
-                    >※ {{ data.DetachType | showDetachType }}</span
+                    >※ {{ showDetachType(data.DetachType) }}</span
                 >
                 <span class="w-buff-meta">ID : {{ data.BuffID }}</span>
                 <span class="w-buff-meta">Level : {{ data.Level }}</span>
@@ -84,8 +84,6 @@ export default {
         iconLink: function (id) {
             return iconLink(id, this.client);
         },
-    },
-    filters: {
         showDetachType: function (val) {
             if (val && detach_types[val]) {
                 return detach_types[val];
