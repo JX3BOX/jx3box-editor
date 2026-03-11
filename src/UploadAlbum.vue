@@ -1,67 +1,115 @@
 <template>
     <div class="c-upload-album">
-        <Upload @insert="updateFileList" text="批量上传图片" />
+        <Upload text="批量上传图片" :only-image="true" @insert="updateFileList" />
         <div class="c-upload-album-list">
-            <draggable v-model="imgList" v-if="imgList && imgList.length">
-                <transition-group>
-                    <div class="u-album-item" v-for="(item,i) in imgList" :key="item.name + item.url">
-                        <img class="u-pic" :src="item.url | showThumbnail" />
+            <draggable v-if="imgList.length" v-model="imgList" item-key="id" class="u-draggable-list">
+                <template #item="{ element, index }">
+                    <div class="u-album-item">
+                        <img class="u-pic" :src="showThumbnail(element.url)" />
                         <i class="u-mask"></i>
-                        <i class="u-op u-preview el-icon-zoom-in" @click="previewHandle(item)"></i>
-                        <i class="u-op u-delete el-icon-delete" @click="deleteHandle(i)"></i>
+                        <span class="u-op u-preview" @click.stop="previewHandle(element)">
+                            <el-icon><ZoomIn /></el-icon>
+                        </span>
+                        <span class="u-op u-delete" @click.stop="deleteHandle(index)">
+                            <el-icon><Delete /></el-icon>
+                        </span>
                     </div>
-                </transition-group>
+                </template>
             </draggable>
-            <div class="u-null" v-else><i class="el-icon-warning-outline"></i> 当前没有任何图片</div>
+            <div v-else class="u-null">
+                <el-icon><Warning /></el-icon>
+                当前没有任何图片
+            </div>
         </div>
-        <el-dialog class="c-upload-album-preview" :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt />
+        <el-dialog v-model="dialogVisible" class="c-upload-album-preview">
+            <img width="100%" :src="dialogImageUrl" alt="" />
         </el-dialog>
     </div>
 </template>
 
 <script>
 import Upload from "./Upload.vue";
+import { Delete, Warning, ZoomIn } from "@element-plus/icons-vue";
 import { getThumbnail } from "@jx3box/jx3box-common/js/utils.js";
 import draggable from "vuedraggable";
 
+const normalizeItem = (item, index = 0) => {
+    if (!item || !item.url) return null;
+    return {
+        ...item,
+        id: item.id || item.uid || `${item.url || "img"}-${item.name || "image"}-${index}`,
+    };
+};
+
+const isSameList = (a = [], b = []) => {
+    if (a.length !== b.length) return false;
+    return a.every((item, index) => {
+        const target = b[index] || {};
+        return item.id === target.id && item.url === target.url && item.name === target.name;
+    });
+};
+
 export default {
-    name: "album",
-    props: ["data"],
-    data: function () {
+    name: "UploadAlbum",
+    components: {
+        draggable,
+        Upload,
+        ZoomIn,
+        Delete,
+        Warning,
+    },
+    props: {
+        modelValue: {
+            type: Array,
+            default: undefined,
+        },
+        data: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+    },
+    emits: ["update:modelValue", "update"],
+    data() {
         return {
-            imgList: this.data || [],
+            imgList: [],
             dialogImageUrl: "",
             dialogVisible: false,
         };
     },
-    model: {
-        prop: "data", //向上同步数据
-        event: "update",
+    computed: {
+        sourceList() {
+            return this.modelValue !== undefined ? this.modelValue : this.data;
+        },
     },
     watch: {
-        data: {
+        sourceList: {
             immediate: true,
             deep: true,
-            handler: function (newval) {
-                this.imgList = newval || [];
+            handler(newval) {
+                const normalized = (newval || []).map((item, index) => normalizeItem(item, index)).filter(Boolean);
+                if (!isSameList(normalized, this.imgList)) {
+                    this.imgList = normalized;
+                }
             },
         },
         imgList: {
             deep: true,
-            handler: function (newval) {
+            handler(newval) {
                 this.$emit("update", newval);
+                this.$emit("update:modelValue", newval);
             },
         },
     },
-    computed: {},
     methods: {
-        updateFileList: function (data) {
-            let upload_list = data.list;
-            let img_list = [];
-            upload_list.forEach((item) => {
+        updateFileList(data) {
+            const upload_list = Array.isArray(data?.list) ? data.list : [];
+            const img_list = [];
+            upload_list.forEach((item, index) => {
                 if (item.is_img) {
                     img_list.push({
+                        id: item.uid || `${item.url || "img"}-${item.name || "image"}-${index}`,
                         name: item.name,
                         url: item.url,
                     });
@@ -69,94 +117,18 @@ export default {
             });
             this.imgList = img_list;
         },
-        previewHandle: function (item) {
+        showThumbnail(val) {
+            return getThumbnail(val, 146);
+        },
+        previewHandle(item) {
             this.dialogImageUrl = item.url;
             this.dialogVisible = true;
         },
-        deleteHandle: function (i) {
+        deleteHandle(i) {
             this.imgList.splice(i, 1);
         },
-    },
-    filters: {
-        showThumbnail: function (val) {
-            return getThumbnail(val, 146);
-        },
-    },
-    mounted: function () {},
-    components: {
-        draggable,
-        Upload,
     },
 };
 </script>
 
-<style lang="less">
-.c-upload-album-list {
-    border: 2px dashed #eee;
-    padding: 8px 0 0 8px;
-    margin-top: 20px;
-    .r(4px);
-
-    @h:148px;
-    min-height:@h;
-    .u-null{
-        .x;
-        .fz(12px,@h);
-        color:#999;
-    }
-
-    .u-album-item {
-        .pr;
-        .size(@h);
-        img {
-            .db;
-            .size(100%);
-        }
-        overflow: hidden;
-        background-color: #fff;
-        border: 1px solid #c0ccda;
-        border-radius: 6px;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        margin: 0 8px 8px 0;
-        display: inline-block;
-        &:hover {
-            .u-mask,
-            .u-op {
-                .db;
-            }
-        }
-    }
-
-    .u-mask,
-    .u-op {
-        .pa;
-        .none;
-    }
-    .u-op {
-        .pointer;
-    }
-    .u-mask {
-        background-color: rgba(0, 0, 0, 0.5);
-        transition: opacity 0.3s;
-        .lt(0);
-        .size(100%);
-        .none;
-        cursor: move;
-    }
-    .u-delete,
-    .u-preview {
-        .fz(20px);
-        color: #fff;
-        .lt(50%);
-        .size(20px);
-        transform: translate(-50%, -50%);
-    }
-    .u-delete {
-        .ml(20px);
-    }
-    .u-preview {
-        .ml(-20px);
-    }
-}
-</style>
+<style lang="less" src="./assets/css/upload_album.less"></style>

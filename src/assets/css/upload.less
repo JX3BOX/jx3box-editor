@@ -6,22 +6,29 @@
     }
 
     .c-upload-toolbar {
-        .flex(y);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
         margin-bottom: 20px;
+        .u-toolbar-row {
+            width: 100%;
+        }
+        .u-toolbar-row-tip {
+            margin-top: 10px;
+        }
         .u-upload-clear {
-            .el-icon{
+            flex-shrink: 0;
+            .el-icon {
                 margin-right: 3px;
             }
-            margin-right: 5px;
         }
         .u-upload-tip {
-            padding-right: 10px;
+            margin: 0;
+            width: 100%;
             padding-top: 6px;
             padding-bottom: 6px;
             .fz(12px, 16px);
-            padding-right: 20px;
-            .db;
-            .nobreak;
+            padding-right: 10px;
         }
     }
 
@@ -46,6 +53,7 @@
     // 列表
     .u-file-wrapper {
         .size(100%);
+        position: relative;
         &.isSelected {
         }
         &.disabled {
@@ -58,9 +66,56 @@
         }
         .pointer;
     }
+    .u-mask {
+        .pa;
+        .lt(0);
+        .size(100%);
+        background-color: rgba(0, 0, 0, 0.35);
+        display: none;
+        z-index: 2;
+    }
+    .u-op {
+        .pa;
+        .lt(50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.58);
+        color: #fff;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 4;
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+        .el-icon {
+            font-size: 16px;
+        }
+    }
+    .u-preview-btn {
+        margin-left: -20px;
+    }
+    .u-delete-btn {
+        margin-left: 20px;
+    }
+    .u-delete-btn.is-single {
+        margin-left: 0;
+    }
+    .u-file-wrapper:hover .u-mask {
+        display: block;
+    }
+    .u-file-wrapper:hover .u-op {
+        display: inline-flex;
+    }
+    .u-file-wrapper:hover .u-delete-btn {
+        display: inline-flex;
+    }
     .u-filebox {
         .x;
         padding: 37px;
+    }
+    .u-imgbox {
+        cursor: pointer;
     }
     .u-fileplaceholder {
         width: 40px;
@@ -75,21 +130,21 @@
     // 勾选
     .u-file-select-label {
         position: absolute;
-        right: -15px;
-        top: -6px;
-        width: 40px;
-        height: 24px;
+        right: 6px;
+        top: 6px;
+        width: 18px;
+        height: 18px;
         background: #13ce66;
         text-align: center;
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
-        -webkit-box-shadow: 0 0 1pc 1px rgba(0, 0, 0, 0.2);
-        box-shadow: 0 0 1pc 1px rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        i {
+        .el-icon {
             font-size: 12px;
-            margin-top: 12px;
-            transform: rotate(-45deg);
         }
     }
 
@@ -103,6 +158,15 @@
                 box-sizing: border-box;
             }
         }
+    }
+    .c-upload-preview-dialog .el-dialog__body {
+        padding-top: 8px;
+    }
+    .u-preview-img {
+        display: block;
+        width: 100%;
+        max-height: 70vh;
+        object-fit: contain;
     }
     @media screen and (max-width: @notebook) {
         .c-large-dialog .el-dialog {

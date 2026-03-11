@@ -1,69 +1,106 @@
 <template>
     <div class="c-upload">
-        <!-- 上传触发按钮 -->
-        <el-button type="primary" @click="dialogVisible = true" icon="el-icon-upload" :disabled="!enable">{{ btn_txt }}</el-button>
+        <el-button type="primary" :disabled="!enable" @click="dialogVisible = true">
+            <template #icon
+                ><el-icon><UploadFilled /></el-icon
+            ></template>
+            {{ buttonText }}
+        </el-button>
 
-        <!-- 弹出界面 -->
-        <el-dialog class="c-large-dialog" title="上传" :visible.sync="dialogVisible">
-            <!-- 清空按钮 -->
-            <el-button class="u-upload-clear" plain icon="el-icon-delete" size="mini" @click="clear">清空</el-button>
-
-            <!-- 限制提示 -->
-            <el-alert class="u-upload-tip" :title="tip" type="info" show-icon :closable="false"></el-alert>
-
-            <!-- 文件区 -->
-            <el-upload :action="API" list-type="picture-card" :auto-upload="false" :limit="10" multiple with-credentials :file-list="fileList" :on-change="change" ref="uploadbox" :accept="accept">
-                <!-- :accept="accept" -->
-                <i slot="default" class="el-icon-plus"></i>
-
-                <!-- 文件项 -->
-                <div
-                    slot="file"
-                    slot-scope="{ file }"
-                    class="u-file-wrapper"
-                    @click="select(file)"
-                    :class="{
-                        isSelected: file.selected,
-                        disabled: file.status != 'success',
-                    }"
-                >
-                    <!-- 图片类型 -->
-                    <img v-if="file.is_img" class="el-upload-list__item-thumbnail u-imgbox" :src="file.url" alt />
-                    <!-- 其他类型 -->
-                    <div v-else class="u-filebox">
-                        <img class="u-fileplaceholder" svg-inline src="./assets/img/file.svg" />
-                        <span class="u-filename">{{ file.name }}</span>
-                    </div>
-                    <!-- 勾选角标 -->
-                    <label v-show="file.selected" class="u-file-select-label">
-                        <i class="el-icon-upload-success el-icon-check"></i>
-                    </label>
+        <el-dialog v-model="dialogVisible" class="c-large-dialog" title="上传">
+            <div class="c-upload-toolbar">
+                <div class="u-toolbar-row">
+                    <el-button class="u-upload-clear" plain @click="clear">
+                        <template #icon
+                            ><el-icon><Delete /></el-icon
+                        ></template>
+                        清空
+                    </el-button>
                 </div>
+                <div class="u-toolbar-row u-toolbar-row-tip">
+                    <el-alert class="u-upload-tip" :title="tipText" type="info" show-icon :closable="false" />
+                </div>
+            </div>
+
+            <el-upload
+                ref="uploadbox"
+                :action="API"
+                list-type="picture-card"
+                :auto-upload="false"
+                :limit="max"
+                multiple
+                with-credentials
+                :file-list="fileList"
+                :on-change="change"
+                :accept="accept"
+            >
+                <template #default>
+                    <el-icon><Plus /></el-icon>
+                </template>
+
+                <template #file="{ file }">
+                    <div
+                        class="u-file-wrapper"
+                        :class="{
+                            isSelected: !!file.selected,
+                            disabled: file.status !== 'success',
+                        }"
+                        @click.stop="select(file)"
+                    >
+                        <template v-if="isImageFile(file)">
+                            <img class="el-upload-list__item-thumbnail u-imgbox" :src="file.url" alt="" />
+                            <i class="u-mask"></i>
+                            <span class="u-op u-preview-btn" @click.stop="preview(file)">
+                                <el-icon><ZoomIn /></el-icon>
+                            </span>
+                        </template>
+                        <span class="u-op u-delete-btn" :class="{ 'is-single': !isImageFile(file) }" @click.stop="deleteFile(file)">
+                            <el-icon><Delete /></el-icon>
+                        </span>
+                        <div v-if="!isImageFile(file)" class="u-filebox">
+                            <img class="u-fileplaceholder" svg-inline src="./assets/img/file.svg" />
+                            <span class="u-filename">{{ file.name }}</span>
+                        </div>
+                        <label v-show="file.status === 'success'" class="u-file-select-label">
+                            <el-icon><Check /></el-icon>
+                        </label>
+                    </div>
+                </template>
             </el-upload>
 
-            <!-- 插入按钮 -->
-            <span slot="footer" class="dialog-footer">
+            <template #footer>
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="insert">
                     {{ buttonTXT }}
                 </el-button>
-            </span>
+            </template>
+        </el-dialog>
+
+        <el-dialog v-model="previewVisible" class="c-upload-preview-dialog" append-to-body width="60%" title="图片预览">
+            <img class="u-preview-img" :src="previewUrl" alt="" />
         </el-dialog>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import { Check, Delete, Plus, UploadFilled, ZoomIn } from "@element-plus/icons-vue";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+import allow_types from "@jx3box/jx3box-common/data/conf";
 const { __cms } = JX3BOX;
 const API_Root = process.env.NODE_ENV === "production" ? __cms : "/";
 const API = API_Root + "api/cms/upload";
-
-import allow_types from "@jx3box/jx3box-common/data/conf";
-const imgtypes = ["jpg", "png", "gif", "bmp", "webp", "jpeg", "JPG", "PNG", "GIF", "BMP", "WEBP", "JPEG"];
+const imgtypes = ["jpg", "png", "gif", "bmp", "webp", "jpeg"];
 
 export default {
     name: "Upload",
+    components: {
+        Check,
+        Delete,
+        Plus,
+        UploadFilled,
+        ZoomIn,
+    },
     props: {
         text: {
             type: String,
@@ -76,6 +113,7 @@ export default {
         },
         accept: {
             type: String,
+            default: allow_types.accept,
         },
         enable: {
             type: Boolean,
@@ -88,162 +126,193 @@ export default {
         // 文件大小限制
         sizeLimit: {
             type: Number,
-            default: 30
+            default: 30,
         },
     },
-    data: function () {
+    emits: ["insert", "update", "htmlUpdate"],
+    data() {
         return {
-            API: API,
+            API,
             dialogVisible: false,
-            tip: this.desc || `一次最多同时上传${this.max}个文件（单个文件不超过${this.sizeLimit}M），格式限常见的图片、文档、数据表及压缩包`,
-            btn_txt: this.text || "上传附件",
-
+            previewVisible: false,
+            previewUrl: "",
             fileList: [],
-            selectedCount: 0,
             insertList: "",
-
-            // accept: allow_types.accept,
-            // sizeLimit: allow_types.sizeLimit,
         };
     },
     watch: {
         fileList: {
             deep: true,
-            handler: function (newval) {
+            handler(newval) {
                 this.$emit("update", newval);
             },
         },
-        insertList: function (newval) {
+        insertList(newval) {
             this.$emit("htmlUpdate", newval);
         },
     },
     computed: {
-        buttonTXT: function () {
+        tipText() {
+            return (
+                this.desc ||
+                `一次最多同时上传${this.max}个文件（单个文件不超过${this.sizeLimit}M），格式限常见的图片、文档、数据表及压缩包`
+            );
+        },
+        buttonText() {
+            return this.text || "上传附件";
+        },
+        selectedCount() {
+            return this.fileList.filter((file) => file.selected).length;
+        },
+        buttonTXT() {
             return this.selectedCount ? "插 入" : "确 定";
         },
     },
     methods: {
-        change: function (file, fileList) {
-            if (file.status != "success") {
-                // 判断大小
-                // if (file.size > this.sizeLimit) {
-                //     this.$message.error("文件超出大小限制");
-                //     this.removeFile(fileList, file.uid);
-                //     return;
-                // }
+        isImageFile(file) {
+            if (!file) return false;
+            if (typeof file.is_img === "boolean") return file.is_img;
+            if (file.raw?.type?.startsWith("image/")) return true;
 
-                // 分析文件类型
-                let ext = file.name.split(".").pop();
-                let is_img = imgtypes.includes(ext);
+            const origin = file.name || file.url || "";
+            const clean = origin.split("?")[0].split("#")[0];
+            const ext = (clean.split(".").pop() || "").toLowerCase();
+            return imgtypes.includes(ext);
+        },
+        change(file) {
+            if (!file || file.status === "success" || !file.raw) return;
 
-                if (this.onlyImage && !is_img) return;
+            const ext = (file.name.split(".").pop() || "").toLowerCase();
+            const is_img = imgtypes.includes(ext);
 
-                // 构建数据
-                let fdata = new FormData();
-                fdata.append("file", file.raw);
+            if (this.onlyImage && !is_img) {
+                this.$message.warning("当前仅允许上传图片");
+                this.removeFileByUid(file.uid);
+                return;
+            }
 
-                // 异步上传
-                axios
-                    .post(API, fdata, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                        withCredentials: true,
-                        auth: {
-                            username: (localStorage && localStorage.getItem("token")) || "",
-                            password: "cms common request",
-                        },
-                    })
-                    .then((res) => {
-                        if (res.data.code) {
-                            this.$message({
-                                message: res.data.msg,
-                                type: "error",
-                            });
-                            return;
-                        }
-                        // 提醒
-                        this.$message({
-                            message: "上传成功",
-                            type: "success",
-                        });
+            const sizeInMB = (file.size || 0) / 1024 / 1024;
+            if (sizeInMB > this.sizeLimit) {
+                this.$message.error(`文件超出大小限制（${this.sizeLimit}M）`);
+                this.removeFileByUid(file.uid);
+                return;
+            }
 
-                        // 修改path
-                        file.url = res.data.data && res.data.data[0];
+            const fdata = new FormData();
+            fdata.append("file", file.raw);
 
-                        // 额外赋值
-                        file.is_img = is_img;
-                        file.selected = true;
+            axios
+                .post(API, fdata, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    withCredentials: true,
+                    auth: {
+                        username: (localStorage && localStorage.getItem("token")) || "",
+                        password: "cms common request",
+                    },
+                })
+                .then((res) => {
+                    const payload = res.data || {};
+                    if (payload.code) {
+                        this.$message.error(payload.msg || "上传失败");
+                        this.removeFileByUid(file.uid);
+                        return;
+                    }
 
-                        // 修改状态加入仓库
-                        file.status = "success";
+                    const url =
+                        payload.location ||
+                        payload.url ||
+                        (payload.data &&
+                            (Array.isArray(payload.data)
+                                ? payload.data[0]
+                                : payload.data.url || payload.data.location || payload.data));
+
+                    if (!url) {
+                        this.$message.error("上传成功但未返回文件地址");
+                        this.removeFileByUid(file.uid);
+                        return;
+                    }
+
+                    file.url = url;
+                    file.is_img = is_img;
+                    file.selected = true;
+                    file.status = "success";
+
+                    const targetIndex = this.fileList.findIndex((item) => item.uid === file.uid);
+                    if (targetIndex > -1) {
+                        this.fileList.splice(targetIndex, 1, file);
+                    } else {
                         this.fileList.push(file);
-                        this.selectedCount++;
-                    })
-                    .catch((err) => {
-                        if (err.response.data.code) {
-                            this.$message.error(`[${err.response.data.code}] ${err.response.data.message}`);
-                        } else {
-                            this.$message.error("请求异常");
-                        }
-                    });
-            }
+                    }
+
+                    this.$message.success("上传成功");
+                })
+                .catch((err) => {
+                    const code = err?.response?.data?.code;
+                    const message = err?.response?.data?.message || err?.response?.data?.msg;
+                    if (code) {
+                        this.$message.error(`[${code}] ${message || "请求异常"}`);
+                    } else {
+                        this.$message.error("请求异常");
+                    }
+                    this.removeFileByUid(file.uid);
+                });
         },
-        select: function (file) {
-            if (file.status == "success") {
-                this.$set(file, "selected", !file.selected);
-                file.selected ? this.selectedCount++ : this.selectedCount--;
-            }
+        select(file) {
+            if (file.status !== "success") return;
+            file.selected = !file.selected;
         },
-        buildHTML: function () {
-            let list = [];
+        preview(file) {
+            if (!this.isImageFile(file) || !file.url) return;
+            this.previewUrl = file.url;
+            this.previewVisible = true;
+        },
+        buildHTML() {
+            const list = [];
             this.fileList.forEach((file) => {
                 if (file.selected) {
-                    file.is_img ? list.push(`<img src="${file.url}" />`) : list.push(`<a target="_blank" href="${file.url}">${file.name}</a>`);
+                    this.isImageFile(file)
+                        ? list.push(`<img src="${file.url}" />`)
+                        : list.push(`<a target="_blank" href="${file.url}">${file.name}</a>`);
                 }
             });
             this.insertList = list.join(" \n");
             return this.insertList;
         },
-        insert: function () {
-            // 关闭窗口
+        insert() {
             this.dialogVisible = false;
-
-            //为空不执行插入
             if (!this.selectedCount) return;
-
-            // 传递值
             this.$emit("insert", {
                 list: this.fileList,
                 html: this.buildHTML(),
             });
-
-            //移除所有选择状态
             this.resetSelectStatus();
         },
-        resetSelectStatus: function () {
-            this.fileList.forEach((file, i) => {
-                this.$set(this.fileList[i], "selected", false);
+        resetSelectStatus() {
+            this.fileList.forEach((file) => {
+                file.selected = false;
             });
-            this.selectedCount = 0;
         },
-        clear: function () {
-            this.$refs.uploadbox.clearFiles();
+        clear() {
+            this.$refs.uploadbox?.clearFiles?.();
             this.fileList = [];
+            this.insertList = "";
         },
-        removeFile: function (fileList, uid) {
-            fileList.forEach((file, i) => {
-                if (file.uid == uid) {
-                    fileList.splice(i, 1);
-                }
-            });
+        removeFileByUid(uid) {
+            if (!uid) return;
+            this.fileList = this.fileList.filter((file) => file.uid !== uid);
+        },
+        deleteFile(file) {
+            if (!file) return;
+            this.removeFileByUid(file.uid);
+            if (this.previewUrl === file.url) {
+                this.previewVisible = false;
+                this.previewUrl = "";
+            }
         },
     },
-    mounted: function () {},
-    components: {},
 };
 </script>
 
-<style lang="less">
-@import "./assets/css/upload.less";
-</style>
+<style lang="less" src="./assets/css/upload.less"></style>

@@ -1,0 +1,91 @@
+.c-upload-album-list {
+    border: 2px dashed #eee;
+    padding: 8px 0 0 8px;
+    margin-top: 20px;
+    .r(4px);
+
+    @h: 148px;
+    min-height: @h;
+
+    .u-null {
+        .x;
+        .fz(12px, @h);
+        color: #999;
+        .flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+
+        .el-icon {
+            font-size: 14px;
+        }
+    }
+
+    .u-draggable-list {
+        min-height: @h;
+    }
+
+    .u-album-item {
+        .pr;
+        .size(@h);
+        overflow: hidden;
+        background-color: #fff;
+        border: 1px solid #c0ccda;
+        border-radius: 6px;
+        box-sizing: border-box;
+        margin: 0 8px 8px 0;
+        display: inline-block;
+
+        .u-pic {
+            .db;
+            .size(100%);
+        }
+
+        &:hover {
+            .u-mask,
+            .u-op {
+                .db;
+            }
+        }
+    }
+
+    .u-mask,
+    .u-op {
+        .pa;
+        .none;
+    }
+
+    .u-op {
+        .pointer;
+        color: #fff;
+        .lt(50%);
+        transform: translate(-50%, -50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.58);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        .el-icon {
+            font-size: 16px;
+        }
+    }
+
+    .u-mask {
+        background-color: rgba(0, 0, 0, 0.5);
+        transition: opacity 0.3s;
+        .lt(0);
+        .size(100%);
+        cursor: move;
+    }
+
+    .u-delete {
+        .ml(20px);
+    }
+
+    .u-preview {
+        .ml(-20px);
+    }
+}

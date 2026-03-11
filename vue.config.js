@@ -1,5 +1,7 @@
 const path = require('path');
 const { spawn } = require("child_process");
+const JX3BOX = require("@jx3box/jx3box-common/data/jx3box.json");
+const CMS_PROXY_TARGET = (process.env.VUE_APP_CMS || JX3BOX.__cms || "https://cms.jx3box.com").replace(/\/$/, "");
 
 const pages = {
     index: {
@@ -131,6 +133,13 @@ module.exports = {
 
     //❤️ Porxy ~
     devServer: {
+        proxy: {
+            "^/api/cms": {
+                target: CMS_PROXY_TARGET,
+                changeOrigin: true,
+                secure: true,
+            },
+        },
         setupMiddlewares(middlewares, devServer) {
             // 暴露一个全局方法，给上面的 watcher/build 插件用来强制刷新当前打开的 dev 页面
             global.__JX3BOX_DEV_TRIGGER_RELOAD__ = (file = "manual") => {
