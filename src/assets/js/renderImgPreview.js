@@ -37,6 +37,9 @@ export default function renderImgPreview(rootEl, selector = "img") {
             // 保留本项目的业务规则：表情图片不启用预览
             if (this.classList && this.classList.contains("e-jx3-emotion-img"))
                 return false;
+            // 业务规则：图标不启用预览
+            if (this.classList && this.classList.contains("e-jx3-icon"))
+                return false;
             return true;
         });
 
