@@ -183,7 +183,7 @@ module.exports = {
             global.__JX3BOX_DEV_TRIGGER_RELOAD__ = (file = "manual") => {
                 try {
                     if (devServer && devServer.webSocketServer && devServer.webSocketServer.clients) {
-                        devServer.sendMessage(devServer.webSocketServer.clients, "static-changed", file);
+                        // devServer.sendMessage(devServer.webSocketServer.clients, "static-changed", file);
                     }
                 } catch (e) {
                     // ignore
