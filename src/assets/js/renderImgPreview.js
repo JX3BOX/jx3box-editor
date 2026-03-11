@@ -4,6 +4,27 @@ import Viewer from "viewerjs";
 
 const viewerMap = new WeakMap();
 
+function initViewer(ele) {
+    if (!ele) return null;
+    if (viewerMap.has(ele)) return viewerMap.get(ele);
+    const viewer = new Viewer(ele, {
+        toolbar: false,
+        navbar: false,
+    });
+    viewerMap.set(ele, viewer);
+    return viewer;
+}
+
+export function getImgViewer(ele) {
+    return viewerMap.get(ele) || null;
+}
+
+export function showImgPreview(ele) {
+    const viewer = initViewer(ele);
+    if (viewer) viewer.show();
+    return viewer;
+}
+
 export default function renderImgPreview(rootEl, selector = "img") {
     if (!rootEl) return;
 
@@ -20,11 +41,6 @@ export default function renderImgPreview(rootEl, selector = "img") {
         });
 
     imgs.each((_, ele) => {
-        if (viewerMap.has(ele)) return;
-        const viewer = new Viewer(ele, {
-            toolbar: false,
-            navbar: false,
-        });
-        viewerMap.set(ele, viewer);
+        initViewer(ele);
     });
 }

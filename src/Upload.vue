@@ -1,38 +1,30 @@
 <template>
     <div class="c-upload">
         <el-button type="primary" :disabled="!enable" @click="dialogVisible = true">
-            <template #icon
-                ><el-icon><UploadFilled /></el-icon
-            ></template>
-            {{ buttonText }}
+            <el-icon><UploadFilled /></el-icon>
+            <span>{{ buttonText }}</span>
         </el-button>
 
         <el-dialog v-model="dialogVisible" class="c-large-dialog" title="上传">
             <div class="c-upload-toolbar">
-                <div class="u-toolbar-row">
-                    <el-button class="u-upload-clear" plain @click="clear">
-                        <template #icon
-                            ><el-icon><Delete /></el-icon
-                        ></template>
-                        清空
-                    </el-button>
-                </div>
-                <div class="u-toolbar-row u-toolbar-row-tip">
-                    <el-alert class="u-upload-tip" :title="tipText" type="info" show-icon :closable="false" />
-                </div>
+                <!-- 清空按钮 -->
+                <el-button class="u-upload-clear" plain size="small" @click="clear"
+                    ><el-icon> <Delete /> </el-icon><span>清空</span></el-button
+                >
+                <!-- 限制提示 -->
+                <div class="u-upload-tip" :title="tipText" type="info" show-icon :closable="false"><span>{{ tipText }}</span></div>
             </div>
 
             <el-upload
-                ref="uploadbox"
-                :action="API"
                 list-type="picture-card"
                 :auto-upload="false"
                 :limit="max"
                 multiple
-                with-credentials
                 :file-list="fileList"
                 :on-change="change"
+                ref="uploadbox"
                 :accept="accept"
+                with-credentials
             >
                 <template #default>
                     <el-icon><Plus /></el-icon>
@@ -41,20 +33,30 @@
                 <template #file="{ file }">
                     <div
                         class="u-file-wrapper"
+                        @click.stop="select(file)"
                         :class="{
                             isSelected: !!file.selected,
                             disabled: file.status !== 'success',
                         }"
-                        @click.stop="select(file)"
+                        v-loading="file.status === 'uploading'"
                     >
                         <template v-if="isImageFile(file)">
-                            <img class="el-upload-list__item-thumbnail u-imgbox" :src="file.url" alt="" />
+                            <img
+                                class="el-upload-list__item-thumbnail u-imgbox"
+                                :src="file.url"
+                                :data-upload-uid="file.uid"
+                                alt=""
+                            />
                             <i class="u-mask"></i>
-                            <span class="u-op u-preview-btn" @click.stop="preview(file)">
+                            <span class="u-op u-preview-btn" @click.stop="preview(file, $event)">
                                 <el-icon><ZoomIn /></el-icon>
                             </span>
                         </template>
-                        <span class="u-op u-delete-btn" :class="{ 'is-single': !isImageFile(file) }" @click.stop="deleteFile(file)">
+                        <span
+                            class="u-op u-delete-btn"
+                            :class="{ 'is-single': !isImageFile(file) }"
+                            @click.stop="deleteFile(file)"
+                        >
                             <el-icon><Delete /></el-icon>
                         </span>
                         <div v-if="!isImageFile(file)" class="u-filebox">
@@ -75,10 +77,6 @@
                 </el-button>
             </template>
         </el-dialog>
-
-        <el-dialog v-model="previewVisible" class="c-upload-preview-dialog" append-to-body width="60%" title="图片预览">
-            <img class="u-preview-img" :src="previewUrl" alt="" />
-        </el-dialog>
     </div>
 </template>
 
@@ -87,10 +85,10 @@ import axios from "axios";
 import { Check, Delete, Plus, UploadFilled, ZoomIn } from "@element-plus/icons-vue";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import allow_types from "@jx3box/jx3box-common/data/conf";
+import { showImgPreview } from "./assets/js/renderImgPreview";
 const { __cms } = JX3BOX;
-const API_Root = process.env.NODE_ENV === "production" ? __cms : "/";
-const API = API_Root + "api/cms/upload";
-const imgtypes = ["jpg", "png", "gif", "bmp", "webp", "jpeg"];
+const API = __cms + "api/cms/upload";
+const imgtypes = ["jpg", "png", "gif", "bmp", "webp", "jpeg", "svg"];
 
 export default {
     name: "Upload",
@@ -132,10 +130,7 @@ export default {
     emits: ["insert", "update", "htmlUpdate"],
     data() {
         return {
-            API,
             dialogVisible: false,
-            previewVisible: false,
-            previewUrl: "",
             fileList: [],
             insertList: "",
         };
@@ -263,10 +258,12 @@ export default {
             if (file.status !== "success") return;
             file.selected = !file.selected;
         },
-        preview(file) {
+        preview(file, e) {
             if (!this.isImageFile(file) || !file.url) return;
-            this.previewUrl = file.url;
-            this.previewVisible = true;
+            const wrapper = e?.currentTarget?.closest?.(".u-file-wrapper");
+            const img = wrapper?.querySelector?.("img.u-imgbox");
+            if (!img) return;
+            showImgPreview(img);
         },
         buildHTML() {
             const list = [];
@@ -306,10 +303,6 @@ export default {
         deleteFile(file) {
             if (!file) return;
             this.removeFileByUid(file.uid);
-            if (this.previewUrl === file.url) {
-                this.previewVisible = false;
-                this.previewUrl = "";
-            }
         },
     },
 };
