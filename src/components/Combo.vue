@@ -1,12 +1,11 @@
 <template>
     <!-- 连招 -->
-    <!-- TODO: 命名规范 -->
-    <div class="c-combo m-resource-combo">
+    <div class="w-resource-combo">
         <el-tabs v-model="activeName" type="card" class="m-skill-tabs">
             <el-tab-pane label="门派武学" name="special">
                 <template #label>
                     <div class="u-tab-label">
-                        <i class="el-icon-s-order"></i>
+                        <el-icon><Sort></Sort></el-icon>
                         <b>门派武学</b>
                     </div>
                 </template>
@@ -14,17 +13,17 @@
             <el-tab-pane label="全部技能" name="all">
                 <template #label>
                     <div class="u-tab-label">
-                        <i class="el-icon-menu"></i>
+                        <el-icon><Menu></Menu></el-icon>
                         <b>全部技能</b>
                     </div>
                 </template>
             </el-tab-pane>
         </el-tabs>
-        <div class="c-combo-content">
+        <div class="w-resource-combo__content">
             <div class="m-select-content">
                 <div v-show="activeName === 'all'">
                     <div v-if="total && done" class="m-resource-count">
-                        <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
+                        <el-icon><Histogram /></el-icon> 共找到 <b>{{ total }}</b> 条记录
                     </div>
                     <ul class="m-resource-list">
                         <li v-for="(o, i) in skill" class="u-item" :key="i" @click="selectSkill(o, i)" ref="skill">
@@ -49,7 +48,7 @@
                             class="m-archive-more"
                             :class="{ show: hasNextPage }"
                             type="primary"
-                            icon="el-icon-arrow-down"
+                            icon="ArrowDown"
                             @click="appendPage"
                             >加载更多</el-button
                         >
@@ -76,7 +75,7 @@
                 ></skill-martial>
             </div>
 
-            <div class="c-combo-content__right">
+            <div class="m-selected-content">
                 <!-- 已选技能 -->
                 <el-divider
                     >已选技能
@@ -98,7 +97,7 @@
                                     :alt="skill.IconID"
                                 />
                                 <i class="u-gcd-icon" v-show="skill.WithoutGcd">
-                                    <i class="el-icon-time"></i>
+                                    <el-icon><Timer /></el-icon>
                                 </i>
                                 <span
                                     class="u-name"
@@ -113,21 +112,14 @@
                                 :class="skill.iconSize ? `u-remove-icon_${skill.iconSize}` : ''"
                                 title="移除"
                                 @click="removeSelected(index)"
-                                ><i class="el-icon-close"></i
+                                ><el-icon><Close /></el-icon
                             ></i>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <el-dialog
-            :visible.sync="showRemark"
-            width="600px"
-            append-to-body
-            v-draggable
-            class="c-large-dialog"
-            title="设置备注"
-        >
+        <el-dialog v-model="showRemark" width="600px" append-to-body draggable class="c-large-dialog" title="设置备注">
             <el-form label-position="left" label-width="80px">
                 <el-form-item label="备注">
                     <el-input placeholder="输入备注" v-model="form.n"></el-input>
@@ -147,16 +139,20 @@
                     <span :style="nStyle">{{ form.n || "示例文字" }}</span>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="showRemark = false">取 消</el-button>
-                <el-button type="primary" @click="confirm">确 定 </el-button>
-            </span>
+            <template #footer>
+                <span class="m-dialog-footer">
+                    <el-button @click="showRemark = false">取 消</el-button>
+                    <el-button type="primary" @click="confirm">确 定 </el-button>
+                </span>
+            </template>
         </el-dialog>
     </div>
 </template>
 
 <script>
-import Vue from "vue";
+import { h } from "vue";
+import { ElIcon } from "element-plus";
+import { Check, Close } from "@element-plus/icons-vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { getSkill } from "../service/resource";
 import SkillMartial from "./SkillMartial.vue";
@@ -164,11 +160,11 @@ import SkillMartial from "./SkillMartial.vue";
 import Sortable from "sortablejs";
 import { cloneDeep, pick } from "lodash";
 
-import LoadScript from "vue-plugin-load-script";
-Vue.use(LoadScript);
+import ContextMenu from "@imengyu/vue3-context-menu";
+import "@imengyu/vue3-context-menu/lib/vue3-context-menu.css";
 
-import contextmenu from "vue-contextmenujs";
-Vue.use(contextmenu);
+const renderMenuIcon = (IconComponent) => h(ElIcon, null, () => h(IconComponent));
+
 export default {
     name: "ComboSkill",
     components: {
@@ -347,14 +343,16 @@ export default {
             });
         },
         onContextmenu(event, skill) {
-            this.$contextmenu({
+            ContextMenu.showContextMenu({
+                x: event.x || event.clientX,
+                y: event.y || event.clientY,
                 items: [
                     {
                         label: !skill?.WithoutGcd ? "设置为无GCD技能" : "设置为有GCD技能",
                         onClick: () => {
-                            this.$set(skill, "WithoutGcd", !skill.WithoutGcd);
+                            skill.WithoutGcd = !skill.WithoutGcd;
                         },
-                        icon: !skill?.WithoutGcd ? "el-icon-check" : "el-icon-close",
+                        icon: !skill?.WithoutGcd ? renderMenuIcon(Check) : renderMenuIcon(Close),
                     },
                     {
                         label: "图标大小",
@@ -362,13 +360,13 @@ export default {
                             {
                                 label: "小",
                                 onClick: () => {
-                                    this.$set(skill, "iconSize", "small");
+                                    skill.iconSize = "small";
                                 },
                             },
                             {
                                 label: "大",
                                 onClick: () => {
-                                    this.$set(skill, "iconSize", "large");
+                                    skill.iconSize = "large";
                                 },
                             },
                         ],
@@ -376,7 +374,7 @@ export default {
                     {
                         label: skill.underline ? "取消下划线" : "设置下划线",
                         onClick: () => {
-                            this.$set(skill, "underline", !skill.underline);
+                            skill.underline = !skill.underline;
                         },
                     },
                     {
@@ -387,8 +385,6 @@ export default {
                         },
                     },
                 ],
-                event,
-                customClass: "custom-class",
                 zIndex: 99999,
                 minWidth: 200,
             });
@@ -419,10 +415,10 @@ export default {
         },
         confirm() {
             if (this.form.n) {
-                this.$set(this.currentSkill, "n", this.form.n);
-                this.$set(this.currentSkill, "c", this.form.c);
-                this.$set(this.currentSkill, "fz", this.form.fz);
-                this.$set(this.currentSkill, "fw", this.form.fw);
+                this.currentSkill.n = this.form.n;
+                this.currentSkill.c = this.form.c;
+                this.currentSkill.fz = this.form.fz;
+                this.currentSkill.fw = this.form.fw;
             }
 
             this.showRemark = false;
@@ -442,5 +438,5 @@ export default {
 </script>
 
 <style lang="less">
-// @import "./assets/css/tinymce/combo.less";
+@import "../assets/css/tinymce/combo.less";
 </style>

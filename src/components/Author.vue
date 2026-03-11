@@ -44,7 +44,18 @@
             <!-- <div class="u-honor" :style="honorStyle" v-if="honor">{{ honor }}</div> -->
             <div class="u-trophy" v-if="hasTrophy">
                 <div class="u-medals" v-if="medals && medals.length">
-                    <medal :medals="medals" :showIcon="showMedalIcon"></medal>
+                    <div class="m-medal">
+                        <a
+                            v-for="item in medals"
+                            :key="item.id"
+                            :href="medalLink(item)"
+                            target="_blank"
+                            class="u-medal"
+                            :title="item.medal_desc"
+                        >
+                            <img class="u-medal-img" :src="showMedalIcon(item.medal)" />
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="u-teams" v-if="teams && teams.length">
@@ -58,13 +69,12 @@
 </template>
 
 <script>
-import { authorLink, getLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
+import { authorLink, getLink, getMedalLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { getUserInfo, getUserMedals, getUserPublicTeams } from "../service/author";
 import { getDecoration, getDecorationJson } from "../service/cms";
 import User from "@jx3box/jx3box-common/js/user";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import Avatar from "./Avatar.vue";
-import medal from "./medal.vue";
 const ATCARD_KEY = "decoration_atcard";
 const DECORATION_JSON = "decoration_json";
 const DECORATION_KEY = "decoration_me";
@@ -74,10 +84,14 @@ const { __server, __imgPath, __userLevelColor, __cdn, __userLevel } = JX3BOX;
 export default {
     name: "Author",
     components: {
-        medal,
         Avatar,
     },
-    props: ["uid"],
+    props: {
+        uid: {
+            type: [String, Number],
+            required: true,
+        },
+    },
     data: () => ({
         data: null,
         medals: [],
@@ -252,6 +266,9 @@ export default {
 
         showMedalIcon: function (val) {
             return __imgPath + "image/medals/user/" + val + ".gif";
+        },
+        medalLink: function ({ rank_id, medal_type = "rank" }) {
+            return getMedalLink(rank_id, medal_type);
         },
         showMedalDesc: function (item) {
             return item.medal_desc || medal_map[item.medal];

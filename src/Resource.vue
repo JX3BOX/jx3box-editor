@@ -4,16 +4,16 @@
         <el-button class="u-switch" type="primary" @click="openDialog" :disabled="!enable"> <img class="u-icon" svg-inline src="./assets/img/jx3.svg" />剑三资源 </el-button>
 
         <!-- 弹出界面 -->
-        <el-dialog class="c-large-dialog" title="剑三数据库" :visible.sync="dialogVisible" v-draggable>
+        <el-dialog class="c-large-dialog" title="剑三数据库" v-model="dialogVisible" draggable>
             <div class="c-resource-content" v-loading="loading">
                 <div class="m-database-search">
                     <el-radio-group class="u-client" v-model="client" @change="search">
-                        <el-radio-button label="std">重制</el-radio-button>
-                        <el-radio-button label="origin">缘起</el-radio-button>
+                        <el-radio-button value="std">重制</el-radio-button>
+                        <el-radio-button value="origin">缘起</el-radio-button>
                     </el-radio-group>
-                    <el-input class="u-input" placeholder="请输入 ID 或 名称" v-model="query" @change="search" @keyup.enter.native="search">
-                        <template slot="prepend">ID ／名称</template>
-                        <template slot="append" v-if="isPC">
+                    <el-input class="u-input" placeholder="请输入 ID 或 名称" v-model="query" @change="search" @keyup.enter="search">
+                        <template #prepend>ID ／名称</template>
+                        <template #append v-if="isPC">
                             <el-switch v-model="strict" active-text="精确匹配" @change="search" title="仅对Buff/Skill有效"></el-switch>
                         </template>
                     </el-input>
@@ -21,18 +21,20 @@
 
                 <el-tabs class="m-database-tabs" v-model="type" type="card" @tab-click="changeType">
                     <el-tab-pane label="Buff" name="buff">
-                        <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="./assets/img/buff.svg" />
-                            <b>Buff</b>
-                            <em class="u-count">{{ stat.buff }}</em>
-                        </span>
+                        <template #label>
+                            <span class="u-tab-label">
+                                <img class="u-icon" svg-inline src="./assets/img/buff.svg" />
+                                <b>Buff</b>
+                                <em class="u-count">{{ stat.buff }}</em>
+                            </span>
+                        </template>
                         <div v-if="total && done" class="m-resource-count">
                             <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
                             <div class="u-mode">
                                 插入模式：
                                 <el-radio-group v-model="buff_mode" size="mini" @change="changeMode">
-                                    <el-radio-button label="simple">简版</el-radio-button>
-                                    <el-radio-button label="full">完整版</el-radio-button>
+                                    <el-radio-button value="simple">简版</el-radio-button>
+                                    <el-radio-button value="full">完整版</el-radio-button>
                                 </el-radio-group>
                             </div>
                         </div>
@@ -40,7 +42,7 @@
                             <li v-for="(o, i) in buff" class="u-item" :key="i" :class="{ on: !!o.isSelected }" @click="selectBuff(o, i)" ref="buff">
                                 <span class="u-id">
                                     ID:{{ o.BuffID }}
-                                    <span class="u-detach">{{ o.DetachType | showDetachType }}</span>
+                                    <span class="u-detach">{{ showDetachType(o.DetachType) }}</span>
                                 </span>
                                 <img class="u-pic" :title="'IconID:' + o.IconID" :src="iconURL(o.IconID)" />
                                 <span class="u-primary">
@@ -55,18 +57,20 @@
                         <el-alert v-if="!buff.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
                     </el-tab-pane>
                     <el-tab-pane label="技能" name="skill">
-                        <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="./assets/img/skill.svg" />
-                            <b>技能</b>
-                            <em class="u-count">{{ stat.skill }}</em>
-                        </span>
+                        <template #label>
+                            <span class="u-tab-label">
+                                <img class="u-icon" svg-inline src="./assets/img/skill.svg" />
+                                <b>技能</b>
+                                <em class="u-count">{{ stat.skill }}</em>
+                            </span>
+                        </template>
                         <div v-if="total && done" class="m-resource-count">
                             <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
                             <div class="u-mode">
                                 插入模式：
                                 <el-radio-group v-model="skill_mode" size="mini" @change="changeMode">
-                                    <el-radio-button label="simple">简版</el-radio-button>
-                                    <el-radio-button label="full">完整版</el-radio-button>
+                                    <el-radio-button value="simple">简版</el-radio-button>
+                                    <el-radio-button value="full">完整版</el-radio-button>
                                 </el-radio-group>
                             </div>
                         </div>
@@ -80,7 +84,7 @@
                                         <em v-if="o.SkillName">({{ o.SkillName }})</em>
                                     </span>
                                     <span class="u-content">
-                                        {{ o.Desc | filterRaw }}
+                                        {{ filterRaw(o.Desc) }}
                                     </span>
                                 </span>
                             </li>
@@ -88,27 +92,31 @@
                         <el-alert v-if="!skill.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
                     </el-tab-pane>
                     <el-tab-pane label="物品" name="item">
-                        <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="./assets/img/item.svg" />
-                            <b>物品</b>
-                            <em class="u-count">{{ stat.item }}</em>
-                        </span>
+                        <template #label>
+                            <span class="u-tab-label">
+                                <img class="u-icon" svg-inline src="./assets/img/item.svg" />
+                                <b>物品</b>
+                                <em class="u-count">{{ stat.item }}</em>
+                            </span>
+                        </template>
                         <p v-if="total && done" class="m-resource-count">
                             <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
                         </p>
                         <ul class="m-resource-list" v-if="item.length">
                             <el-popover popper-class="m-item-pop" :visible-arrow="false" trigger="hover" placement="left" v-for="(o, i) in item" :key="o.id">
-                                <li slot="reference" class="u-item" :class="{ on: o.isSelected }" @click="selectItem(o, i)" ref="item">
-                                    <span class="u-id">ID:{{ o.id }}</span>
-                                    <img class="u-pic" :title="'IconID:' + o.IconID" :src="iconURL(o.IconID)" />
-                                    <span class="u-name">{{ o.Name }}</span>
-                                    <span class="u-content">
-                                        <game-text :text="o.Desc"></game-text>
-                                    </span>
-                                    <span class="u-remark">
-                                        {{ o.Requirement }}
-                                    </span>
-                                </li>
+                                <template #reference>
+                                    <li class="u-item" :class="{ on: o.isSelected }" @click="selectItem(o, i)" ref="item">
+                                        <span class="u-id">ID:{{ o.id }}</span>
+                                        <img class="u-pic" :title="'IconID:' + o.IconID" :src="iconURL(o.IconID)" />
+                                        <span class="u-name">{{ o.Name }}</span>
+                                        <span class="u-content">
+                                            <game-text :text="o.Desc"></game-text>
+                                        </span>
+                                        <span class="u-remark">
+                                            {{ o.Requirement }}
+                                        </span>
+                                    </li>
+                                </template>
 
                                 <jx3-item :item_id="o.id" :client="client"></jx3-item>
                             </el-popover>
@@ -116,11 +124,13 @@
                         <el-alert v-if="!item.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
                     </el-tab-pane>
                     <el-tab-pane label="Npc" name="npc">
-                        <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="./assets/img/npc/skull.svg" />
-                            <b>Npc</b>
-                            <em class="u-count">{{ stat.npc }}</em>
-                        </span>
+                        <template #label>
+                            <span class="u-tab-label">
+                                <img class="u-icon" svg-inline src="./assets/img/npc/skull.svg" />
+                                <b>Npc</b>
+                                <em class="u-count">{{ stat.npc }}</em>
+                            </span>
+                        </template>
                         <p v-if="total && done" class="m-resource-count">
                             <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
                         </p>
@@ -145,11 +155,13 @@
                         <el-alert v-if="!npc.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
                     </el-tab-pane>
                     <el-tab-pane label="图标" name="icon">
-                        <span slot="label" class="u-tab-label">
-                            <img class="u-icon" svg-inline src="./assets/img/icons.svg" />
-                            <b>图标</b>
-                            <em class="u-count">{{ stat.icon }}</em>
-                        </span>
+                        <template #label>
+                            <span class="u-tab-label">
+                                <img class="u-icon" svg-inline src="./assets/img/icons.svg" />
+                                <b>图标</b>
+                                <em class="u-count">{{ stat.icon }}</em>
+                            </span>
+                        </template>
                         <p v-if="icon.length && done" class="m-resource-count">
                             <i class="el-icon-s-data"></i> 共找到 <b>{{ icon.length }}</b> 条记录
                         </p>
@@ -179,7 +191,7 @@
                         :hide-on-single-page="true"
                         :page-size="per"
                         :total="total"
-                        :current-page.sync="page"
+                        v-model:current-page="page"
                         @current-change="changePage"
                     ></el-pagination>
                 </template>
@@ -188,12 +200,14 @@
             </div>
 
             <!-- 插入按钮 -->
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="insert">
-                    {{ buttonTXT }}
-                </el-button>
-            </span>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="insert">
+                        {{ buttonTXT }}
+                    </el-button>
+                </span>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -488,6 +502,16 @@ export default {
         userAvatar: function(url) {
             return showAvatar(url,'m');
         },
+        filterRaw: function(str) {
+            return str && str.replace(/\\n/g, "\n");
+        },
+        showDetachType: function(val) {
+            if (val && detach_types[val]) {
+                return detach_types[val];
+            } else {
+                return "";
+            }
+        },
 
         // 杂项
         // ==============================
@@ -498,18 +522,6 @@ export default {
                     this.stat = data;
                     this.actived = true;
                 });
-            }
-        },
-    },
-    filters: {
-        filterRaw: function(str) {
-            return str && str.replace(/\\n/g, "\n");
-        },
-        showDetachType: function(val) {
-            if (val && detach_types[val]) {
-                return detach_types[val];
-            } else {
-                return "";
             }
         },
     },

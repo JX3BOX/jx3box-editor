@@ -153,6 +153,12 @@ module.exports = {
             };
             return middlewares;
         },
+        client: {
+            overlay: {
+                warnings: false,
+                errors: false,
+            },
+        },
     },
 
     //❤️ 配置需要被 Babel 转译的 node_modules 依赖 ~

@@ -5,7 +5,7 @@
         <div class="c-editor-header">
             <Upload v-if="attachmentEnable" @insert="insertAttachments" />
             <!-- <Resource v-if="resourceEnable" @insert="insertResource" /> -->
-            <!-- <BoxResource v-if="resourceEnable" @insert="insertResource" :subtype="subtype" /> -->
+            <BoxResource v-if="resourceEnable" @insert="insertResource" :subtype="subtype" />
         </div>
 
         <Emotion v-if="emotionEnable" class="c-editor-emotion" @selected="emotionSelected"></Emotion>
@@ -41,14 +41,12 @@ const apiUrl = process.env.NODE_ENV === "development" ? "/api/cms/upload/tinymce
 
 import Upload from "./Upload";
 // import Resource from "./Resource";
-// import BoxResource from "./BoxResource";
+import BoxResource from "./BoxResource";
 import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
 
 import axios from "axios";
 import Editor from "@tinymce/tinymce-vue";
 import hljs_languages from "./assets/js/item/hljs_languages.js";
-import { draggable } from "./assets/js/drag";
-
 // TODO:请求代理问题
 
 export default {
@@ -57,14 +55,8 @@ export default {
         Editor,
         Upload,
         // Resource,
-        // BoxResource,
+        BoxResource,
         Emotion,
-    },
-    directives: {
-        draggable: {
-            mounted: draggable,
-            updated: draggable,
-        },
     },
     props: {
         // Vue3 默认 v-model
@@ -103,7 +95,7 @@ export default {
         // 心法（技能连招使用）
         subtype: {
             type: String,
-            default: "",
+            default: "通用",
         },
     },
     emits: ["update:modelValue", "update:content", "update"],

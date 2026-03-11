@@ -15,7 +15,24 @@ import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 const { __server, __imgPath } = JX3BOX;
 export default {
     name: "Avatar",
-    props: ["uid", "url", "size", "frame"],
+    props: {
+        uid: {
+            type: [String, Number],
+            required: true,
+        },
+        url: {
+            type: String,
+            default: "",
+        },
+        frame: {
+            type: String,
+            default: "",
+        },
+        size: {
+            type: [String, Number],
+            default: "s",
+        },
+    },
     components: {},
     data: function() {
         return {

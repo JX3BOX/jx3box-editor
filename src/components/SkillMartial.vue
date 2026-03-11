@@ -185,7 +185,7 @@ import { flattenDeep, uniqBy } from "lodash";
 import kungfus from "@jx3box/jx3box-data/data/martial/kungfuid.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
-    name: "pvp_martial",
+    name: "SkillMartial",
     props: {
         subtype: {
             type: String,
@@ -215,9 +215,7 @@ export default {
             return xfmap[this.subtype]?.id;
         },
         skillIds() {
-            return flattenDeep(
-                Object.values(this.kungfumap?.[this.mountId]?.["skills"])
-            );
+            return flattenDeep(Object.values(this.mountData?.skills || {}));
         },
         ids() {
             return [
@@ -228,6 +226,9 @@ export default {
         },
         kungfumap() {
             return this.client == "origin" ? kungfumap_origin : kungfumap_std;
+        },
+        mountData() {
+            return this.kungfumap?.[this.mountId] || {};
         },
         params() {
             return {
@@ -249,7 +250,7 @@ export default {
         // 门派技能数据
         kungfusSkills: function () {
             const obj = {};
-            Object.entries(this.kungfumap[this.mountId]["skills"]).forEach(
+            Object.entries(this.mountData?.skills || {}).forEach(
                 ([key, value]) => {
                     obj[key] = value.map(SkillID => {
                         const currentSkill = this.data.find(
@@ -263,7 +264,7 @@ export default {
         },
         // 门派技能套路id
         kungfus: function () {
-            return this.kungfumap[this.mountId]["kungfus"];
+            return this.mountData?.kungfus || [];
         },
         talentSkills() {
             return this.talentSkillIds
