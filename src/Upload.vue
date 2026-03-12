@@ -36,7 +36,8 @@
                         @click.stop="select(file)"
                         :class="{
                             isSelected: !!file.selected,
-                            disabled: file.status !== 'success',
+                            isUnselected: !file.selected,
+                            isPending: !!file.status && file.status !== 'success',
                         }"
                         v-loading="file.status === 'uploading'"
                     >
@@ -63,8 +64,8 @@
                             <img class="u-fileplaceholder" svg-inline src="./assets/img/file.svg" />
                             <span class="u-filename">{{ file.name }}</span>
                         </div>
-                        <label v-show="file.status === 'success'" class="u-file-select-label">
-                            <el-icon><Check /></el-icon>
+                        <label class="u-file-select-label" :class="{ 'is-unselected': !file.selected }">
+                            <span class="u-file-select-icon">✓</span>
                         </label>
                     </div>
                 </template>
@@ -82,7 +83,7 @@
 
 <script>
 import axios from "axios";
-import { Check, Delete, Plus, UploadFilled, ZoomIn } from "@element-plus/icons-vue";
+import { Delete, Plus, UploadFilled, ZoomIn } from "@element-plus/icons-vue";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import allow_types from "@jx3box/jx3box-common/data/conf";
 import { showImgPreview } from "./assets/js/renderImgPreview";
@@ -93,7 +94,6 @@ const imgtypes = ["jpg", "png", "gif", "bmp", "webp", "jpeg", "svg"];
 export default {
     name: "Upload",
     components: {
-        Check,
         Delete,
         Plus,
         UploadFilled,
@@ -164,6 +164,30 @@ export default {
         },
     },
     methods: {
+        normalizeUploadFile(file, extra = {}) {
+            const base = file || {};
+            return {
+                uid: base.uid,
+                name: base.name,
+                url: base.url,
+                status: base.status,
+                raw: base.raw,
+                selected: !!base.selected,
+                is_img: this.isImageFile(base),
+                ...extra,
+            };
+        },
+        upsertFile(file) {
+            const next = this.normalizeUploadFile(file);
+            const index = this.fileList.findIndex((item) => item.uid === next.uid);
+            if (index > -1) {
+                const list = [...this.fileList];
+                list.splice(index, 1, next);
+                this.fileList = list;
+            } else {
+                this.fileList = [...this.fileList, next];
+            }
+        },
         isImageFile(file) {
             if (!file) return false;
             if (typeof file.is_img === "boolean") return file.is_img;
@@ -228,18 +252,14 @@ export default {
                         this.removeFileByUid(file.uid);
                         return;
                     }
-
-                    file.url = url;
-                    file.is_img = is_img;
-                    file.selected = true;
-                    file.status = "success";
-
-                    const targetIndex = this.fileList.findIndex((item) => item.uid === file.uid);
-                    if (targetIndex > -1) {
-                        this.fileList.splice(targetIndex, 1, file);
-                    } else {
-                        this.fileList.push(file);
-                    }
+                    this.upsertFile(
+                        this.normalizeUploadFile(file, {
+                            url,
+                            is_img,
+                            selected: true,
+                            status: "success",
+                        })
+                    );
 
                     this.$message.success("上传成功");
                 })
@@ -255,8 +275,10 @@ export default {
                 });
         },
         select(file) {
-            if (file.status !== "success") return;
-            file.selected = !file.selected;
+            if (file.status && file.status !== "success") return;
+            this.fileList = this.fileList.map((item) =>
+                item.uid === file.uid ? { ...item, selected: !item.selected } : item
+            );
         },
         preview(file, e) {
             if (!this.isImageFile(file) || !file.url) return;
@@ -287,9 +309,7 @@ export default {
             this.resetSelectStatus();
         },
         resetSelectStatus() {
-            this.fileList.forEach((file) => {
-                file.selected = false;
-            });
+            this.fileList = this.fileList.map((file) => ({ ...file, selected: false }));
         },
         clear() {
             this.$refs.uploadbox?.clearFiles?.();

@@ -21,7 +21,6 @@
 
             <el-tab-pane label="UploadAlbum 图片相册" name="album">
                 <UploadAlbum v-model="albumList" />
-                <el-alert class="u-alert" type="info" :closable="false" show-icon title="相册输出（v-model）" />
                 <ol class="u-list" v-if="albumList.length">
                     <li v-for="item in albumList" :key="item.id || item.url">
                         <span>{{ item.name || "未命名" }}</span>
