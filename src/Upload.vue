@@ -90,6 +90,7 @@ import { showImgPreview } from "./assets/js/renderImgPreview";
 const { __cms } = JX3BOX;
 const API = __cms + "api/cms/upload";
 const imgtypes = ["jpg", "png", "gif", "bmp", "webp", "jpeg", "svg"];
+const DEFAULT_ACCEPT = `${allow_types.accept},image/svg+xml,.svg`;
 
 export default {
     name: "Upload",
@@ -111,7 +112,7 @@ export default {
         },
         accept: {
             type: String,
-            default: allow_types.accept,
+            default: DEFAULT_ACCEPT,
         },
         enable: {
             type: Boolean,
