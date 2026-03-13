@@ -7,12 +7,28 @@ const FORBID = new Set(["script", "object", "embed", "applet", "base", "meta", "
 
 const EXTRA_TAGS = [
     "img",
-    "h1", "h2", "h3", "h4", "h5", "h6",
-    "table", "thead", "tbody", "tr", "th", "td",
-    "blockquote", "pre", "code", "hr",
-    "video", "source",
-    "iframe", "style",
-    "colgroup", "col",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "table",
+    "thead",
+    "tbody",
+    "tr",
+    "th",
+    "td",
+    "blockquote",
+    "pre",
+    "code",
+    "hr",
+    "video",
+    "source",
+    "iframe",
+    "style",
+    "colgroup",
+    "col",
 ];
 
 // 必须顶层的 at-rule（你说不需要动画，但 keyframes 也可能被编辑器/作者写进来，留着更稳）
@@ -116,6 +132,7 @@ export default function sanitizeRichText(html) {
         .filter((t) => !FORBID.has(t));
 
     return sanitizeHtml(html, {
+        allowVulnerableTags: true,
         disallowedTagsMode: "discard",
         allowedTags,
 
@@ -125,7 +142,18 @@ export default function sanitizeRichText(html) {
             img: ["src", "alt", "title", "width", "height", "class", "style", "loading", "decoding"],
             video: ["controls", "width", "height", "class", "style"],
             source: ["src", "type"],
-            iframe: ["src", "width", "height", "frameborder", "scrolling", "allowfullscreen", "sandbox", "referrerpolicy", "class", "style"],
+            iframe: [
+                "src",
+                "width",
+                "height",
+                "frameborder",
+                "scrolling",
+                "allowfullscreen",
+                "sandbox",
+                "referrerpolicy",
+                "class",
+                "style",
+            ],
             td: ["colspan", "rowspan", "align", "valign", "class", "style"],
             th: ["colspan", "rowspan", "align", "valign", "class", "style"],
             col: ["span", "width", "class", "style"],

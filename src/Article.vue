@@ -8,12 +8,19 @@
                 v-for="(text, i) in data"
                 :key="i"
                 v-html="text"
-                :class="{ on: i == page - 1 || all == true }"
+                :class="{ on: i == page - 1 || all == true, 'markdown-body': isMarkdownMode }"
                 :id="'c-article-part' + ~~(i + 1)"
             ></div>
         </div>
 
-        <div id="c-article" class="c-article" ref="article" v-else-if="data && data.length" v-html="data[0]"></div>
+        <div
+            id="c-article"
+            class="c-article"
+            ref="article"
+            v-else-if="data && data.length"
+            v-html="data[0]"
+            :class="{ 'markdown-body': isMarkdownMode }"
+        ></div>
 
         <el-button class="c-article-all" type="primary" v-if="!all && hasPages" @click="showAll">加载全部</el-button>
 
@@ -48,6 +55,8 @@
 
 <script>
 import $ from "jquery";
+import Vditor from "vditor";
+import "github-markdown-css/github-markdown-light.css";
 
 // XSS
 import execFilterXSS from "./assets/js/xss";
@@ -85,8 +94,7 @@ import renderJx3Element from "./assets/js/jx3_element";
 export default {
     name: "Article",
     props: {
-
-        post_mode : {
+        post_mode: {
             type: String,
             default: "tinymce",
         },
@@ -134,6 +142,7 @@ export default {
             page: 1,
             data: [],
             mode: "",
+            renderVersion: 0,
 
             // 画廊
             gallery_index: null,
@@ -180,13 +189,16 @@ export default {
     },
     computed: {
         total: function () {
-            return this.chunks.length;
+            return this.data.length;
         },
         hasPages: function () {
-            return this.chunks.length > 1;
+            return this.data.length > 1;
         },
         origin: function () {
             return this.content;
+        },
+        isMarkdownMode: function () {
+            return ["markdown", "md", "vditor"].includes(String(this.post_mode || "").toLowerCase());
         },
         chunks: function () {
             return this.pageable ? execSplitPages(this.origin) : [this.origin];
@@ -195,9 +207,7 @@ export default {
     methods: {
         getHeaderHeight: function () {
             // 页面上可能没有这些元素，取存在的第一个：.c-header 优先，其次 .c-breadcrumb
-            const el =
-                document.querySelector(".c-header") ||
-                document.querySelector(".c-breadcrumb");
+            const el = document.querySelector(".c-header") || document.querySelector(".c-breadcrumb");
             if (!el) return 0;
             const rect = el.getBoundingClientRect && el.getBoundingClientRect();
             const h = (rect && rect.height) || el.offsetHeight || 0;
@@ -231,6 +241,31 @@ export default {
             } else {
                 return "";
             }
+        },
+        renderMarkdownChunk: async function (chunk) {
+            const temp = document.createElement("div");
+
+            await Vditor.preview(temp, chunk || "", {
+                mode: "light",
+                lang: "zh_CN",
+                hljs: {
+                    enable: true,
+                    lineNumber: false,
+                    style: "github",
+                },
+                markdown: {
+                    sanitize: true,
+                },
+                icon: "ant",
+            });
+
+            return temp.innerHTML;
+        },
+        renderMarkdown: async function () {
+            const html = await this.renderMarkdownChunk(this.origin);
+            const chunks = this.pageable ? execSplitPages(html) : [html];
+
+            return chunks.map((chunk) => this.doReg(chunk));
         },
         doDOM: function ($root) {
             // 折叠块
@@ -305,16 +340,27 @@ export default {
                 this.doDir();
             });
         },
-        render: function () {
+        render: async function () {
+            const version = ++this.renderVersion;
             let result = [];
-            for (let chunk of this.chunks) {
-                let _chunk = this.doReg(chunk);
-                result.push(_chunk);
+
+            if (this.isMarkdownMode) {
+                result = await this.renderMarkdown();
+            } else {
+                for (let chunk of this.chunks) {
+                    let _chunk = this.doReg(chunk);
+                    result.push(_chunk);
+                }
             }
+
+            if (version !== this.renderVersion) return;
             this.data = result;
         },
-        run: function () {
-            this.render();
+        run: async function () {
+            this.page = 1;
+            this.all = false;
+            await this.render();
+            if (!this.data.length) return;
 
             // 等待html加载完毕后
             this.$nextTick(() => {
@@ -332,6 +378,9 @@ export default {
     },
     watch: {
         content: function () {
+            this.run();
+        },
+        post_mode: function () {
             this.run();
         },
     },

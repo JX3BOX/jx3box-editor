@@ -4,7 +4,7 @@
         <el-segmented v-model="group" :options="groupOptions" />
     </div>
     <div class="container">
-        <Article class="article" :content="content"></Article>
+        <Article class="article" :content="content" :post_mode="postMode"></Article>
         <div id="directory"></div>
     </div>
 </template>
@@ -28,6 +28,11 @@ export default {
                 { label: "Markdown", value: "markdown" },
             ],
         };
+    },
+    computed: {
+        postMode() {
+            return this.group === "markdown" ? "markdown" : "tinymce";
+        },
     },
     watch: {
         group: {
@@ -53,20 +58,19 @@ export default {
     .flex(x);
     margin-bottom: 1rem;
 }
-.container{
-    #directory{
+.container {
+    #directory {
         .w(200px);
         position: fixed;
-        right:20px;
-        top:20px;
+        right: 20px;
+        top: 20px;
     }
-    .article{
+    .article {
         margin-right: 320px;
     }
-
 }
-body{
-    min-height:2000px;
-    padding:0 20px;
+body {
+    min-height: 2000px;
+    padding: 0 20px;
 }
 </style>
