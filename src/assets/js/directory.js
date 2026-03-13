@@ -18,6 +18,7 @@ const ICON_CARET_SVG = `
     <svg width="12px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-58697b5c=""><path fill="currentColor" d="m512 128 288 320H224zM224 576h576L512 896z"></path></svg>
 `;
 
+
 function getHeaderHeight() {
     // 页面上可能没有这些元素，取存在的第一个：.c-header 优先，其次 .c-breadcrumb
     const el = document.querySelector(".c-header") || document.querySelector(".c-breadcrumb");
@@ -48,8 +49,8 @@ function directory(from, to = '#directory') {
         $box.html(
             `<div class="c-article-directory" id="c-article-directory">
                 <div class="c-article-directory-title" id="c-article-directory-title">
-                    <span class="c-article-directory-title-label" class="c-go-top">${ICON_READING_SVG} 导读</span>
-                    <span class="c-article-directory-title-folder" class="c-go-top">${ICON_CARET_SVG} 折叠</span>
+                    <span class="c-article-directory-title-label" class="c-go-top"><i class="u-icon el-icon-reading"></i> 导读</span>
+                    <span class="c-article-directory-title-folder" class="c-go-top"><i class="el-icon-d-caret"></i> 折叠</span>
                 </div>
                 <div class="c-article-directory-content" id="c-article-directory-content"></div>
             </div>`
