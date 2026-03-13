@@ -43,7 +43,7 @@
             </div>
             <!-- <div class="u-honor" :style="honorStyle" v-if="honor">{{ honor }}</div> -->
             <div class="u-trophy" v-if="hasTrophy">
-                <div class="u-medals" v-if="medals && medals.length">
+                <div class="m-medals" v-if="medals && medals.length">
                     <div class="m-medal">
                         <a
                             v-for="item in medals"
