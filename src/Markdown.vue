@@ -541,6 +541,10 @@ export default {
     flex-direction: column;
     gap: 12px;
 
+    .vditor-sv{
+        font-family: var(--apple-font-family);
+    }
+
     &__host {
         overflow: visible;
         border: 1px solid #dcdfe6;
