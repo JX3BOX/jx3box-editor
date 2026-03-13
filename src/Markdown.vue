@@ -1,18 +1,6 @@
 <template>
-    <div class="c-editor-markdown">
+    <div class="c-editor-markdown" :class="{ 'c-editor-markdown--preview': previewVisible }">
         <slot name="prepend"></slot>
-
-        <div class="c-editor-markdown__toolbar">
-            <div class="c-editor-markdown__toolbar-left">
-                <span class="c-editor-markdown__toolbar-label">编辑模式</span>
-                <el-radio-group v-model="editorMode" size="small">
-                    <el-radio-button v-for="item in modeOptions" :key="item.value" :value="item.value">
-                        {{ item.label }}
-                    </el-radio-button>
-                </el-radio-group>
-            </div>
-            <div class="c-editor-markdown__toolbar-tip">GitHub 样式预览，支持 Ctrl+V 粘贴图片上传</div>
-        </div>
 
         <slot></slot>
 
@@ -25,17 +13,81 @@
 <script>
 import axios from "axios";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+import {
+    Bold,
+    Code2,
+    Expand,
+    Eye,
+    EyeOff,
+    Heading,
+    Italic,
+    Link2,
+    List,
+    ListChecks,
+    ListOrdered,
+    Quote,
+    Redo2,
+    SquareCode,
+    Strikethrough,
+    TableProperties,
+    Undo2,
+} from "lucide";
 import Vditor from "vditor";
 import "vditor/dist/index.css";
-import "github-markdown-css/github-markdown.css";
+import "github-markdown-css/github-markdown-light.css";
 
 const { __cms } = JX3BOX;
 const UPLOAD_API = `${__cms}api/cms/upload`;
-const MODE_OPTIONS = [
-    { label: "所见即所得", value: "wysiwyg" },
-    { label: "即时渲染", value: "ir" },
-    { label: "分屏预览", value: "sv" },
-];
+const TOOLBAR_ICON_SIZE = 16;
+const STATIC_TOOLBAR_ICONS = {
+    headings: Heading,
+    bold: Bold,
+    italic: Italic,
+    strike: Strikethrough,
+    link: Link2,
+    list: List,
+    "ordered-list": ListOrdered,
+    check: ListChecks,
+    quote: Quote,
+    code: Code2,
+    "inline-code": SquareCode,
+    table: TableProperties,
+    undo: Undo2,
+    redo: Redo2,
+    fullscreen: Expand,
+};
+
+function renderLucideIcon(iconNode) {
+    if (!iconNode) return "";
+
+    const attrs = {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: TOOLBAR_ICON_SIZE,
+        height: TOOLBAR_ICON_SIZE,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+        class: "c-editor-markdown__icon",
+        "aria-hidden": "true",
+    };
+    const svgAttrs = Object.entries(attrs)
+        .map(([key, value]) => `${key}="${value}"`)
+        .join(" ");
+    const content = iconNode
+        .map(([tag, tagAttrs]) => {
+            const elementAttrs = Object.entries(tagAttrs)
+                .map(([key, value]) => `${key}="${value}"`)
+                .join(" ");
+
+            return `<${tag} ${elementAttrs}></${tag}>`;
+        })
+        .join("");
+
+    return `<svg ${svgAttrs}>${content}</svg>`;
+}
 
 export default {
     name: "Markdown",
@@ -74,10 +126,14 @@ export default {
             data: this.modelValue ?? this.content ?? "",
             editor: null,
             editorReady: false,
-            editorMode: "ir",
-            modeOptions: MODE_OPTIONS,
+            editorMode: "sv",
+            previewVisible: false,
             isRebuildingEditor: false,
             isUploadingImage: false,
+            counterElement: null,
+            counterClickListener: null,
+            counterClickTimestamps: [],
+            pendingTip: "",
         };
     },
     watch: {
@@ -105,13 +161,6 @@ export default {
                 this.applyEditableState();
             },
         },
-        editorMode(nextMode, prevMode) {
-            if (!this.editorReady || this.isRebuildingEditor || nextMode === prevMode) {
-                return;
-            }
-
-            this.rebuildEditor(nextMode);
-        },
     },
     mounted() {
         this.initEditor();
@@ -120,11 +169,28 @@ export default {
         this.destroyEditor();
     },
     methods: {
-        getPreviewMode(mode) {
-            return mode === "sv" ? "both" : "editor";
+        getPreviewMode() {
+            return this.previewVisible ? "both" : "editor";
+        },
+        getPreviewTip() {
+            return this.previewVisible ? "返回编辑" : "查看预览";
+        },
+        getToolbarIconMap() {
+            return {
+                ...STATIC_TOOLBAR_ICONS,
+                "toggle-preview": this.previewVisible ? EyeOff : Eye,
+            };
         },
         getToolbar() {
             return [
+                {
+                    name: "toggle-preview",
+                    icon: renderLucideIcon(Eye),
+                    tip: this.getPreviewTip(),
+                    tipPosition: "ne",
+                    click: () => this.togglePreview(),
+                },
+                "|",
                 "headings",
                 "bold",
                 "italic",
@@ -171,7 +237,7 @@ export default {
                     markdown: {
                         sanitize: true,
                     },
-                    mode: this.getPreviewMode(this.editorMode),
+                    mode: this.getPreviewMode(),
                 },
                 customWysiwygToolbar() {},
                 toolbar: this.getToolbar(),
@@ -190,6 +256,10 @@ export default {
                     this.editorReady = true;
                     this.syncEditorValue(this.data);
                     this.applyEditableState();
+                    this.applyPreviewState();
+                    this.syncToolbarState();
+                    this.bindCounterShortcut();
+                    this.showPendingTip();
                 },
                 input: (value) => {
                     this.handleEditorInput(value);
@@ -204,6 +274,7 @@ export default {
             this.editor = new Vditor(host, this.buildEditorOptions(initialValue));
         },
         destroyEditor() {
+            this.unbindCounterShortcut();
             if (!this.editor) return;
 
             this.editor.destroy();
@@ -212,9 +283,11 @@ export default {
         },
         rebuildEditor() {
             const currentValue = this.editor?.getValue?.() ?? this.data ?? "";
+
             this.data = currentValue;
             this.isRebuildingEditor = true;
             this.destroyEditor();
+
             this.$nextTick(() => {
                 this.initEditor(currentValue);
                 this.isRebuildingEditor = false;
@@ -226,6 +299,112 @@ export default {
             const nextValue = value ?? "";
             if (this.editor.getValue() === nextValue) return;
             this.editor.setValue(nextValue);
+            if (this.previewVisible) {
+                this.editor.renderPreview();
+            }
+        },
+        getToolbarButton(name) {
+            return this.$refs.editorHost?.querySelector?.(`.vditor-toolbar button[data-type="${name}"]`) || null;
+        },
+        syncToolbarState() {
+            const iconMap = this.getToolbarIconMap();
+
+            Object.entries(iconMap).forEach(([name, iconNode]) => {
+                const button = this.getToolbarButton(name);
+                if (!button) return;
+
+                button.innerHTML = renderLucideIcon(iconNode);
+            });
+
+            const previewButton = this.getToolbarButton("toggle-preview");
+            if (previewButton) {
+                previewButton.setAttribute("aria-label", this.getPreviewTip());
+                previewButton.classList.toggle("vditor-menu--current", this.previewVisible);
+            }
+
+            this.$refs.editorHost?.querySelectorAll?.(".vditor-toolbar button[data-type]").forEach((button) => {
+                const isVisibleInPreview = ["toggle-preview", "fullscreen"].includes(button.dataset.type || "");
+
+                button.parentElement.style.display = this.previewVisible && !isVisibleInPreview ? "none" : "";
+            });
+            this.$refs.editorHost?.querySelectorAll?.(".vditor-toolbar .vditor-toolbar__divider").forEach((divider) => {
+                divider.style.display = this.previewVisible ? "none" : "";
+            });
+        },
+        syncEditorPanels() {
+            const host = this.$refs.editorHost;
+            const preview = host?.querySelector?.(".vditor-preview");
+            const sv = host?.querySelector?.(".vditor-sv");
+            const irWrapper = host?.querySelector?.(".vditor-ir");
+            const wysiwygWrapper = host?.querySelector?.(".vditor-wysiwyg");
+
+            if (preview) {
+                preview.style.display = this.previewVisible ? "block" : "none";
+            }
+            if (sv) {
+                sv.style.display = this.editorMode === "sv" && !this.previewVisible ? "block" : "none";
+            }
+            if (irWrapper) {
+                irWrapper.style.display = "none";
+            }
+            if (wysiwygWrapper) {
+                wysiwygWrapper.style.display = this.editorMode === "wysiwyg" && !this.previewVisible ? "block" : "none";
+            }
+        },
+        applyPreviewState() {
+            if (!this.editorReady || !this.editor) return;
+
+            this.syncEditorPanels();
+            if (this.previewVisible) {
+                this.editor.renderPreview();
+            }
+        },
+        togglePreview() {
+            this.previewVisible = !this.previewVisible;
+
+            if (!this.editorReady || !this.editor) return;
+
+            this.applyPreviewState();
+            this.syncToolbarState();
+        },
+        toggleSecretEditorMode() {
+            if (this.isRebuildingEditor) return;
+
+            this.editorMode = this.editorMode === "wysiwyg" ? "sv" : "wysiwyg";
+            this.pendingTip = this.editorMode === "wysiwyg" ? "已切换到所见即所得模式" : "已切换到 Markdown 源码模式";
+            this.rebuildEditor();
+        },
+        bindCounterShortcut() {
+            const counter = this.$refs.editorHost?.querySelector?.(".vditor-counter");
+            if (!counter || counter === this.counterElement) return;
+
+            this.unbindCounterShortcut();
+            this.counterClickListener = this.counterClickListener || (() => this.handleCounterClick());
+            this.counterElement = counter;
+            this.counterElement.addEventListener("click", this.counterClickListener);
+        },
+        unbindCounterShortcut() {
+            if (!this.counterElement) return;
+
+            this.counterElement.removeEventListener("click", this.counterClickListener);
+            this.counterElement = null;
+        },
+        handleCounterClick() {
+            const now = Date.now();
+
+            this.counterClickTimestamps = this.counterClickTimestamps.filter((time) => now - time <= 2000);
+            this.counterClickTimestamps.push(now);
+
+            if (this.counterClickTimestamps.length < 6) return;
+
+            this.counterClickTimestamps = [];
+            this.toggleSecretEditorMode();
+        },
+        showPendingTip() {
+            if (!this.pendingTip || !this.editor?.tip) return;
+
+            this.editor.tip(this.pendingTip, 1500);
+            this.pendingTip = "";
         },
         applyEditableState() {
             if (!this.editorReady || !this.editor) return;
@@ -329,28 +508,6 @@ export default {
     flex-direction: column;
     gap: 12px;
 
-    &__toolbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
-
-    &__toolbar-left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
-
-    &__toolbar-label,
-    &__toolbar-tip {
-        font-size: 13px;
-        color: #57606a;
-        line-height: 1.4;
-    }
-
     &__host {
         overflow: visible;
         border: 1px solid #dcdfe6;
@@ -358,8 +515,10 @@ export default {
         background-color: #ffffff;
     }
 
-    .el-radio-group {
-        box-shadow: none;
+    &__icon {
+        display: block;
+        width: 16px;
+        height: 16px;
     }
 
     .vditor {
@@ -369,10 +528,74 @@ export default {
     }
 
     .vditor-toolbar {
+    display: flex;
+    align-items: center;
         padding: 10px 12px;
         background: #f6f8fa;
         border-bottom: 1px solid #d8dee4;
         overflow: visible;
+
+        .vditor-toolbar__item {
+            margin-right: 2px;
+        }
+
+        .vditor-toolbar__divider {
+            margin: 0 4px;
+        }
+
+        .vditor-toolbar__item > .vditor-tooltipped {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            color: #4b5563;
+        }
+
+        .vditor-toolbar__item > .vditor-tooltipped svg {
+            fill: none !important;
+            stroke: currentColor !important;
+            stroke-width: 2 !important;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            width: 16px;
+            height: 16px;
+            overflow: visible;
+        }
+
+        .vditor-toolbar__item > .vditor-tooltipped svg * {
+            fill: none !important;
+            stroke: currentColor !important;
+            stroke-width: 2 !important;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .vditor-panel button {
+            width: auto;
+            height: auto;
+            padding: 4px 8px;
+            color: inherit;
+            display: block;
+            line-height: 1.5;
+            text-align: left;
+            white-space: nowrap;
+        }
+    }
+
+    &--preview {
+        .vditor-sv,
+        .vditor-ir,
+        .vditor-wysiwyg,
+        .vditor-counter {
+            display: none !important;
+        }
+
+        .vditor-preview {
+            display: block !important;
+            width: 100%;
+        }
     }
 
     .vditor-reset {
@@ -400,9 +623,20 @@ export default {
     }
 
     .vditor-counter {
-        padding: 8px 12px;
-        border-top: 1px solid #d8dee4;
-        background: #f6f8fa;
+        padding: 3px 8px;
+        border-top: 0;
+        background: rgba(27, 31, 35, 0.05);
+        border-radius: 3px;
+        line-height: 1.4;
+        margin: 0;
+        position: absolute;
+        right: 12px;
+
+        &::before,
+        &::after {
+            display: none !important;
+            content: none !important;
+        }
     }
 
     .vditor-preview__action {
@@ -414,11 +648,12 @@ export default {
         z-index: 30;
     }
 
-    @media (max-width: 768px) {
-        &__toolbar {
-            align-items: flex-start;
-        }
+    .vditor-menu--current {
+        color: #0969da;
+        background: #eaf2ff;
+    }
 
+    @media (max-width: 768px) {
         .vditor-reset.markdown-body,
         .vditor-sv__editor,
         .vditor-ir__marker,
