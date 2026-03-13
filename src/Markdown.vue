@@ -35,6 +35,7 @@ import {
 import Vditor from "vditor";
 import "vditor/dist/index.css";
 import "github-markdown-css/github-markdown-light.css";
+import normalizeMarkdownForVditor from "./assets/js/normalizeMarkdownForVditor";
 
 const { __cms } = JX3BOX;
 const UPLOAD_API = `${__cms}api/cms/upload`;
@@ -130,6 +131,7 @@ export default {
             previewVisible: false,
             isRebuildingEditor: false,
             isUploadingImage: false,
+            previewRenderVersion: 0,
             counterElement: null,
             counterClickListener: null,
             counterClickTimestamps: [],
@@ -235,7 +237,9 @@ export default {
                         style: "github",
                     },
                     markdown: {
+                        mark: true,
                         sanitize: true,
+                        toc: true,
                     },
                     mode: this.getPreviewMode(),
                 },
@@ -300,7 +304,7 @@ export default {
             if (this.editor.getValue() === nextValue) return;
             this.editor.setValue(nextValue);
             if (this.previewVisible) {
-                this.editor.renderPreview();
+                this.renderPreviewContent();
             }
         },
         getToolbarButton(name) {
@@ -356,8 +360,37 @@ export default {
 
             this.syncEditorPanels();
             if (this.previewVisible) {
-                this.editor.renderPreview();
+                this.renderPreviewContent();
             }
+        },
+        renderPreviewContent: async function () {
+            if (!this.editorReady || !this.editor) return;
+
+            const previewRoot = this.$refs.editorHost?.querySelector?.(".vditor-preview");
+            const previewBody = previewRoot?.querySelector?.(".vditor-reset") || previewRoot;
+            if (!previewBody) return;
+
+            const version = ++this.previewRenderVersion;
+            const normalizedMarkdown = normalizeMarkdownForVditor(this.editor.getValue());
+
+            await Vditor.preview(previewBody, normalizedMarkdown, {
+                mode: "light",
+                lang: "zh_CN",
+                hljs: {
+                    enable: true,
+                    lineNumber: false,
+                    style: "github",
+                },
+                markdown: {
+                    mark: true,
+                    sanitize: true,
+                    toc: true,
+                },
+                icon: "ant",
+            });
+
+            if (version !== this.previewRenderVersion) return;
+            previewBody.classList.add("markdown-body");
         },
         togglePreview() {
             this.previewVisible = !this.previewVisible;
@@ -528,8 +561,8 @@ export default {
     }
 
     .vditor-toolbar {
-    display: flex;
-    align-items: center;
+        display: flex;
+        align-items: center;
         padding: 10px 12px;
         background: #f6f8fa;
         border-bottom: 1px solid #d8dee4;
