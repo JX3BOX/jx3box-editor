@@ -66,6 +66,7 @@ import execLazyload from "./assets/js/img";
 import execFilterIframe from "./assets/js/iframe";
 import execFilterLink from "./assets/js/a";
 import execSplitPages from "./assets/js/nextpage";
+import normalizeMarkdownForVditor from "./assets/js/normalizeMarkdownForVditor";
 
 // 扩展文本
 import renderFoldBlock from "./assets/js/fold";
@@ -244,8 +245,9 @@ export default {
         },
         renderMarkdownChunk: async function (chunk) {
             const temp = document.createElement("div");
+            const normalizedChunk = normalizeMarkdownForVditor(chunk);
 
-            await Vditor.preview(temp, chunk || "", {
+            await Vditor.preview(temp, normalizedChunk, {
                 mode: "light",
                 lang: "zh_CN",
                 hljs: {
@@ -254,7 +256,9 @@ export default {
                     style: "github",
                 },
                 markdown: {
+                    mark: true,
                     sanitize: true,
+                    toc: true,
                 },
                 icon: "ant",
             });
