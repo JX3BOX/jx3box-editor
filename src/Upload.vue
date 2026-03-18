@@ -1,6 +1,6 @@
 <template>
     <div class="c-upload">
-        <el-button type="primary" :disabled="!enable" @click="dialogVisible = true">
+        <el-button type="primary" :disabled="!enable" size="large" @click="dialogVisible = true">
             <el-icon><UploadFilled /></el-icon>
             <span>{{ buttonText }}</span>
         </el-button>
@@ -12,7 +12,9 @@
                     ><el-icon> <Delete /> </el-icon><span>清空</span></el-button
                 >
                 <!-- 限制提示 -->
-                <div class="u-upload-tip" :title="tipText" type="info" show-icon :closable="false"><span>{{ tipText }}</span></div>
+                <div class="u-upload-tip" :title="tipText" type="info" show-icon :closable="false">
+                    <span>{{ tipText }}</span>
+                </div>
             </div>
 
             <el-upload

@@ -1,7 +1,9 @@
 <template>
     <div class="c-resource">
         <!-- 上传触发按钮 -->
-        <el-button class="u-switch" type="primary" @click="openDialog" :disabled="!enable"> <img class="u-icon" svg-inline src="./assets/img/jx3.svg" />剑三资源 </el-button>
+        <el-button class="u-switch" size="large" type="primary" @click="openDialog" :disabled="!enable">
+            <img class="u-icon" svg-inline src="./assets/img/jx3.svg" />剑三资源
+        </el-button>
 
         <!-- 弹出界面 -->
         <el-dialog class="c-large-dialog" title="剑三数据库" v-model="dialogVisible" draggable>
@@ -11,10 +13,22 @@
                         <el-radio-button value="std">重制</el-radio-button>
                         <el-radio-button value="origin">缘起</el-radio-button>
                     </el-radio-group>
-                    <el-input size="large" class="u-input" placeholder="请输入 ID 或 名称" v-model="query" @change="search" @keyup.enter="search">
+                    <el-input
+                        size="large"
+                        class="u-input"
+                        placeholder="请输入 ID 或 名称"
+                        v-model="query"
+                        @change="search"
+                        @keyup.enter="search"
+                    >
                         <template #prepend>ID ／名称</template>
                         <template #append v-if="isPC">
-                            <el-switch v-model="strict" active-text="精确匹配" @change="search" title="仅对Buff/Skill有效"></el-switch>
+                            <el-switch
+                                v-model="strict"
+                                active-text="精确匹配"
+                                @change="search"
+                                title="仅对Buff/Skill有效"
+                            ></el-switch>
                         </template>
                     </el-input>
                 </div>
@@ -105,7 +119,12 @@
                                 </span>
                             </li>
                         </ul>
-                        <el-alert v-if="!skill.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
+                        <el-alert
+                            v-if="!skill.length && done"
+                            title="没有找到相关条目"
+                            type="info"
+                            show-icon
+                        ></el-alert>
                     </el-tab-pane>
                     <el-tab-pane label="物品" name="item">
                         <template #label>
@@ -120,9 +139,21 @@
                             共找到 <b>{{ total }}</b> 条记录
                         </p>
                         <ul class="m-resource-list" v-if="item.length">
-                            <el-popover popper-class="m-item-pop" :visible-arrow="false" trigger="hover" placement="left" v-for="(o, i) in item" :key="o.id">
+                            <el-popover
+                                popper-class="m-item-pop"
+                                :visible-arrow="false"
+                                trigger="hover"
+                                placement="left"
+                                v-for="(o, i) in item"
+                                :key="o.id"
+                            >
                                 <template #reference>
-                                    <li class="u-item" :class="{ on: o.isSelected }" @click="selectItem(o, i)" :ref="(el) => setResultItemRef('item', i, el)">
+                                    <li
+                                        class="u-item"
+                                        :class="{ on: o.isSelected }"
+                                        @click="selectItem(o, i)"
+                                        :ref="(el) => setResultItemRef('item', i, el)"
+                                    >
                                         <span class="u-id">ID:{{ o.id }}</span>
                                         <img class="u-pic" :title="'IconID:' + o.IconID" :src="iconURL(o.IconID)" />
                                         <span class="u-name">{{ o.Name }}</span>
@@ -215,7 +246,15 @@
 
                 <template v-if="multipage">
                     <!-- 下一页 -->
-                    <el-button class="m-archive-more" :class="{ show: hasNextPage }" type="primary" icon="ArrowDown" @click="appendPage" size="large">加载更多</el-button>
+                    <el-button
+                        class="m-archive-more"
+                        :class="{ show: hasNextPage }"
+                        type="primary"
+                        icon="ArrowDown"
+                        @click="appendPage"
+                        size="large"
+                        >加载更多</el-button
+                    >
                     <!-- 分页 -->
                     <el-pagination
                         class="m-archive-pages"
@@ -490,31 +529,41 @@ export default {
             this.resetItems();
             o.isSelected = true;
             if (this.buff_mode === "simple") {
-                this.html = `<a data-type="buff" class="e-jx3-buff w-jx3-element ${o.CanCancel === 1 ? "isBuff" : "isDebuff"}" href="${this.getDbLink(
-                    "buff",
-                    this.client,
-                    o.BuffID,
-                    o.Level
-                )}" data-client="${this.client}" data-id="${o.BuffID}" data-level="${o.Level}">[${o.Name}]</a>`;
+                this.html = `<a data-type="buff" class="e-jx3-buff w-jx3-element ${
+                    o.CanCancel === 1 ? "isBuff" : "isDebuff"
+                }" href="${this.getDbLink("buff", this.client, o.BuffID, o.Level)}" data-client="${
+                    this.client
+                }" data-id="${o.BuffID}" data-level="${o.Level}">[${o.Name}]</a>`;
             } else {
-                this.html = `<pre data-type="buff" data-id="${o.BuffID}" class="e-jx3-resource">${this.nl2br(this.getResultItemHtml("buff", i))}</pre>`;
+                this.html = `<pre data-type="buff" data-id="${o.BuffID}" class="e-jx3-resource">${this.nl2br(
+                    this.getResultItemHtml("buff", i)
+                )}</pre>`;
             }
         },
         selectSkill(o, i) {
             this.resetItems();
             o.isSelected = true;
             if (this.skill_mode === "simple") {
-                this.html = `<a data-type="skill" class="e-jx3-skill w-jx3-element" href="${this.getDbLink("skill", this.client, o.SkillID, o.Level)}" data-client="${this.client}" data-id="${
-                    o.SkillID
-                }" data-level="${o.Level}">[${o.Name}]</a>`;
+                this.html = `<a data-type="skill" class="e-jx3-skill w-jx3-element" href="${this.getDbLink(
+                    "skill",
+                    this.client,
+                    o.SkillID,
+                    o.Level
+                )}" data-client="${this.client}" data-id="${o.SkillID}" data-level="${o.Level}">[${o.Name}]</a>`;
             } else {
-                this.html = `<pre data-type="skill" data-id="${o.SkillID}" class="e-jx3-resource">${this.nl2br(this.getResultItemHtml("skill", i))}</pre>`;
+                this.html = `<pre data-type="skill" data-id="${o.SkillID}" class="e-jx3-resource">${this.nl2br(
+                    this.getResultItemHtml("skill", i)
+                )}</pre>`;
             }
         },
         selectItem(o) {
             this.resetItems();
             o.isSelected = true;
-            this.html = `<a data-type="item" class="e-jx3-item e-jx3-item-q${o.Quality} w-jx3-element" data-mode="" data-id="${o.id}" data-quality="${o.Quality}" data-client="${this.client}" target="_blank" href="${this.getLink("item", o.id)}">[${o.Name}]</a>`;
+            this.html = `<a data-type="item" class="e-jx3-item e-jx3-item-q${
+                o.Quality
+            } w-jx3-element" data-mode="" data-id="${o.id}" data-quality="${o.Quality}" data-client="${
+                this.client
+            }" target="_blank" href="${this.getLink("item", o.id)}">[${o.Name}]</a>`;
         },
         selectIcon(o) {
             this.resetItems();
@@ -524,7 +573,11 @@ export default {
         selectNpc(o) {
             this.resetItems();
             o.isSelected = true;
-            this.html = `<a data-type="npc" class="e-jx3-npc w-jx3-element" data-mode="" data-id="${o.ID}" data-client="${this.client}" target="_blank" href="${this.getDbLink("npc", this.client, o.ID)}">[${o.Name}]</a>`;
+            this.html = `<a data-type="npc" class="e-jx3-npc w-jx3-element" data-mode="" data-id="${
+                o.ID
+            }" data-client="${this.client}" target="_blank" href="${this.getDbLink("npc", this.client, o.ID)}">[${
+                o.Name
+            }]</a>`;
         },
         resetItems() {
             this.currentList.forEach((item) => {
