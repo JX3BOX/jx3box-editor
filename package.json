@@ -1,6 +1,6 @@
 {
     "name": "@jx3box/jx3box-editor",
-    "version": "3.0.6",
+    "version": "3.0.7",
     "description": "JX3BOX Article & Editor",
     "main": "index.js",
     "scripts": {
@@ -47,6 +47,7 @@
     "devDependencies": {
         "@babel/core": "^7.12.16",
         "@babel/eslint-parser": "^7.12.16",
+        "@tailwindcss/postcss": "^4.2.1",
         "@typescript-eslint/eslint-plugin": "^5.31.0",
         "@typescript-eslint/parser": "^5.31.0",
         "@vue/cli-plugin-babel": "~5.0.0",
@@ -54,6 +55,7 @@
         "@vue/cli-plugin-typescript": "~5.0.0",
         "@vue/cli-service": "~5.0.0",
         "@vue/eslint-config-typescript": "^11.0.0",
+        "autoprefixer": "^10.4.27",
         "babel-loader": "^8.2.5",
         "csslab": "^6.0.1",
         "eslint": "^7.32.0",
@@ -70,6 +72,7 @@
         "sass-loader": "^16.0.7",
         "serve": "^14.2.0",
         "style-resources-loader": "^1.5.0",
+        "tailwindcss": "^4.2.1",
         "typescript": "~4.5.5",
         "unplugin-vue-define-options": "^1.2.1",
         "url": "^0.11.0",

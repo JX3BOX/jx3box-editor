@@ -11,5 +11,6 @@ app.use(ElementPlus);
 
 import '@jx3box/jx3box-common/css/font.css';
 import '@jx3box/jx3box-common/css/normalize.css';
+import "../assets/css/tailwind.css";
 
 app.mount("#app");

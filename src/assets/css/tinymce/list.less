@@ -3,10 +3,13 @@
     ul,
     ol {
         margin: 20px 0;
-    }
-    ul,
-    ol {
         padding-left: 40px;
+    }
+    ul{
+        list-style: disc;
+    }
+    ol {
+        list-style: decimal;
     }
 
     /* 旧版checklist,无创建逻辑,仅作留存显示 */
@@ -19,7 +22,8 @@
             display: block;
             position: absolute;
             left: 0;
-            top: 0.7em;
+            top: 50%;
+            transform: translateY(-50%);
             content: "";
             cursor: pointer;
             height: 1em;
@@ -38,6 +42,7 @@
     .tox-checklist > li{
         line-height: 2.2;
         margin:0 !important;
+        position: relative;
     }
     .tox-checklist > li:not(.tox-checklist--hidden) {
         list-style: none;
@@ -50,7 +55,8 @@
         cursor: pointer;
         height: 1em;
         margin-left: -1.5em;
-        margin-top: 0.7em;
+        top:50%;
+        transform: translateY(-50%);
         position: absolute;
         width: 1em;
     }
