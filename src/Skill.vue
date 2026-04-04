@@ -48,7 +48,7 @@ export default {
         desc: function () {
             if (this.data?.parse && this.show_parse) {
                 const result = this.data.parse.desc;
-                return result.replace(/\\n/g, "\n");
+                if (result) return result.replace(/\\n/g, "\n");
             }
             return this.data?.Desc;
         },
