@@ -42,9 +42,9 @@ const { __cdn, __imgPath, __cms } = JX3BOX;
 // 开发环境走 devServer proxy，避免跨域导致粘贴图片上传“看起来没反应”
 const apiUrl = process.env.NODE_ENV === "development" ? "/api/cms/upload/tinymce" : __cms + "api/cms/upload/tinymce";
 
-import Upload from "./Upload";
-import Resource from "./Resource";
-import BoxResource from "./BoxResource";
+import Upload from "./Upload.vue";
+import Resource from "./Resource.vue";
+import BoxResource from "./BoxResource.vue";
 import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
 
 import axios from "axios";

@@ -27,7 +27,7 @@
 
 <script>
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
-import { getEmotion } from "../service/author";
+import { getEmotion } from "../service/author.js";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import dayjs from "dayjs";
 import Avatar from "./Avatar.vue";

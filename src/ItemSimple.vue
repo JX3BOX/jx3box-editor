@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import Item from "./Item";
+import Item from "./Item.vue";
 import icon_url from "./assets/js/item/icon_url.js";
 import item_color from "./assets/js/item/color.js";
 import item_border from "./assets/js/item/border.js";

@@ -35,7 +35,7 @@ import {
 import Vditor from "vditor";
 import "vditor/dist/index.css";
 import "github-markdown-css/github-markdown-light.css";
-import normalizeMarkdownForVditor from "./assets/js/normalizeMarkdownForVditor";
+import normalizeMarkdownForVditor from "./assets/js/normalizeMarkdownForVditor.js";
 
 const { __cms } = JX3BOX;
 const UPLOAD_API = `${__cms}api/cms/upload`;

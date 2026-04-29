@@ -59,38 +59,38 @@ import Vditor from "vditor";
 import "github-markdown-css/github-markdown-light.css";
 
 // XSS
-import execFilterXSS from "./assets/js/xss";
+import execFilterXSS from "./assets/js/xss.js";
 
 // 基本文本
-import execLazyload from "./assets/js/img";
-import execFilterIframe from "./assets/js/iframe";
-import execFilterLink from "./assets/js/a";
-import execSplitPages from "./assets/js/nextpage";
-import normalizeMarkdownForVditor from "./assets/js/normalizeMarkdownForVditor";
+import execLazyload from "./assets/js/img.js";
+import execFilterIframe from "./assets/js/iframe.js";
+import execFilterLink from "./assets/js/a.js";
+import execSplitPages from "./assets/js/nextpage.js";
+import normalizeMarkdownForVditor from "./assets/js/normalizeMarkdownForVditor.js";
 
 // 扩展文本
-import renderFoldBlock from "./assets/js/fold";
-import renderDirectory from "./assets/js/directory";
-import renderKatex from "./assets/js/katex";
-import renderCode from "./assets/js/code";
-import renderImgPreview from "./assets/js/renderImgPreview";
+import renderFoldBlock from "./assets/js/fold.js";
+import renderDirectory from "./assets/js/directory.js";
+import renderKatex from "./assets/js/katex.js";
+import renderCode from "./assets/js/code.js";
+import renderImgPreview from "./assets/js/renderImgPreview.js";
 
 // 魔盒
-import renderMacro from "./assets/js/macro";
-import renderTalent from "./assets/js/qixue";
-import renderTalent2 from "./assets/js/talent2";
-import renderPzIframe from "./assets/js/pz_iframe";
-import renderCombo from "./assets/js/combo";
-import renderAudio from "./assets/js/audio";
-import Author from "./components/Author";
+import renderMacro from "./assets/js/macro.js";
+import renderTalent from "./assets/js/qixue.js";
+import renderTalent2 from "./assets/js/talent2.js";
+import renderPzIframe from "./assets/js/pz_iframe.js";
+import renderCombo from "./assets/js/combo.js";
+import renderAudio from "./assets/js/audio.js";
+import Author from "./components/Author.vue";
 import PostAuthor from "./components/PostAuthor.vue";
 
 // 剑三
-import Item from "./Item";
-import Buff from "./Buff";
-import Skill from "./Skill";
-import Npc from "./Npc";
-import renderJx3Element from "./assets/js/jx3_element";
+import Item from "./Item.vue";
+import Buff from "./Buff.vue";
+import Skill from "./Skill.vue";
+import Npc from "./Npc.vue";
+import renderJx3Element from "./assets/js/jx3_element.js";
 
 export default {
     name: "Article",

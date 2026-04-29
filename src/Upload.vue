@@ -88,7 +88,7 @@ import axios from "axios";
 import { Delete, Plus, UploadFilled, ZoomIn } from "@element-plus/icons-vue";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import allow_types from "@jx3box/jx3box-common/data/conf";
-import { showImgPreview } from "./assets/js/renderImgPreview";
+import { showImgPreview } from "./assets/js/renderImgPreview.js";
 const { __cms } = JX3BOX;
 const API = __cms + "api/cms/upload";
 const imgtypes = ["jpg", "png", "gif", "bmp", "webp", "jpeg", "svg"];

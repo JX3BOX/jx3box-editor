@@ -11,7 +11,7 @@
 
 <script>
 import { extractTextContent, getLink, iconLink } from "@jx3box/jx3box-common/js/utils";
-import { getResource as getResourceFromNode } from "./service/resource";
+import { getResource as getResourceFromNode } from "./service/resource.js";
 import { escape } from "lodash";
 import gameFonts from "./assets/data/game_font.json";
 

@@ -154,7 +154,7 @@ import { h } from "vue";
 import { ElIcon } from "element-plus";
 import { Check, Close } from "@element-plus/icons-vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
-import { getSkill } from "../service/resource";
+import { getSkill } from "../service/resource.js";
 import SkillMartial from "./SkillMartial.vue";
 
 import Sortable from "sortablejs";

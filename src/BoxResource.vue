@@ -190,9 +190,9 @@
 </template>
 
 <script>
-import { loadStat } from "./service/database";
-import { loadAuthors, loadEmotions, getLetterPaper } from "./service/cms";
-import { getUserInfo } from "./service/author";
+import { loadStat } from "./service/database.js";
+import { loadAuthors, loadEmotions, getLetterPaper } from "./service/cms.js";
+import { getUserInfo } from "./service/author.js";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import { getLink, showAvatar, resolveImagePath } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user";

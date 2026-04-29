@@ -27,27 +27,27 @@
 import markdownRender from "@jx3box/markdown/src/render.vue";
 
 // 基本文本
-import execLazyload from "./assets/js/img";
-import execFilterIframe from "./assets/js/iframe";
-import execFilterLink from "./assets/js/a";
-import execFilterXSS from "./assets/js/script";
+import execLazyload from "./assets/js/img.js";
+import execFilterIframe from "./assets/js/iframe.js";
+import execFilterLink from "./assets/js/a.js";
+import execFilterXSS from "./assets/js/script.js";
 
 // 扩展文本
-import renderDirectory from "./assets/js/directory";
-import renderMacro from "./assets/js/macro";
-import renderTalent from "./assets/js/qixue";
-import renderTalent2 from "./assets/js/talent2";
-import { renderKatexAll } from "./assets/js/katex";
-import renderCode from "./assets/js/code";
+import renderDirectory from "./assets/js/directory.js";
+import renderMacro from "./assets/js/macro.js";
+import renderTalent from "./assets/js/qixue.js";
+import renderTalent2 from "./assets/js/talent2.js";
+import renderKatexAll from "./assets/js/katex.js";
+import renderCode from "./assets/js/code.js";
 
 // 剑三
-import Item from "./Item";
-import Buff from "./Buff";
-import Skill from "./Skill";
-import Npc from "./Npc";
-import renderJx3Element from "./assets/js/jx3_element";
-import renderImgPreview from "./assets/js/renderImgPreview";
-import renderAudio from "./assets/js/audio";
+import Item from "./Item.vue";
+import Buff from "./Buff.vue";
+import Skill from "./Skill.vue";
+import Npc from "./Npc.vue";
+import renderJx3Element from "./assets/js/jx3_element.js";
+import renderImgPreview from "./assets/js/renderImgPreview.js";
+import renderAudio from "./assets/js/audio.js";
 
 import { xssOptions } from "./assets/data/markdown_whitelist.json";
 
