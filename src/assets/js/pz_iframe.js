@@ -1,23 +1,23 @@
 import $ from "jquery";
-function buildIframe(str){
+function buildIframe(str) {
     let _str = new URLSearchParams(str);
-    let mode = _str.get('mode')
+    let mode = _str.get("mode");
 
-    if(mode == 'vertical'){
-        return `<iframe class="w-pz-iframe" src="${str}" scrolling="no" width="750" height="3468" style="border:none;background:none;max-width:100%;overflow:hidden;"></iframe>`
-    }else{
-        return `<iframe class="w-pz-iframe" src="${str}" scrolling="no" width="1280" height="720" style="border:none;background:none;max-width:100%;overflow:hidden;"></iframe>`
+    if (mode == "vertical") {
+        return `<div class="w-pz-iframe-wrap"><iframe class="w-pz-iframe" src="${str}" scrolling="no" width="750" height="3468" style="border:none;background:none;max-width:100%;overflow:hidden;"></iframe></div>`;
+    } else {
+        return `<div class="w-pz-iframe-wrap"><iframe class="w-pz-iframe" src="${str}" scrolling="no" width="1280" height="720" style="border:none;background:none;max-width:100%;overflow:hidden;"></iframe></div>`;
     }
 }
 
-function renderPzIframe(selector = ".e-pz-iframe"){
+function renderPzIframe(selector = ".e-pz-iframe") {
     try {
-        $(selector).each(function(i, ele) {
+        $(selector).each(function (i, ele) {
             // 获取嵌入源地址
-            let url =  $(this).text();
+            let url = $(this).text();
 
             // 构建嵌入源码
-            let code = buildIframe(url)
+            let code = buildIframe(url);
 
             // 挂载点
             $(this).after(code);
@@ -27,4 +27,4 @@ function renderPzIframe(selector = ".e-pz-iframe"){
     }
 }
 
-export default renderPzIframe
+export default renderPzIframe;
