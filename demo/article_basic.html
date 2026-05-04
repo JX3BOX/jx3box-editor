@@ -1,0 +1,263 @@
+<!-- ========== 字体与颜色（style允许） ========== -->
+<h1>1.字体</h1>
+<p>
+  <span style="font-size: 12px;">12px</span>，
+  <span style="font-size: 14px;">14px</span>，
+  16px，
+  <span style="font-size: 18px;">18px</span>，
+  <span style="font-size: 22px;">22px</span>，
+  <span style="font-size: 24px;">24px</span>，
+  <span style="font-size: 26px;">26px</span>，
+  <span style="font-size: 28px;">28px</span>，
+  <span style="font-size: 32px;">32px</span>，
+  <span style="font-size: 48px;">48px</span>，
+  <span style="font-size: 72px;">72px</span>
+</p>
+<p>
+  <span style="color: #ff99cc;">粉粉の</span>，
+  <span style="color: #00ff00; background-color: #000000;">辣眼睛</span>，
+  <span style="color: #cc99ff; background-color: #ccffff;">柔和</span>
+</p>
+<p>
+  <strong>粗体</strong>，
+  <em>斜体</em>，
+  <span style="text-decoration: underline;">下划线</span>，
+  <span style="text-decoration: line-through;">删除线</span>，
+  <sup>上标</sup>，
+  <sub>下标</sub>
+</p>
+
+
+<!-- ========== 链接：站内/站外/相对/锚点 ========== -->
+<h1>2.链接</h1>
+
+<p id="anchor-top">锚点目标：anchor-top（用于 # 跳转）</p>
+
+<p>
+  站外绝对链接：
+  <a href="https://www.2kog.com" rel="noopener">通配白名单</a>
+  <a href="https://iruxu.com" rel="noopener" target="_blank">匹配白名单·新窗</a>
+  <a href="https://test.example.com" rel="noopener">非白名单·自动新窗</a>
+  <a href="https://evil.example.com" rel="noopener">非白名单·严格模式自动过滤</a>
+</p>
+
+<p>
+  站内相对链接：
+  <a href="/emotion/940" target="_blank">/emotion/940（自带新窗）</a>，
+  <a href="author/8">author/8 （无新窗）</a>，
+  <a href="./relative/path">./relative/path</a>
+</p>
+
+<p>
+  锚点链接：
+  <a href="#anchor-top">跳到 anchor-top</a>
+</p>
+
+<!-- ========== 标题 ========== -->
+<h1>3.标题</h1>
+<h1>1级标题</h1>
+<h2>2级标题</h2>
+<h3>3级标题</h3>
+<h4>4级标题</h4>
+<h5>5级标题</h5>
+<h6>6级标题</h6>
+
+<!--nextpage-->
+
+<!-- ========== 对齐与缩进 ========== -->
+<h1>4.对齐与缩进</h1>
+<p style="text-align: right;">右对齐内容</p>
+<p style="text-align: center;">居中对齐</p>
+<p style="text-align: left; padding-left: 40px;">缩进内容（padding-left）</p>
+<p>&nbsp;</p>
+
+<!-- ========== 列表：无序/有序/checklist ========== -->
+<h1>5.列表</h1>
+<ul>
+  <li>无序列表 1</li>
+  <li>无序列表 2</li>
+</ul>
+
+<ol>
+  <li>有序列表 1</li>
+  <li>有序列表 2</li>
+</ol>
+
+<ul class="tox-checklist">
+  <li>checklist 未勾选</li>
+  <li class="tox-checklist--checked">checklist 已勾选</li>
+</ul>
+
+<div class="e-checklist">
+  <div class="on">旧版checklist：on</div>
+  <div>旧版checklist：off</div>
+</div>
+
+<!-- ========== 表格与引用 ========== -->
+<h1>6.表格与引用</h1>
+
+<table style="border-collapse: collapse; width: 100%;" border="1">
+  <tbody>
+    <tr>
+      <td style="width: 25%;">表格</td>
+      <td style="width: 25%;">1</td>
+      <td style="width: 25%;">2</td>
+      <td style="width: 25%;">3</td>
+    </tr>
+    <tr>
+      <td style="width: 25%;">4</td>
+      <td style="width: 25%;">5</td>
+      <td style="width: 25%;">6</td>
+      <td style="width: 25%;">7</td>
+    </tr>
+    <tr>
+      <td style="width: 25%;">8</td>
+      <td style="width: 25%;">9</td>
+      <td style="width: 25%;">10</td>
+      <td style="width: 25%;">&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>引用内容：用于测试 blockquote 渲染、行高、内边距、换行表现。</p>
+  <p>引用内容：用于测试 blockquote 渲染、行高、内边距、换行表现。</p>
+</blockquote>
+
+<!-- ========== 折叠文本（summary/details） ========== -->
+<h1>7.折叠文本</h1>
+<pre class="e-summary">折叠头文本:e-summary<br />哈哈哈哈哈</pre>
+<pre class="e-details">被折叠区域文本:e-details</pre>
+
+<!--nextpage-->
+
+<!-- ========== 图片：普通、lazy、相对路径、属性 ========== -->
+<h1>8.图片</h1>
+
+<p>普通图片（绝对地址）：</p>
+<p>
+  <img src="https://cdn.jx3box.com/image/common/avatar.png?x-oss-process=style/avatar_s" alt="img-abs" />
+</p>
+
+<p>已有 lazy 的图片（测试不重复/不破坏）：</p>
+<p>
+  <img loading="lazy" src="https://cdn.jx3box.com/image/common/avatar.png?x-oss-process=style/avatar_s" alt="img-lazy" />
+</p>
+
+<p>相对路径图片（测试 cdnDomain 拼接逻辑）：</p>
+<p>
+  <img src="/img/miipet.png" alt="img-relative-root" style="width:60px"/>
+  <img src="/img/2kog.svg" alt="img-relative-root2" style="width:60px"/>
+</p>
+
+
+<!-- ========== 媒体：video + iframe 白名单 ========== -->
+<h1>9.媒体</h1>
+
+<p>video（mp4）：</p>
+<video controls width="360" height="180">
+  <source src="https://static.jx3.xoyo.com/video/20090828/CG1_fengqidaoxiang.mp4" type="video/mp4" />
+</video>
+
+<p>B站 iframe（白名单：player.bilibili.com）</p>
+<iframe class="w-player-bilibili"
+  src="https://player.bilibili.com/player.html?bvid=BV1J24y1B7T3&autoplay=0"
+  frameborder="0"
+  scrolling="no"
+  allowfullscreen="allowfullscreen">
+</iframe>
+
+<p>非白名单 iframe（应被移除或 src 置空）：</p>
+<iframe src="https://evil.example.com/xss.html" width="360" height="180"></iframe>
+
+<!--nextpage-->
+
+<!-- ========== 代码与语法高亮 ========== -->
+<h1>10.代码</h1>
+
+<p>行内代码：<code>npm run dev</code>、<code>const a = 1</code></p>
+
+<pre class="language-javascript"><code>function print() {
+  console.log("hello world");
+}
+// &lt;script&gt; in code should not execute
+</code></pre>
+
+<!-- ========== 公式 ========== -->
+<h1>11.公式</h1>
+<h5>2.1 行内公式<span style="font-size: 12px;">（文字中的小公式）</span></h5>
+<p>在文字中插入小型公式，有两种写法：</p>
+<h6><strong>方法一：使用<code>$$</code>单个美元符号</strong></h6>
+<ul>
+<li><strong>⌨️ 示例</strong>：勾股定理 <code>$a^2 + b^2 = c^2$</code></li>
+<li><strong>🎉 效果</strong>：$a^2 + b^2 = c^2$&nbsp;</li>
+</ul>
+<h6><strong>方法二：使用<code>\(\)</code></strong><strong>括号</strong></h6>
+<ul>
+<li><span style="font-size: 16px;"><strong>⌨️ 示例</strong>：爱因斯坦质能方程</span> <code>\(E = mc^2\)</code></li>
+<li><span style="font-size: 16px;"><strong>🎉 效果</strong>：</span>\(E = mc^2\)<span style="font-size: 16px;"><br /><br /></span></li>
+</ul>
+<h5>2.2 独立公式<span style="font-size: 12px;">（大型公式块）</span></h5>
+<p>对于需要突出显示的重要公式，使用块级显示：</p>
+<h6><strong>方法一：使用<code>$$$$</code>双美元符号</strong></h6>
+<ul>
+<li><strong>⌨️ 示例</strong>：</li>
+</ul>
+<pre class="language-bash"><code>$$
+y = \sqrt{x_1^2 + x_2^2 + x_3^2 + x_4^2}
+$$</code></pre>
+<ul>
+<li><strong><span style="font-size: 16px;">🎉 </span>效果：</strong></li>
+</ul>
+<p>$$ y = \\sqrt{x_1^2 + x_2^2 + x_3^2 + x_4^2} $$</p>
+<p>&nbsp;</p>
+<h6><strong>方法二：使用<code>\[\]</code>括号</strong></h6>
+<ul>
+<li><strong>⌨️ 示例：</strong></li>
+</ul>
+<pre class="language-bash"><code>\[
+\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+\]</code></pre>
+<ul>
+<li><strong><span style="font-size: 16px;">🎉 </span>效果：</strong></li>
+</ul>
+<p>\[ \int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2} \]</p>
+<p>&nbsp;</p>
+<p><span style="color: #ff6600;"><strong><span style="font-size: 12px;">注意：块级公式会自动居中显示，适合长公式或多行公式。</span></strong></span></p>
+<p>&nbsp;</p>
+<h5>方法三：源码指定</h5>
+<p>如果您精通HTML，你可以直接通过编辑源码，对包裹区使用特定的类<code>.w-latex</code>，系统会自动处理换行和格式。</p>
+<ul>
+<li><strong>⌨️ 示例：</strong></li>
+</ul>
+<pre class="language-xml"><code>&lt;div class="w-latex"&gt; x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} &lt;/div&gt;</code></pre>
+<ul>
+<li><strong><span style="font-size: 16px;">🎉 </span>效果：</strong></li>
+</ul>
+<div class="w-latex">x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</div>
+<p>&nbsp;</p>
+
+
+<!-- ========== 安全检测：脚本/事件/协议/style ========== -->
+<h1>12.安全检测：XSS 最小危险集</h1>
+
+<h6>安全检测1：script 标签（应被移除）</h6>
+<script>alert("xss-script-tag")</script>
+
+<h6>安全检测2：on* 事件属性（应被移除）</h6>
+<p>
+  <img src="x" onerror="alert('xss-onerror')" alt="xss-onerror" />
+  <a href="https://example.com" onclick="alert('xss-onclick')">onclick 测试</a>
+</p>
+
+<h6>安全检测3：javascript: 协议（应被置空或移除）</h6>
+<p>
+  <a href="javascript:alert('xss-js-href')">javascript: href</a>
+</p>
+
+<h6>安全检测4：style 中的 @import / url（应被清理）</h6>
+<p style="@import url(https://evil.example.com/x.css); color: red;">@import 测试</p>
+<p style="background-image: url(https://evil.example.com/track.png); padding: 10px; border: 1px solid #ccc;">
+  url() 测试（背景图）
+</p>
+
