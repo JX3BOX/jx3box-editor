@@ -1,0 +1,35 @@
+name: Deploy Storybook
+
+on:
+    push:
+        branches:
+            - storybook
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Use Node.js 22.14.0
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.14.0
+                  cache: npm
+
+            - name: Install && Build Storybook
+              run: |
+                  npm ci --legacy-peer-deps
+                  npm run build-storybook -- --disable-telemetry
+
+            - name: Deploy to gh-pages
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  token: ${{ secrets.ACCESS_TOKEN }}
+                  branch: gh-pages
+                  folder: storybook-static
+                  clean: true
