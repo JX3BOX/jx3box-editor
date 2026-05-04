@@ -26,10 +26,10 @@ jobs:
                   npm install --include=optional --package-lock=false
                   npm run build-storybook -- --disable-telemetry
 
-            - name: Deploy to gh-pages
-              uses: JamesIves/github-pages-deploy-action@v4
+            - name: Github Pages
+              uses: JamesIves/github-pages-deploy-action@releases/v3
               with:
-                  token: ${{ secrets.ACCESS_TOKEN }}
-                  branch: gh-pages
-                  folder: storybook-static
-                  clean: true
+                  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                  BRANCH: gh-pages
+                  FOLDER: storybook-static
+                  CLEAN: true
