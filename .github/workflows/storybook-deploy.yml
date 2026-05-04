@@ -23,7 +23,7 @@ jobs:
 
             - name: Install && Build Storybook
               run: |
-                  npm ci --legacy-peer-deps
+                  npm install
                   npm run build-storybook -- --disable-telemetry
 
             - name: Deploy to gh-pages
