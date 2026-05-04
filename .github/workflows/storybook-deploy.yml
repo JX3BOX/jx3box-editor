@@ -23,7 +23,7 @@ jobs:
 
             - name: Install && Build Storybook
               run: |
-                  npm install
+                  npm install --include=optional --package-lock=false
                   npm run build-storybook -- --disable-telemetry
 
             - name: Deploy to gh-pages
