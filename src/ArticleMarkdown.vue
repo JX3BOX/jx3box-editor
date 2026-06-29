@@ -173,7 +173,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "./assets/css/article_markdown.less";
+@import "./assets/css/markdown/markdown-article.less";
 
 .v-note-img-wrapper {
     display: none;

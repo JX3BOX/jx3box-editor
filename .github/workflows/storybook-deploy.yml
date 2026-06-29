@@ -1,0 +1,35 @@
+name: Deploy Storybook
+
+on:
+    push:
+        branches:
+            - storybook
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Use Node.js 22.14.0
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.14.0
+                  cache: npm
+
+            - name: Install && Build Storybook
+              run: |
+                  npm install --include=optional --package-lock=false
+                  npm run build-storybook -- --disable-telemetry
+
+            - name: Github Pages
+              uses: JamesIves/github-pages-deploy-action@releases/v3
+              with:
+                  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                  BRANCH: gh-pages
+                  FOLDER: storybook-static
+                  CLEAN: true
