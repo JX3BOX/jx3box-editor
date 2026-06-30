@@ -1,7 +1,7 @@
 <template>
     <!-- @圈人pop：作者卡片 -->
     <div class="w-author" v-loading="loading">
-        <div class="w-author-wrapper el-popover" v-if="data" :style="{ backgroundImage: `url(${bg})` }">
+        <div class="w-author-wrapper el-popover" :class="{ 'is-no-atcard': !bg }" v-if="data" :style="authorCardStyle">
             <div class="u-author">
                 <Avatar
                     class="u-avatar"
@@ -71,11 +71,11 @@
 <script>
 import { authorLink, getLink, getMedalLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import { getUserInfo, getUserMedals, getUserPublicTeams } from "../service/author.js";
-import { getDecoration, getDecorationJson } from "../service/cms.js";
+import { getDecoration, getDecorationJson, getDecorationV2 } from "../service/cms.js";
 import User from "@jx3box/jx3box-common/js/user";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import Avatar from "./Avatar.vue";
-const ATCARD_KEY = "decoration_atcard";
+const ATCARD_KEY = "decoration_atcard_v2";
 const DECORATION_JSON = "decoration_json";
 const DECORATION_KEY = "decoration_me";
 const HONOR_KEY = "honor_me";
@@ -122,6 +122,13 @@ export default {
         },
         isSuperAuthor: function () {
             return !!this.data?.sign;
+        },
+        authorCardStyle: function () {
+            return this.bg
+                ? {
+                      backgroundImage: `url(${this.bg})`,
+                  }
+                : {};
         },
     },
     watch: {
@@ -170,23 +177,30 @@ export default {
             }
             //已有缓存，读取解析
             if (decoration_atcard) {
-                this.setDecoration(decoration_atcard);
+                this.setAtcardBackground(decoration_atcard);
                 return;
             }
-            getDecoration({ using: 1, user_id: this.uid, type: "atcard" }).then((data) => {
-                let res = data.data.data;
-                if (res.length == 0) {
+            getDecorationV2({
+                using: 1,
+                user_id: this.uid,
+                type: "atcard",
+                subtype: "pc_atcard",
+            }).then((data) => {
+                let res = data?.data?.data || [];
+                let image = res[0]?.decorations?.[0]?.image;
+                if (!image) {
                     //空 则为无主题，不再加载接口，界面设No
                     sessionStorage.setItem(ATCARD_KEY + this.uid, "no");
                     this.bg = "";
                     return;
                 }
-                sessionStorage.setItem(ATCARD_KEY + this.uid, res[0].val);
-                this.setDecoration(res[0].val);
+                image = this.showDecorationImage(image);
+                sessionStorage.setItem(ATCARD_KEY + this.uid, image);
+                this.setAtcardBackground(image);
             });
         },
-        setDecoration(val) {
-            this.bg = this.showDecoration(val, "atcard");
+        setAtcardBackground(val) {
+            this.bg = val || "";
         },
         getHonor() {
             this.honor = "";
@@ -265,7 +279,7 @@ export default {
         },
 
         showMedalIcon: function (val) {
-            return __cdn + "/design/medals/user/" + val + ".gif";
+            return __cdn + "/design/medals/user/" + val + ".webp";
         },
         medalLink: function ({ rank_id, medal_type = "rank" }) {
             return getMedalLink(rank_id, medal_type);
@@ -282,8 +296,10 @@ export default {
         showLevelColor: function (level) {
             return __userLevelColor[level];
         },
-        showDecoration: function (val, type) {
-            return __cdn + `design/decoration/images/${val}/${type}.png`;
+        showDecorationImage: function (val) {
+            if (!val) return "";
+            if (/^(https?:)?\/\//.test(val) || /^(data|blob):/.test(val)) return val;
+            return __cdn.replace(/\/$/, "") + "/" + val.replace(/^\//, "");
         },
         authorLink,
     },
@@ -297,6 +313,10 @@ export default {
         background-repeat: no-repeat;
         background-position: top right;
         background-size: 100% auto;
+        &.is-no-atcard {
+            background-color: #f8fafc;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
         .u-author {
             padding: 5px 0 15px 5px;
         }
