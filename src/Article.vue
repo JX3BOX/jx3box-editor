@@ -47,7 +47,12 @@
                 v-show="jx3_element.type == 'skill'"
             />
             <jx3-npc :client="npc.client" :id="npc.id" v-show="jx3_element.type === 'npc'" />
-            <jx3-author :uid="author.id" v-show="jx3_element.type === 'author'" />
+            <jx3-author
+                :key="author.id"
+                :uid="author.id"
+                :visible="jx3_element.type === 'author' && jx3_element.style.display !== 'none'"
+                v-show="jx3_element.type === 'author'"
+            />
             <jx3-emotion-author :id="emotion.id" v-show="jx3_element.type === 'emotion'" />
         </div>
     </div>

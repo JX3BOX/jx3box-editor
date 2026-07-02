@@ -34,6 +34,12 @@ function getDecorationV2(params) {
     });
 }
 
+function getUserSkin(params) {
+    return $cms().get(`/api/cms/user/skin`, {
+        params,
+    });
+}
+
 function getDecorationJson() {
     let url = __cdn + "design/decoration/index.json";
     return axios.get(url);
@@ -45,4 +51,4 @@ function getLetterPaper(params) {
         params,
     });
 }
-export { uploadFile, loadAuthors, loadEmotions, getDecoration, getDecorationV2, getDecorationJson, getLetterPaper };
+export { uploadFile, loadAuthors, loadEmotions, getDecoration, getDecorationV2, getUserSkin, getDecorationJson, getLetterPaper };

@@ -1,6 +1,6 @@
 {
     "name": "@jx3box/jx3box-editor",
-    "version": "3.2.6",
+    "version": "3.2.7",
     "description": "JX3BOX Article & Editor",
     "main": "index.js",
     "scripts": {
@@ -74,9 +74,9 @@
         "postcss": "^8.5.6",
         "postcss-safe-parser": "^7.0.1",
         "prettier": "2.7.1",
+        "qrcode.vue": "^3.6.0",
         "sass": "^1.97.3",
         "sass-loader": "^16.0.7",
-        "qrcode.vue": "^3.6.0",
         "serve": "^14.2.0",
         "storybook": "^8.6.14",
         "style-resources-loader": "^1.5.0",

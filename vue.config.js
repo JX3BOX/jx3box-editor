@@ -1,7 +1,7 @@
 const path = require('path');
 const { spawn } = require("child_process");
 const JX3BOX = require("@jx3box/jx3box-common/data/jx3box.json");
-const CMS_PROXY_TARGET = (process.env.VUE_APP_CMS || JX3BOX.__cms || "https://cms.jx3box.com").replace(/\/$/, "");
+const CMS_PROXY_TARGET = (process.env.VUE_APP_CMS || process.env.VITE_CMS_API || JX3BOX.__cms || "https://cms.jx3box.com").replace(/\/$/, "");
 const { __cms, __node, __team, __next } = JX3BOX;
 
 const pages = {
@@ -146,7 +146,7 @@ module.exports = {
                 secure: true,
             },
             "^/__proxy/cms": {
-                target: __cms,
+                target: CMS_PROXY_TARGET,
                 changeOrigin: true,
                 secure: true,
                 pathRewrite: {
