@@ -91,6 +91,8 @@ import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import Avatar from "./Avatar.vue";
 const ATCARD_CACHE_KEY = "skin_atcard_pc_authorcard_v2_";
 const ATCARD_SUBTYPE = "pc_authorcard";
+const DEFAULT_ATCARD_IMAGE = "https://cdn.jx3box.com/design/skin/default/pc_authorcard.png";
+const DEFAULT_ATCARD_POSITION = "right top";
 const DECORATION_JSON = "decoration_json";
 const DECORATION_KEY = "decoration_me";
 const HONOR_KEY = "honor_me";
@@ -132,8 +134,8 @@ export default {
         data: null,
         medals: [],
         loading: false,
-        bg: "",
-        bgPosition: "right top",
+        bg: DEFAULT_ATCARD_IMAGE,
+        bgPosition: DEFAULT_ATCARD_POSITION,
         honor: "",
         honorStyle: {},
     }),
@@ -215,8 +217,7 @@ export default {
         },
         getAtcard() {
             const uid = this.uid;
-            this.bg = "";
-            this.bgPosition = "right top";
+            this.setAtcardBackground();
 
             const cached = this.getAtcardCache(uid);
             if (cached) {
@@ -236,7 +237,7 @@ export default {
                     let image = this.showDecorationImage(skin?.image);
                     if (!image) {
                         this.setAtcardCache(uid, "no");
-                        this.bg = "";
+                        this.setAtcardBackground();
                         return;
                     }
                     let payload = {
@@ -248,18 +249,23 @@ export default {
                 })
                 .catch(() => {
                     if (this.uid === uid) {
-                        this.bg = "";
+                        this.setAtcardBackground();
                     }
                 });
         },
-        setAtcardBackground(val) {
-            if (typeof val === "string") {
-                this.bg = val || "";
-                this.bgPosition = "right top";
+        setAtcardBackground(val = null) {
+            if (!val) {
+                this.bg = DEFAULT_ATCARD_IMAGE;
+                this.bgPosition = DEFAULT_ATCARD_POSITION;
                 return;
             }
-            this.bg = val?.image || "";
-            this.bgPosition = val?.position || "right top";
+            if (typeof val === "string") {
+                this.bg = val || "";
+                this.bgPosition = DEFAULT_ATCARD_POSITION;
+                return;
+            }
+            this.bg = val?.image || DEFAULT_ATCARD_IMAGE;
+            this.bgPosition = val?.position || DEFAULT_ATCARD_POSITION;
         },
         getAtcardCache(uid) {
             let cached = sessionStorage.getItem(ATCARD_CACHE_KEY + uid);
