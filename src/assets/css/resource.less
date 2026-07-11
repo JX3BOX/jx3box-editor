@@ -1,6 +1,7 @@
 @import "var.less";
 
-.c-resource {
+.c-resource,
+.c-resource-dialog {
     .w-dialog,
     .el-dialog {
         max-width: 100%;
@@ -62,6 +63,10 @@
 
         .u-item {
             .db;
+            // 调用方常会全局设为 border-box / overflow:hidden；这里的 60px 是内容区高度，
+            // 必须保留上下 padding 与头像的空间，避免用户条目在宿主项目中被裁切。
+            box-sizing: content-box;
+            overflow: visible;
             border: 2px solid #e1e4e8;
             background: #fafbfc;
             margin-bottom: 10px;

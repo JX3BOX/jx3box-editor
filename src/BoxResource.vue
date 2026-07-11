@@ -6,7 +6,7 @@
         </el-button>
 
         <!-- 弹出界面 -->
-        <el-dialog draggable class="c-large-dialog" title="魔盒资源库" v-model="dialogVisible" :teleported="true">
+        <el-dialog draggable class="c-large-dialog c-resource-dialog" title="魔盒资源库" v-model="dialogVisible" :teleported="true">
             <div class="c-resource-content" v-loading="loading">
                 <div class="m-database-search">
                     <el-radio-group
