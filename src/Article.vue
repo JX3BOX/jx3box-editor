@@ -234,6 +234,7 @@ export default {
                     "player.bilibili.com",
                     "docs.qq.com",
                     "open.douyu.com",
+                    "music.163.com",
                     ...this.iframeWhitelist,
                 ]);
 
