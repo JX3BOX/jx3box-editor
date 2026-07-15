@@ -1,4 +1,5 @@
 import { load } from "cheerio";
+import { resolveImagePath } from "@jx3box/jx3box-common/js/utils";
 
 function joinDomain(domain, path) {
     const d = String(domain || "").replace(/\/+$/, "");
@@ -16,7 +17,13 @@ function isAbsoluteLike(src) {
 
 function normalizeImgSrc(src, domain) {
     const s = String(src || "").trim();
-    if (!s || !domain) return s;
+    if (!s) return s;
+
+    // 历史 OSS 图片域名先统一转换为当前 CDN，随后再处理可选的相对路径拼接。
+    const resolved = resolveImagePath(s);
+    if (resolved && resolved !== s) return resolved;
+
+    if (!domain) return s;
     if (isAbsoluteLike(s)) return s;
 
     // 最常见：/uploads/xxx
@@ -52,15 +59,12 @@ export default function lazyLoad(html, domain = "") {
         // 固定懒加载：无论如何都加/覆盖
         img.attr("loading", "lazy");
 
-        // 只有传了 domain 才处理 src 拼接
-        if (domain) {
-            const src = img.attr("src");
-            if (src) img.attr("src", normalizeImgSrc(src, domain));
+        // 无论是否传入 domain，都先统一历史 OSS/CDN 地址；相对路径仅在有 domain 时拼接。
+        const src = img.attr("src");
+        if (src) img.attr("src", normalizeImgSrc(src, domain));
 
-            // 如果你有用 data-src 之类，也可以一起处理（可删）
-            const dataSrc = img.attr("data-src");
-            if (dataSrc) img.attr("data-src", normalizeImgSrc(dataSrc, domain));
-        }
+        const dataSrc = img.attr("data-src");
+        if (dataSrc) img.attr("data-src", normalizeImgSrc(dataSrc, domain));
     });
 
     return $("root").html() || "";
