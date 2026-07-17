@@ -1,6 +1,43 @@
 <template>
+    <div
+        v-if="isPopoverMode"
+        v-bind="$attrs"
+        data-jx3-author-pop-scope
+        @mouseover="onTriggerMouseOver"
+        @mouseout="onTriggerMouseOut"
+        @click="onTriggerClick"
+    >
+        <slot></slot>
+
+        <el-popover
+            ref="popover"
+            :visible="popoverVisible"
+            :virtual-ref="activeTrigger"
+            virtual-triggering
+            teleported
+            placement="bottom-start"
+            width="auto"
+            :offset="10"
+            :show-arrow="false"
+            :popper-style="popoverStyle"
+            popper-class="w-jx3-author-popper"
+        >
+            <div ref="popoverContent" @mouseenter="onPopoverMouseEnter" @mouseleave="onPopoverMouseLeave">
+                <Author
+                    v-if="activeUid"
+                    mode="card"
+                    :key="activeUid"
+                    :uid="activeUid"
+                    :visible="popoverVisible"
+                    :inside-popover="true"
+                    @loaded="updatePopoverPosition"
+                />
+            </div>
+        </el-popover>
+    </div>
+
     <!-- @圈人pop：作者卡片 -->
-    <div class="w-author" v-loading="loading">
+    <div v-else v-bind="$attrs" class="w-author" v-loading="loading">
         <div class="w-author-wrapper el-popover" :class="{ 'is-no-atcard': !bg }" v-if="data" :style="authorCardStyle">
             <div class="u-author">
                 <Avatar
@@ -12,7 +49,14 @@
                 />
                 <div class="u-info">
                     <a class="u-name" :href="authorLink(uid)" target="_blank">
-                        <el-tooltip class="item" effect="dark" content="签约作者" placement="top" v-if="isSuperAuthor">
+                        <el-tooltip
+                            class="item"
+                            effect="dark"
+                            content="签约作者"
+                            placement="top"
+                            :teleported="!insidePopover"
+                            v-if="isSuperAuthor"
+                        >
                             <a class="u-superauthor" href="/dashboard/cooperation" target="_blank">
                                 <img :src="super_author_icon" alt="superauthor" />
                             </a>
@@ -20,7 +64,7 @@
                         <span class="u-displayname" :title="data.display_name">{{ data.display_name || "未知" }}</span>
                     </a>
                     <div class="u-extend">
-                        <el-tooltip class="item" effect="dark" placement="top">
+                        <el-tooltip class="item" effect="dark" placement="top" :teleported="!insidePopover">
                             <template #content>
                                 <span class="u-tips">经验值：{{ data.experience }}</span>
                             </template>
@@ -33,7 +77,14 @@
                                 >Lv.{{ level }}</span
                             >
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" :content="vipTypeTitle" placement="top" v-if="isVip">
+                        <el-tooltip
+                            class="item"
+                            effect="dark"
+                            :content="vipTypeTitle"
+                            placement="top"
+                            :teleported="!insidePopover"
+                            v-if="isVip"
+                        >
                             <a class="u-vip" href="/vip/premium?from=sidebar_author" target="_blank">
                                 <i class="i-icon-vip on">{{ vipType }}</i>
                             </a>
@@ -96,6 +147,7 @@ const DEFAULT_ATCARD_POSITION = "right top";
 const DECORATION_JSON = "decoration_json";
 const DECORATION_KEY = "decoration_me";
 const HONOR_KEY = "honor_me";
+const AUTHOR_SCOPE_ATTR = "data-jx3-author-pop-scope";
 const POSITION_MAP = {
     lt: "left top",
     mt: "center top",
@@ -117,17 +169,32 @@ const POSITION_MAP = {
 const { __server, __imgPath, __userLevelColor, __cdn, __Root, __userLevel } = JX3BOX;
 export default {
     name: "Author",
+    inheritAttrs: false,
+    emits: ["loaded"],
     components: {
         Avatar,
     },
     props: {
         uid: {
             type: [String, Number],
-            required: true,
+            default: "",
         },
         visible: {
             type: Boolean,
             default: true,
+        },
+        mode: {
+            type: String,
+            default: "card",
+            validator: (value) => ["card", "popover"].includes(value),
+        },
+        selector: {
+            type: String,
+            default: '.w-jx3-element[data-type="author"]',
+        },
+        insidePopover: {
+            type: Boolean,
+            default: false,
         },
     },
     data: () => ({
@@ -138,8 +205,24 @@ export default {
         bgPosition: DEFAULT_ATCARD_POSITION,
         honor: "",
         honorStyle: {},
+        activeUid: "",
+        activeTrigger: null,
+        popoverVisible: false,
+        hideTriggerTimer: null,
+        hidePopoverTimer: null,
+        lastTappedElement: null,
+        documentClickBound: false,
+        popoverStyle: {
+            padding: "0",
+            border: "none",
+            background: "transparent",
+            boxShadow: "none",
+        },
     }),
     computed: {
+        isPopoverMode: function () {
+            return this.mode === "popover";
+        },
         super_author_icon: function () {
             return __imgPath + "image/user/" + "superauthor.svg";
         },
@@ -194,8 +277,126 @@ export default {
                 }
             },
         },
+        mode() {
+            if (!this.$el) return;
+            this.syncDocumentClickListener();
+            if (!this.isPopoverMode) {
+                this.lastTappedElement = null;
+                this.hidePopover();
+                this.clearPopoverTimers();
+            }
+        },
+    },
+    mounted() {
+        this.syncDocumentClickListener();
+    },
+    beforeUnmount() {
+        this.clearPopoverTimers();
+        document.removeEventListener("click", this.onDocumentClick);
+        this.documentClickBound = false;
     },
     methods: {
+        syncDocumentClickListener() {
+            if (this.isPopoverMode && !this.documentClickBound) {
+                document.addEventListener("click", this.onDocumentClick);
+                this.documentClickBound = true;
+            } else if (!this.isPopoverMode && this.documentClickBound) {
+                document.removeEventListener("click", this.onDocumentClick);
+                this.documentClickBound = false;
+            }
+        },
+        isMobile() {
+            const coarsePointer =
+                typeof window.matchMedia === "function" &&
+                window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+            const hasTouchEvent = "ontouchstart" in window;
+            const mobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
+            return coarsePointer || (hasTouchEvent && mobileUA);
+        },
+        getOwnedTrigger(target) {
+            if (!(target instanceof Element)) return null;
+            const trigger = target.closest(this.selector);
+            if (!trigger || !this.$el.contains(trigger)) return null;
+            return trigger.closest(`[${AUTHOR_SCOPE_ATTR}]`) === this.$el ? trigger : null;
+        },
+        isSameTriggerTransition(trigger, relatedTarget) {
+            return relatedTarget instanceof Node && trigger.contains(relatedTarget);
+        },
+        onTriggerMouseOver(event) {
+            if (!this.isPopoverMode || this.isMobile()) return;
+            const trigger = this.getOwnedTrigger(event.target);
+            if (!trigger) return;
+            event.stopPropagation();
+            if (this.isSameTriggerTransition(trigger, event.relatedTarget)) return;
+            this.showPopover(trigger);
+        },
+        onTriggerMouseOut(event) {
+            if (!this.isPopoverMode || this.isMobile()) return;
+            const trigger = this.getOwnedTrigger(event.target);
+            if (!trigger) return;
+            event.stopPropagation();
+            if (this.isSameTriggerTransition(trigger, event.relatedTarget)) return;
+            clearTimeout(this.hideTriggerTimer);
+            this.hideTriggerTimer = setTimeout(this.hidePopover, 380);
+        },
+        onTriggerClick(event) {
+            if (!this.isPopoverMode || !this.isMobile()) return;
+            const trigger = this.getOwnedTrigger(event.target);
+            if (!trigger) return;
+            event.stopPropagation();
+
+            const href = trigger.closest("a[href]")?.getAttribute("href") || "";
+            if (href && this.lastTappedElement === trigger) {
+                this.lastTappedElement = null;
+                this.hidePopover();
+                return;
+            }
+
+            event.preventDefault();
+            this.lastTappedElement = trigger;
+            this.showPopover(trigger);
+        },
+        onDocumentClick(event) {
+            if (!this.isPopoverMode || !this.isMobile()) return;
+            const inPopover = this.$refs.popoverContent?.contains(event.target);
+            if (this.getOwnedTrigger(event.target) || inPopover) return;
+            this.lastTappedElement = null;
+            this.hidePopover();
+        },
+        onPopoverMouseEnter() {
+            if (this.isMobile()) return;
+            clearTimeout(this.hideTriggerTimer);
+            clearTimeout(this.hidePopoverTimer);
+        },
+        onPopoverMouseLeave() {
+            if (this.isMobile()) return;
+            clearTimeout(this.hidePopoverTimer);
+            this.hidePopoverTimer = setTimeout(this.hidePopover, 280);
+        },
+        showPopover(trigger) {
+            const uid = trigger.getAttribute("data-id");
+            if (!uid) return;
+
+            clearTimeout(this.hideTriggerTimer);
+            clearTimeout(this.hidePopoverTimer);
+            this.activeUid = uid;
+            this.activeTrigger = trigger;
+            this.popoverVisible = true;
+            this.updatePopoverPosition();
+        },
+        updatePopoverPosition() {
+            if (!this.popoverVisible) return;
+            this.$nextTick(() => {
+                this.$refs.popover?.popperRef?.popperInstanceRef?.update?.();
+            });
+        },
+        hidePopover() {
+            this.popoverVisible = false;
+        },
+        clearPopoverTimers() {
+            clearTimeout(this.hideTriggerTimer);
+            clearTimeout(this.hidePopoverTimer);
+        },
         loadData: function () {
             const promises = [getUserInfo(this.uid), getUserMedals(this.uid)];
             this.loading = true;
@@ -203,6 +404,7 @@ export default {
                 this.data = res[0];
                 this.medals = res[1];
                 this.loading = false;
+                this.$nextTick(() => this.$emit("loaded"));
             });
         },
         loadUserInfo: function () {
@@ -446,11 +648,13 @@ export default {
             return {
                 key: role?.id || role?.key || role?.val || name + index,
                 name,
-                server: role?.server || role?.role_server || role?.jx3_server || info?.server || info?.role_server || "",
+                server:
+                    role?.server || role?.role_server || role?.jx3_server || info?.server || info?.role_server || "",
                 url: this.normalizeLink(role?.url || role?.link || role?.href || info?.url || info?.link || ""),
                 icon: this.normalizeRoleIcon(role, info),
                 color: role?.color || info?.color || "",
-                backgroundColor: role?.background_color || role?.bg_color || info?.background_color || info?.bg_color || "",
+                backgroundColor:
+                    role?.background_color || role?.bg_color || info?.background_color || info?.bg_color || "",
                 borderColor: role?.border_color || info?.border_color || "",
             };
         },
@@ -461,7 +665,8 @@ export default {
             return __cdn + url.replace(/^\/+/, "");
         },
         normalizeRoleIcon: function (role, info) {
-            const mount = role?.mount || role?.school || role?.school_id || info?.mount || info?.school || info?.school_id || "";
+            const mount =
+                role?.mount || role?.school || role?.school_id || info?.mount || info?.school || info?.school_id || "";
             if (mount) return showSchoolIcon(mount);
 
             return this.normalizeRoleAsset(role?.icon || role?.logo || role?.image || info?.icon || info?.logo || "");
@@ -486,6 +691,13 @@ export default {
 
 <style lang="less">
 @import "../assets/css/module/author.less";
+.w-jx3-author-popper.el-popover {
+    min-width: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
 .w-author {
     .w-author-wrapper {
         width: 300px;

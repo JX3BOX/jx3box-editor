@@ -1,5 +1,5 @@
 <template>
-    <div class="c-article-tinymce c-article-box">
+    <Author mode="popover" class="c-article-tinymce c-article-box" data-jx3-element-scope>
         <!-- <div id="c-article-origin" class="c-article-origin" ref="origin"><slot></slot></div> -->
 
         <div id="c-article" class="c-article" ref="article" v-if="pageable">
@@ -37,7 +37,7 @@
             :total="total"
         ></el-pagination>
 
-        <div class="w-jx3-element-pop" :style="jx3_element.style">
+        <div ref="jx3ElementPop" class="w-jx3-element-pop" :style="jx3_element.style">
             <jx3-item :item_id="item.id" :jx3ClientType="item.client" v-show="jx3_element.type == 'item'" />
             <jx3-buff :client="buff.client" :id="buff.id" :level="buff.level" v-show="jx3_element.type == 'buff'" />
             <jx3-skill
@@ -47,15 +47,9 @@
                 v-show="jx3_element.type == 'skill'"
             />
             <jx3-npc :client="npc.client" :id="npc.id" v-show="jx3_element.type === 'npc'" />
-            <jx3-author
-                :key="author.id"
-                :uid="author.id"
-                :visible="jx3_element.type === 'author' && jx3_element.style.display !== 'none'"
-                v-show="jx3_element.type === 'author'"
-            />
             <jx3-emotion-author :id="emotion.id" v-show="jx3_element.type === 'emotion'" />
         </div>
-    </div>
+    </Author>
 </template>
 
 <script>
@@ -96,6 +90,33 @@ import Buff from "./Buff.vue";
 import Skill from "./Skill.vue";
 import Npc from "./Npc.vue";
 import renderJx3Element from "./assets/js/jx3_element.js";
+
+const NETEASE_MUSIC_PLAYER_SRC_RE =
+    /(\s+src\s*=\s*)(["'])(?:https?:)?\/\/music\.163\.com\/(?:m\/)?outchain\/player(?=[?#]|\2)/i;
+
+function isMobileArticleRuntime() {
+    if (typeof window !== "undefined" && typeof window.Capacitor?.isNativePlatform === "function") {
+        if (window.Capacitor.isNativePlatform()) return true;
+    }
+    if (typeof navigator === "undefined") return false;
+    if (navigator.userAgentData?.mobile === true) return true;
+
+    const userAgent = navigator.userAgent || "";
+    return (
+        /Android|iPhone|iPad|iPod|Mobile|HarmonyOS|OpenHarmony|ArkWeb/i.test(userAgent) ||
+        (/Macintosh/i.test(userAgent) && navigator.maxTouchPoints > 1)
+    );
+}
+
+function normalizeNeteaseMusicPlayerIframe(content) {
+    const playerUrl = isMobileArticleRuntime()
+        ? "https://music.163.com/m/outchain/player"
+        : "https://music.163.com/outchain/player";
+
+    return String(content || "").replace(/<iframe\b[^>]*>/gi, (iframe) =>
+        iframe.replace(NETEASE_MUSIC_PLAYER_SRC_RE, `$1$2${playerUrl}`)
+    );
+}
 
 export default {
     name: "Article",
@@ -176,9 +197,6 @@ export default {
                 client: "std",
                 id: "",
             },
-            author: {
-                id: "",
-            },
             emotion: {
                 id: "",
             },
@@ -187,7 +205,7 @@ export default {
                 style: {
                     top: 0,
                     left: 0,
-                    display: "block",
+                    display: "none",
                 },
                 type: "",
             },
@@ -238,10 +256,13 @@ export default {
                     ...this.iframeWhitelist,
                 ]);
 
-                // 3. 处理图片懒加载
+                // 3. 避开网易云播放器在不同终端间跳转到 HTTP 地址
+                data = normalizeNeteaseMusicPlayerIframe(data);
+
+                // 4. 处理图片懒加载
                 data = execLazyload(data, this.cdnDomain);
 
-                // 4. 最后处理链接
+                // 5. 最后处理链接
                 data = execFilterLink(data, this.linkWhitelist, this.linkStrict);
 
                 return data;
@@ -299,7 +320,7 @@ export default {
             // 音频
             renderAudio();
             // 物品
-            renderJx3Element(this);
+            renderJx3Element(this, '.w-jx3-element:not([data-type="author"])');
         },
         doDir: function () {
             // 显示局部
@@ -363,17 +384,19 @@ export default {
                 }
             }
 
-            if (version !== this.renderVersion) return;
+            if (version !== this.renderVersion) return null;
             this.data = result;
+            return version;
         },
         run: async function () {
             this.page = 1;
             this.all = false;
-            await this.render();
-            if (!this.data.length) return;
+            const version = await this.render();
+            if (!version || version !== this.renderVersion || !this.data.length) return;
 
             // 等待html加载完毕后
             this.$nextTick(() => {
+                if (version !== this.renderVersion) return;
                 this.$emit("contentLoaded");
 
                 // 统一DOM处理
@@ -399,12 +422,22 @@ export default {
         this.mode = params.get("mode") || "";
         this.run();
     },
+    beforeUnmount: function () {
+        this.renderVersion++;
+        if (typeof this.__jx3ElementCleanup === "function") {
+            this.__jx3ElementCleanup();
+        }
+        if (this.__jx3ElementPop?.length && this.__jx3ElementPop.parent()[0] === document.body) {
+            this.__jx3ElementPop.remove();
+        }
+        this.__jx3ElementPop = null;
+    },
     components: {
         "jx3-item": Item,
         "jx3-buff": Buff,
         "jx3-skill": Skill,
         "jx3-npc": Npc,
-        "jx3-author": Author,
+        Author,
         "jx3-emotion-author": PostAuthor,
     },
 };
