@@ -42,7 +42,7 @@ export default {
 | `enable` | 是否可用 | `Boolean` | `true` |
 | `onlyImage` | 是否仅允许图片 | `Boolean` | `false` |
 | `desc` | 顶部提示文案 | `String` | `"一次最多同时上传..."` |
-| `accept` | 允许类型 | `String` | common conf 的 `accept` |
+| `accept` | 允许类型 | `String` | 本库 `config/global.js` 的 `uploadAccept` |
 | `max` | 单次数量上限 | `Number` | `10` |
 | `sizeLimit` | 单文件体积限制（MB） | `Number` | `30` |
 

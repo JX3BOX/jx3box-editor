@@ -74,6 +74,25 @@ module.exports = {
 
     // 上传组件
     /*------------------*/
-    imgTypes: ["jpg", "png", "gif", "bmp", "webp", "jpeg", "heic", "heif", "avif", "tif", "tiff","svg"],
-    videoTypes: ["mp4", "mov", "avi", "flv", "3gp", "wmv", "mkv", "webm", "m4v"]
-}
+    imgTypes: ["jpg", "png", "gif", "bmp", "webp", "jpeg", "heic", "heif", "avif", "tif", "tiff", "svg"],
+    uploadAccept: [
+        "image/*",
+        ".svg",
+        ".txt",
+        ".csv",
+        ".jx3dat",
+        ".dat",
+        ".pdf",
+        ".zip",
+        ".rar",
+        ".7z",
+        ".doc",
+        ".docx",
+        ".xls",
+        ".xlsx",
+        ".ttf",
+        ".blueprint",
+        ".blueprintx",
+    ].join(","),
+    videoTypes: ["mp4", "mov", "avi", "flv", "3gp", "wmv", "mkv", "webm", "m4v"],
+};
