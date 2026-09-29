@@ -26,9 +26,20 @@
         tr:nth-child(2n + 1) {
             background-color: #fafbfc;
         }
-        tr:first-child {
+        // 有独立表头时，不把 tbody 的首行当作表头。
+        > thead > tr,
+        > tr:first-child,
+        > tbody:first-child > tr:first-child {
             background-color: #fafbfc;
             font-weight: 600;
+        }
+        // 独立表头之后，正文从白底开始交替。
+        > thead ~ tbody > tr {
+            background-color: #fff;
+
+            &:nth-child(2n) {
+                background-color: #fafbfc;
+            }
         }
     }
 }
