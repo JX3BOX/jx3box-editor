@@ -35,7 +35,9 @@
         }
         // 独立表头之后，正文从白底开始交替。
         > thead ~ tbody > tr {
-            background-color: #fff;
+            &:nth-child(2n + 1) {
+                background-color: #fff;
+            }
 
             &:nth-child(2n) {
                 background-color: #fafbfc;
