@@ -157,6 +157,8 @@ export default function sanitizeRichText(html) {
             td: ["colspan", "rowspan", "align", "valign", "class", "style"],
             th: ["colspan", "rowspan", "align", "valign", "class", "style"],
             col: ["span", "width", "class", "style"],
+            ol: ["start", "reversed", "type"],
+            li: ["value"],
             style: ["type", "media"],
         },
 
